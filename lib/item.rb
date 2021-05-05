@@ -44,11 +44,34 @@ class Item
   end
 
   def add_associations_to_model
+    def update_model(start_model, end_model, association, through = false, indermediate_model = '')
+      start_model.downcase!
+      tempfile = File.open('./app/models/model_update.rb', 'w')
+      f = File.new("./app/models/#{start_model}.rb")
+      f.each do |line|
+        tempfile << line
+        next unless line.include? 'class'
+
+        tempfile << if %w[belongs_to has_one].include? association
+                      "  #{association} :#{end_model.downcase.singularize}\n"
+                    elsif through
+                      "  #{association} :#{end_model.downcase.pluralize},"\
+                      "through: :#{indermediate_model.downcase.pluralize}\n"
+                    else
+                      "  #{association} :#{end_model.downcase.pluralize}\n"
+                    end
+      end
+      f.close
+      tempfile.close
+
+      FileUtils.mv('./app/models/model_update.rb', "./app/models/#{start_model}.rb")
+    end
+
     parent_association = parent[:association] ? parent[:association].name : nil
     if parent_association == 'belongs_to'
       update_model(name, parent[:item].name, 'has_many')
-      update_model(grand_parent.name, name, 'has_many', true, parent[:item].name)
-      update_model(name, grand_parent.name, 'has_many', true, parent[:item].name)
+      update_model(grand_parent_item.name, name, 'has_many', true, parent[:item].name)
+      update_model(name, grand_parent_item.name, 'has_many', true, parent[:item].name)
       update_model(parent[:item].name, name, 'belongs_to')
     end
 
@@ -60,27 +83,4 @@ class Item
       end
     end
   end
-end
-
-def update_model(start_model, end_model, association, through = false, indermediate_model = '')
-  start_model.downcase!
-  tempfile = File.open('./app/models/model_update.rb', 'w')
-  f = File.new("./app/models/#{start_model}.rb")
-  f.each do |line|
-    tempfile << line
-    next unless line.include? 'class'
-
-    tempfile << if %w[belongs_to has_one].include? association
-                  "  #{association} :#{end_model.downcase.singularize}\n"
-                elsif through
-                  "  #{association} :#{end_model.downcase.pluralize}, \
-                  through: :#{indermediate_model.downcase.pluralize}\n"
-                else
-                  "  #{association} :#{end_model.downcase.pluralize}\n"
-                end
-  end
-  f.close
-  tempfile.close
-
-  FileUtils.mv('./app/models/model_update.rb', "./app/models/#{start_model}.rb")
 end

@@ -1,3 +1,5 @@
+require 'item'
+
 class Association
   attr_accessor :first_item, :second_items, :name
 
@@ -15,5 +17,4 @@ class Association
   def self.all
     ObjectSpace.each_object(self).to_a
   end
-
 end

@@ -1,6 +1,8 @@
 require 'attribute'
 require 'association'
 require 'fileutils'
+require 'active_support/core_ext/string'
+
 
 class Item
   attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes

@@ -46,7 +46,7 @@ class Item
   end
 
   def add_associations_to_model
-    def update_model(start_model, end_model, association, through = false, indermediate_model = '')
+    def update_model(start_model, end_model, association, through = false, intermediate_model = '')
       start_model.downcase!
       tempfile = File.open('./app/models/model_update.rb', 'w')
       f = File.new("./app/models/#{start_model}.rb")
@@ -58,7 +58,7 @@ class Item
                       "  #{association} :#{end_model.downcase.singularize}\n"
                     elsif through
                       "  #{association} :#{end_model.downcase.pluralize}, "\
-                      "through: :#{indermediate_model.downcase.pluralize}\n"
+                      "through: :#{intermediate_model.downcase.pluralize}\n"
                     else
                       "  #{association} :#{end_model.downcase.pluralize}\n"
                     end

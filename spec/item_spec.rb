@@ -89,7 +89,7 @@ describe Item do
         'category' => 'entity'
       },
       '19' => {
-        'content' => 'belongs_to',
+        'content' => ':through',
         'subItemIds' => [
           20
         ],
@@ -150,7 +150,7 @@ describe Item do
     it 'creates an instance of the class correctly' do
       expect(@item.name).to eq('entity5')
       expect(@item.parent[:item].name).to eq('entity4')
-      expect(@item.parent[:association].name).to eq('belongs_to')
+      expect(@item.parent[:association].name).to eq(':through')
       expect(@item.grand_parent_item.name).to eq('entity1')
       expect(@item.associations[0].name).to eq('has_many')
       expect(@item.attributes[0].name).to eq('attribute4')

@@ -70,7 +70,7 @@ class Item
     end
 
     parent_association = parent[:association] ? parent[:association].name : nil
-    if parent_association == 'belongs_to'
+    if parent_association == ':through'
       update_model(name, parent[:item].name, 'has_many')
       update_model(grand_parent_item.name, name, 'has_many', true, parent[:item].name)
       update_model(name, grand_parent_item.name, 'has_many', true, parent[:item].name)

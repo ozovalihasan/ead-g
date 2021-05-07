@@ -3,9 +3,8 @@ require 'association'
 require 'fileutils'
 require 'active_support/core_ext/string'
 
-
 class Item
-  attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes
+  attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes, :model_create
 
   def initialize(block, parent = { item: nil, association: nil }, grand_parent_item = nil)
     @name = block.content
@@ -13,6 +12,7 @@ class Item
     @grand_parent_item = grand_parent_item
     @attributes = []
     @associations = []
+    @model_create = false
 
     block.sub_blocks.map do |sub_block|
       if sub_block.attribute
@@ -40,8 +40,21 @@ class Item
 
     if %w[has_many has_one].include? parent_association
       command << " #{parent[:item].name.downcase.singularize}:references"
+    elsif parent_association == ':through'
+      if parent[:item].parent[:association] == 'has_one'
+        command << " #{parent[:item].name.downcase.singularize}:references"
+      end
     end
 
+    if parent_association == 'has_many'
+      through_association = associations.select { |association| association.name == ':through' }[0]
+      if through_association
+        through_association.second_items[0].create_migration
+        command << " #{through_association.second_items[0].name.downcase.singularize}:references"
+      end
+    end
+
+    model_create = true
     system(command)
   end
 
@@ -51,17 +64,23 @@ class Item
       tempfile = File.open('./app/models/model_update.rb', 'w')
       f = File.new("./app/models/#{start_model}.rb")
       f.each do |line|
-        tempfile << line
-        next unless line.include? 'class'
+        if line.include? 'end'
 
-        tempfile << if %w[belongs_to has_one].include? association
-                      "  #{association} :#{end_model.downcase.singularize}\n"
-                    elsif through
-                      "  #{association} :#{end_model.downcase.pluralize}, "\
-                      "through: :#{intermediate_model.downcase.pluralize}\n"
-                    else
-                      "  #{association} :#{end_model.downcase.pluralize}\n"
-                    end
+          tempfile << if through
+                        if association == 'has_many'
+                          "  #{association} :#{end_model.downcase.pluralize}, "\
+                          "through: :#{intermediate_model.downcase.pluralize}\n"
+                        elsif association == 'has_one'
+                          "  #{association} :#{end_model.downcase.singularize}, "\
+                          "through: :#{intermediate_model.downcase.singularize}\n"
+                        end
+                      elsif 'has_one' == association
+                        "  #{association} :#{end_model.downcase.singularize}\n"
+                      elsif 'has_many' == association
+                        "  #{association} :#{end_model.downcase.pluralize}\n"
+                      end
+        end
+        tempfile << line
       end
       f.close
       tempfile.close
@@ -71,10 +90,14 @@ class Item
 
     parent_association = parent[:association] ? parent[:association].name : nil
     if parent_association == ':through'
-      update_model(name, parent[:item].name, 'has_many')
-      update_model(grand_parent_item.name, name, 'has_many', true, parent[:item].name)
-      update_model(name, grand_parent_item.name, 'has_many', true, parent[:item].name)
-      update_model(parent[:item].name, name, 'belongs_to')
+      if parent[:item].parent[:association].name == 'has_many'
+        update_model(name, parent[:item].name, 'has_many')
+        update_model(grand_parent_item.name, name, 'has_many', true, parent[:item].name)
+        update_model(name, grand_parent_item.name, 'has_many', true, parent[:item].name)
+      elsif parent[:item].parent[:association].name == 'has_one'
+        update_model(parent[:item].name, name, 'has_one')
+        update_model(grand_parent_item.name, name, 'has_one', true, parent[:item].name)
+      end
     end
 
     associations.each do |association|

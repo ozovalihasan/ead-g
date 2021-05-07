@@ -54,9 +54,7 @@ describe EAD do
   describe '.check_implement_items' do
     it 'checks block having EAD content and create models adn associations' do
       module Kernel
-        def system(arg1)
-            
-        end
+        def system(arg1); end
       end
       allow(File).to receive(:read).and_return(@items)
       mock_file = ''
@@ -69,10 +67,10 @@ describe EAD do
       allow(FileUtils).to receive(:mv)
 
       call_create_migration = 0
-      allow_any_instance_of(Item).to receive(:create_migration) { |arg| call_create_migration += 1 }
+      allow_any_instance_of(Item).to receive(:create_migration) { |_arg| call_create_migration += 1 }
       call_add_associations_to_model = 0
-      allow_any_instance_of(Item).to receive(:add_associations_to_model) { |arg| call_add_associations_to_model += 1 }
-      
+      allow_any_instance_of(Item).to receive(:add_associations_to_model) { |_arg| call_add_associations_to_model += 1 }
+
       @ead.import_JSON([])
       @ead.check_implement_items
       expect(Item.all.size).to eq(2)
@@ -82,18 +80,18 @@ describe EAD do
     end
   end
 
-    describe '.start' do
-      it 'starts all process' do
-        call_import_JSON = 0
-        allow_any_instance_of(EAD).to receive(:import_JSON) { |arg| call_import_JSON += 1 }
-        
-        call_check_implement_items = 0
-        allow_any_instance_of(EAD).to receive(:check_implement_items) { |arg| call_check_implement_items += 1 }
-  
-        @ead.start([])
-  
-        expect(call_import_JSON).to eq(1)
-        expect(call_check_implement_items).to eq(1)
-      end
+  describe '.start' do
+    it 'starts all process' do
+      call_import_JSON = 0
+      allow_any_instance_of(EAD).to receive(:import_JSON) { |_arg| call_import_JSON += 1 }
+
+      call_check_implement_items = 0
+      allow_any_instance_of(EAD).to receive(:check_implement_items) { |_arg| call_check_implement_items += 1 }
+
+      @ead.start([])
+
+      expect(call_import_JSON).to eq(1)
+      expect(call_check_implement_items).to eq(1)
     end
+  end
 end

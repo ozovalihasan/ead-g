@@ -8,164 +8,300 @@ describe Item do
     ObjectSpace.garbage_collect
     items = {
       '9' => {
-        'content' => 'entity1',
+        'content' => 'Physician',
         'subItemIds' => [
-          17,
-          14,
-          12,
+          29,
+          27,
           10
         ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'factory' => false,
         'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
         'category' => 'entity'
       },
       '10' => {
         'content' => 'has_many',
         'subItemIds' => [
-          11,
-          18
+          11
         ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
         'association' => true,
+        'expand' => true,
+        'color' => '#C7FDED',
         'category' => 'association'
       },
       '11' => {
-        'content' => 'entity3',
-        'subItemIds' => [],
+        'content' => 'Appointment',
+        'subItemIds' => [
+          12
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
         'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
         'category' => 'entity'
       },
       '12' => {
-        'content' => 'has_one',
+        'content' => ':through',
         'subItemIds' => [
           13
         ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
         'association' => true,
+        'expand' => true,
+        'color' => '#C7FDED',
         'category' => 'association'
       },
       '13' => {
-        'content' => 'entity2',
-        'subItemIds' => [
-          21
-        ],
+        'content' => 'Patient',
+        'subItemIds' => [],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
         'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
         'category' => 'entity'
       },
       '14' => {
-        'content' => 'attribute container',
+        'content' => 'Supplier',
         'subItemIds' => [
-          16,
-          15
+          17
         ],
-        'type' => 'string',
-        'attributeContainer' => true,
-        'category' => 'attributeContainer'
-      },
-      '15' => {
-        'content' => 'attribute3',
-        'subItemIds' => [],
-        'attribute' => true,
-        'type' => 'float',
-        'category' => 'attribute'
-      },
-      '16' => {
-        'content' => 'attribute2',
-        'subItemIds' => [],
-        'attribute' => true,
-        'type' => 'text',
-        'category' => 'attribute'
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'entity' => true,
+        'expand' => false,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
+        'category' => 'entity'
       },
       '17' => {
-        'content' => 'attribute1',
-        'subItemIds' => [],
-        'attribute' => true,
-        'type' => 'string',
-        'category' => 'attribute'
-      },
-      '18' => {
-        'content' => 'entity4',
+        'content' => 'has_one',
         'subItemIds' => [
-          19
+          18
         ],
-        'entity' => true,
-        'category' => 'entity'
-      },
-      '19' => {
-        'content' => ':through',
-        'subItemIds' => [
-          20
-        ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
         'association' => true,
+        'expand' => true,
+        'color' => '#C7FDED',
         'category' => 'association'
       },
-      '20' => {
-        'content' => 'entity5',
-        'subItemIds' => [
-          23,
-          25
-        ],
-        'entity' => true,
-        'category' => 'entity'
-      },
-      '21' => {
-        'content' => 'has_many',
+      '18' => {
+        'content' => 'Account',
         'subItemIds' => [
           22
         ],
-        'association' => true,
-        'category' => 'association'
-      },
-      '22' => {
-        'content' => 'entity6',
-        'subItemIds' => [],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
         'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
         'category' => 'entity'
       },
-      '23' => {
+      '19' => {
+        'content' => 'Author',
+        'subItemIds' => [
+          25,
+          20
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'entity' => true,
+        'expand' => false,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
+        'category' => 'entity'
+      },
+      '20' => {
         'content' => 'has_many',
         'subItemIds' => [
-          24
+          21
         ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
         'association' => true,
+        'expand' => true,
+        'color' => '#C7FDED',
         'category' => 'association'
       },
-      '24' => {
-        'content' => 'entity7',
+      '21' => {
+        'content' => 'Books',
         'subItemIds' => [],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
         'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
         'category' => 'entity'
       },
-      '25' => {
-        'content' => 'attribute4',
+      '22' => {
+        'content' => ':through',
+        'subItemIds' => [
+          23
+        ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'association' => true,
+        'expand' => true,
+        'color' => '#C7FDED',
+        'category' => 'association'
+      },
+      '23' => {
+        'content' => 'AccountHistory',
+        'subItemIds' => [],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'color' => '#94F6EA',
+        'category' => 'entity'
+      },
+      '24' => {
+        'content' => 'password',
         'subItemIds' => [],
         'attribute' => true,
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
         'type' => 'string',
+        'expand' => true,
+        'color' => '#AAFAE9',
+        'category' => 'attribute'
+      },
+      '25' => {
+        'content' => 'attribute container',
+        'subItemIds' => [
+          26,
+          24
+        ],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'type' => 'string',
+        'expand' => true,
+        'attributeContainer' => true,
+        'color' => '#AAFAE9',
+        'category' => 'attributeContainer'
+      },
+      '26' => {
+        'content' => 'attribute',
+        'subItemIds' => [],
+        'attribute' => true,
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'type' => 'string',
+        'expand' => true,
+        'color' => '#AAFAE9',
+        'category' => 'attribute'
+      },
+      '27' => {
+        'content' => 'attribute container',
+        'subItemIds' => [
+          28
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'type' => 'string',
+        'expand' => true,
+        'attributeContainer' => true,
+        'color' => '#AAFAE9',
+        'category' => 'attributeContainer'
+      },
+      '28' => {
+        'content' => 'salary',
+        'subItemIds' => [],
+        'attribute' => true,
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'type' => 'integer',
+        'expand' => true,
+        'color' => '#AAFAE9',
+        'category' => 'attribute'
+      },
+      '29' => {
+        'content' => 'name',
+        'subItemIds' => [],
+        'attribute' => true,
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'type' => 'string',
+        'expand' => true,
+        'color' => '#AAFAE9',
         'category' => 'attribute'
       }
     }
     @block = Block.new('9', items)
     Item.new(@block)
-    @item = Item.all.select { |item| item.name == 'entity5' }[0]
+    @item = Item.all.select { |item| item.name == 'Appointment' }[0]
+    @item2 = Item.all.select { |item| item.name == 'Patient' }[0]
+    @item3 = Item.all.select { |item| item.name == 'Physician' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@item.name).to eq('entity5')
-      expect(@item.parent[:item].name).to eq('entity4')
-      expect(@item.parent[:association].name).to eq(':through')
-      expect(@item.grand_parent_item.name).to eq('entity1')
-      expect(@item.associations[0].name).to eq('has_many')
-      expect(@item.attributes[0].name).to eq('attribute4')
+      expect(@item.name).to eq('Appointment')
+      expect(@item.parent[:item].name).to eq('Physician')
+      expect(@item.parent[:association].name).to eq('has_many')
+      expect(@item2.grand_parent_item.name).to eq('Physician')
+      expect(@item.associations[0].name).to eq(':through')
+      expect(@item.parent[:item].attributes[0].name).to eq('name')
     end
   end
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(Item.all.size).to eq(7)
+      expect(Item.all.size).to eq(3)
     end
   end
 
   describe '#create_migration' do
     it 'runs command to generate a model and its attributes' do
-      expect_any_instance_of(Object).to receive(:system).with 'bundle exec rails generate model Entity5 attribute4:string'
+      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+        expect([
+                 'bundle exec rails generate model Patient',
+                 'bundle exec rails generate model Appointment physician:references patient:references'
+               ]).to include call_with
+      end
       @item.create_migration
     end
   end
@@ -192,11 +328,17 @@ describe Item do
       allow(File).to receive(:new).and_return(mock_model_file)
       allow(mock_model_file).to receive(:close)
       allow(FileUtils).to receive(:mv)
-      @item.add_associations_to_model
-      expect(mock_file.content).to eq(['class MockClass', "  has_many :entity4s\n", 'end',
-                                       'class MockClass', "  has_many :entity5s, through: :entity4s\n", 'end',
-                                       'class MockClass', "  has_many :entity1s, through: :entity4s\n", 'end',
-                                       'class MockClass', "  has_many :entity7s\n", 'end'])
+      @item2.add_associations_to_model
+      expect(mock_file.content).to eq([
+                                        'class MockClass', "  has_many :appointments\n",
+                                        'end',
+                                        'class MockClass',
+                                        "  has_many :patients, through: :appointments\n",
+                                        'end',
+                                        'class MockClass',
+                                        "  has_many :physicians, through: :appointments\n",
+                                        'end'
+                                      ])
     end
   end
 end

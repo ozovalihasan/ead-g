@@ -4,7 +4,7 @@ require 'fileutils'
 require 'active_support/core_ext/string'
 
 class Item
-  attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes, :model_create
+  attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes
 
   def initialize(block, parent = { item: nil, association: nil }, grand_parent_item = nil)
     @name = block.content
@@ -12,7 +12,6 @@ class Item
     @grand_parent_item = grand_parent_item
     @attributes = []
     @associations = []
-    @model_create = false
 
     block.sub_blocks.map do |sub_block|
       if sub_block.attribute
@@ -54,7 +53,6 @@ class Item
       end
     end
 
-    model_create = true
     system(command)
   end
 
@@ -74,9 +72,9 @@ class Item
                           "  #{association} :#{end_model.downcase.singularize}, "\
                           "through: :#{intermediate_model.downcase.singularize}\n"
                         end
-                      elsif 'has_one' == association
+                      elsif association == 'has_one'
                         "  #{association} :#{end_model.downcase.singularize}\n"
-                      elsif 'has_many' == association
+                      elsif association == 'has_many'
                         "  #{association} :#{end_model.downcase.pluralize}\n"
                       end
         end

@@ -194,8 +194,8 @@ describe Item do
       allow(FileUtils).to receive(:mv)
       @item.add_associations_to_model
       expect(mock_file.content).to eq(['class MockClass', "  has_many :entity4s\n", 'end',
-                                       'class MockClass', "  has_many :entity5s,through: :entity4s\n", 'end',
-                                       'class MockClass', "  has_many :entity1s,through: :entity4s\n", 'end',
+                                       'class MockClass', "  has_many :entity5s, through: :entity4s\n", 'end',
+                                       'class MockClass', "  has_many :entity1s, through: :entity4s\n", 'end',
                                        'class MockClass', "  belongs_to :entity5\n", 'end',
                                        'class MockClass', "  has_many :entity7s\n", 'end'])
     end

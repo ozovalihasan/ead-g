@@ -57,7 +57,7 @@ class Item
         tempfile << if %w[belongs_to has_one].include? association
                       "  #{association} :#{end_model.downcase.singularize}\n"
                     elsif through
-                      "  #{association} :#{end_model.downcase.pluralize},"\
+                      "  #{association} :#{end_model.downcase.pluralize}, "\
                       "through: :#{indermediate_model.downcase.pluralize}\n"
                     else
                       "  #{association} :#{end_model.downcase.pluralize}\n"

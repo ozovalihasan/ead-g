@@ -9,7 +9,7 @@ class Association
     @name = association_block.content
     if association_block.sub_blocks
       association_block.sub_blocks.map do |sub_block|
-        @second_items << Item.new(sub_block, { item: first_item, association: self }, first_item.parent[:item])
+        @second_items << Item.new(sub_block, { item: first_item, association: self })
       end
     end
   end

@@ -282,7 +282,7 @@ describe Item do
       expect(@item.name).to eq('appointment')
       expect(@item.parent[:item].name).to eq('physician')
       expect(@item.parent[:association].name).to eq('has_many')
-      expect(@item2.grand_parent_item.name).to eq('physician')
+      expect(@item2.grand_parent[:item].name).to eq('physician')
       expect(@item.associations[0].name).to eq(':through')
       expect(@item.parent[:item].attributes[0].name).to eq('name')
     end

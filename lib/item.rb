@@ -4,12 +4,11 @@ require 'fileutils'
 require 'active_support/core_ext/string'
 
 class Item
-  attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes
+  attr_accessor :name, :parent, :associations, :attributes
 
-  def initialize(block, parent = { item: nil, association: nil }, grand_parent_item = nil)
+  def initialize(block, parent = { item: nil, association: nil })
     @name = block.content.downcase.singularize
     @parent = parent
-    @grand_parent_item = grand_parent_item
     @attributes = []
     @associations = []
 
@@ -24,6 +23,10 @@ class Item
         @associations << Association.new(self, sub_block)
       end
     end
+  end
+
+  def grand_parent
+    parent[:item].parent
   end
 
   def self.all
@@ -91,11 +94,11 @@ class Item
     if parent_association == ':through'
       if parent[:item].parent[:association].name == 'has_many'
         update_model(name, parent[:item].name, 'has_many')
-        update_model(grand_parent_item.name, name, 'has_many', true, parent[:item].name)
-        update_model(name, grand_parent_item.name, 'has_many', true, parent[:item].name)
+        update_model(grand_parent[:item].name, name, 'has_many', true, parent[:item].name)
+        update_model(name, grand_parent[:item].name, 'has_many', true, parent[:item].name)
       elsif parent[:item].parent[:association].name == 'has_one'
         update_model(parent[:item].name, name, 'has_one')
-        update_model(grand_parent_item.name, name, 'has_one', true, parent[:item].name)
+        update_model(grand_parent[:item].name, name, 'has_one', true, parent[:item].name)
       end
     end
 

@@ -272,17 +272,17 @@ describe Item do
     }
     @block = Block.new('9', items)
     Item.new(@block)
-    @item = Item.all.select { |item| item.name == 'Appointment' }[0]
-    @item2 = Item.all.select { |item| item.name == 'Patient' }[0]
-    @item3 = Item.all.select { |item| item.name == 'Physician' }[0]
+    @item = Item.all.select { |item| item.name == 'appointment' }[0]
+    @item2 = Item.all.select { |item| item.name == 'patient' }[0]
+    @item3 = Item.all.select { |item| item.name == 'physician' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@item.name).to eq('Appointment')
-      expect(@item.parent[:item].name).to eq('Physician')
+      expect(@item.name).to eq('appointment')
+      expect(@item.parent[:item].name).to eq('physician')
       expect(@item.parent[:association].name).to eq('has_many')
-      expect(@item2.grand_parent_item.name).to eq('Physician')
+      expect(@item2.grand_parent_item.name).to eq('physician')
       expect(@item.associations[0].name).to eq(':through')
       expect(@item.parent[:item].attributes[0].name).to eq('name')
     end

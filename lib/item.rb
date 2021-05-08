@@ -41,7 +41,7 @@ class Item
     if %w[has_many has_one].include? parent_association
       command << " #{parent[:item].name.downcase.singularize}:references"
     elsif parent_association == ':through'
-      if parent[:item].parent[:association] == 'has_one'
+      if parent[:item].parent[:association].name == 'has_one'
         command << " #{parent[:item].name.downcase.singularize}:references"
       end
     end

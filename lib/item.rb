@@ -7,7 +7,7 @@ class Item
   attr_accessor :name, :parent, :grand_parent_item, :associations, :attributes
 
   def initialize(block, parent = { item: nil, association: nil }, grand_parent_item = nil)
-    @name = block.content
+    @name = block.content.downcase.singularize
     @parent = parent
     @grand_parent_item = grand_parent_item
     @attributes = []

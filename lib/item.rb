@@ -31,6 +31,7 @@ class Item
   end
 
   def create_migration
+    return if File.exist?("./app/models/#{name.downcase.singularize}.rb")
     command = 'bundle exec rails generate model '
     parent_association = parent[:association] ? parent[:association].name : nil
     model_name = name.capitalize.singularize

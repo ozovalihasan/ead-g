@@ -60,7 +60,7 @@ class Item
     def update_model(start_model, end_model, association, through = false, intermediate_model = '')
       start_model.downcase!
       tempfile = File.open('./app/models/model_update.rb', 'w')
-      f = File.new("./app/models/#{start_model}.rb")
+      f = File.new("./app/models/#{start_model.downcase.singularize}.rb")
       f.each do |line|
         if line.include? 'end'
 
@@ -83,7 +83,7 @@ class Item
       f.close
       tempfile.close
 
-      FileUtils.mv('./app/models/model_update.rb', "./app/models/#{start_model}.rb")
+      FileUtils.mv('./app/models/model_update.rb', "./app/models/#{start_model.downcase.singularize}.rb")
     end
 
     parent_association = parent[:association] ? parent[:association].name : nil

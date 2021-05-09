@@ -299,10 +299,13 @@ describe Item do
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
         expect([
                  'bundle exec rails generate model Patient',
-                 'bundle exec rails generate model Appointment physician:references patient:references'
+                 'bundle exec rails generate model Appointment physician:references patient:references',
+                 'bundle exec rails generate model Physician name:string salary:integer'
                ]).to include call_with
       end
       @appointment.create_migration
+      @physician.create_migration
+
     end
   end
 

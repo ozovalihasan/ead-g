@@ -5,13 +5,33 @@ class Association
 
   def initialize(first_item, association_block)
     @first_item = first_item
-    @second_items = []
+    @second_items = add_second_items(association_block)
     @name = association_block.content
-    if association_block.sub_blocks
-      association_block.sub_blocks.map do |sub_block|
-        @second_items << Item.new(sub_block, { item: first_item, association: self })
-      end
+  end
+
+  def add_second_items(block)
+    block.sub_blocks.map do |sub_block|
+      Item.new(sub_block, parent_of_second_items)
     end
+  end
+
+  def parent_of_second_items
+    {
+      item: first_item,
+      association: self
+    }
+  end
+
+  def has_many?
+    name == 'has_many'
+  end
+
+  def has_one?
+    name == 'has_one'
+  end
+
+  def through?
+    name == ':through'
   end
 
   def self.all

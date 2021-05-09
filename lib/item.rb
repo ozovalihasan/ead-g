@@ -12,15 +12,13 @@ class Item
     @attributes = []
     @associations = []
 
-    block.sub_blocks.map do |sub_block|
+    block.sub_blocks.each do |sub_block|
       if sub_block.attribute
-        @attributes << Attribute.new(sub_block.content, sub_block.type)
+        add_to_attributes(sub_block)
       elsif sub_block.attribute_container
-        sub_block.sub_blocks.map do |attribute|
-          @attributes << Attribute.new(attribute.content, attribute.type)
-        end
+        add_attribute_container(sub_block)
       elsif sub_block.association
-        @associations << Association.new(self, sub_block)
+        add_to_associations(sub_block)
       end
     end
   end
@@ -29,84 +27,152 @@ class Item
     parent[:item].parent
   end
 
+  def add_attribute_container(block)
+    block.sub_blocks.each do |attribute|
+      add_to_attributes(attribute)
+    end
+  end
+
+  def add_to_attributes(block)
+    @attributes << Attribute.new(block.content, block.type)
+  end
+
+  def add_to_associations(block)
+    @associations << Association.new(self, block)
+  end
+
+  def grand_parent_association
+    grand_parent[:association] || nil
+  end
+
+  def grand_parent_has_many?
+    return false unless grand_parent_association
+
+    grand_parent[:association].has_many?
+  end
+
+  def grand_parent_has_one?
+    return false unless grand_parent_association
+
+    grand_parent[:association].has_one?
+  end
+
+  def parent_association
+    parent[:association] || nil
+  end
+
+  def parent_through?
+    return false unless parent_association
+
+    parent[:association].through?
+  end
+
+  def parent_has_many?
+    return false unless parent_association
+
+    parent[:association].has_many?
+  end
+
+  def parent_has_one?
+    return false unless parent_association
+
+    parent[:association].has_one?
+  end
+
   def self.all
     ObjectSpace.each_object(self).to_a
   end
 
+  def through_association
+    associations.find { |association| association.through? }
+  end
+
+  def through_child
+    through_association.second_items.first
+  end
+
+  def model_name
+    name.capitalize
+  end
+
   def create_migration
-    return if File.exist?("./app/models/#{name.downcase.singularize}.rb")
+    def add_references(command, item)
+      command << " #{item.name}:references"
+    end
+
+    return if File.exist?("./app/models/#{name}.rb")
+
     command = 'bundle exec rails generate model '
-    parent_association = parent[:association] ? parent[:association].name : nil
-    model_name = name.capitalize.singularize
     command << model_name
     attributes.each { |attribute| attribute.add_to(command) }
 
-    if %w[has_many has_one].include? parent_association
-      command << " #{parent[:item].name.downcase.singularize}:references"
-    elsif parent_association == ':through'
-      if parent[:item].parent[:association].name == 'has_one'
-        command << " #{parent[:item].name.downcase.singularize}:references"
-      end
+    if parent_has_many? || parent_has_one?
+      add_references(command, parent[:item])
+    elsif parent_through? && grand_parent_has_one?
+      add_references(command, parent[:item])
     end
 
-    if parent_association == 'has_many'
-      through_association = associations.select { |association| association.name == ':through' }[0]
-      if through_association
-        through_association.second_items[0].create_migration
-        command << " #{through_association.second_items[0].name.downcase.singularize}:references"
-      end
+    if parent_has_many? && through_association
+      through_child.create_migration
+      add_references(command, through_child)
     end
 
     system(command)
   end
 
   def add_associations_to_model
-    def update_model(start_model, end_model, association, through = false, intermediate_model = '')
-      start_model.downcase!
+    def through?(item)
+      item.present?
+    end
+
+    def update_model(start_item, end_item, association, intermediate_item = nil)
+      return unless association.has_one? || association.has_many?
+
+      start_model = start_item.name
+      end_model = end_item.name
+      intermediate_model = intermediate_item.name if intermediate_item
+
+      if association.has_many?
+        end_model = end_model.pluralize
+        intermediate_model = intermediate_model.pluralize if intermediate_model
+      end
+
       tempfile = File.open('./app/models/model_update.rb', 'w')
-      f = File.new("./app/models/#{start_model.downcase.singularize}.rb")
+      f = File.new("./app/models/#{start_model}.rb")
       f.each do |line|
         if line.include? 'end'
-
-          tempfile << if through
-                        if association == 'has_many'
-                          "  #{association} :#{end_model.downcase.pluralize}, "\
-                          "through: :#{intermediate_model.downcase.pluralize}\n"
-                        elsif association == 'has_one'
-                          "  #{association} :#{end_model.downcase.singularize}, "\
-                          "through: :#{intermediate_model.downcase.singularize}\n"
-                        end
-                      elsif association == 'has_one'
-                        "  #{association} :#{end_model.downcase.singularize}\n"
-                      elsif association == 'has_many'
-                        "  #{association} :#{end_model.downcase.pluralize}\n"
-                      end
+          line_association = "  #{association.name} :#{end_model}"
+          line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
+          line_association << "\n"
+          tempfile << line_association
         end
         tempfile << line
       end
       f.close
       tempfile.close
 
-      FileUtils.mv('./app/models/model_update.rb', "./app/models/#{start_model.downcase.singularize}.rb")
+      FileUtils.mv(
+        './app/models/model_update.rb',
+        "./app/models/#{start_model}.rb"
+      )
     end
 
-    parent_association = parent[:association] ? parent[:association].name : nil
-    if parent_association == ':through'
-      if parent[:item].parent[:association].name == 'has_many'
-        update_model(name, parent[:item].name, 'has_many')
-        update_model(grand_parent[:item].name, name, 'has_many', true, parent[:item].name)
-        update_model(name, grand_parent[:item].name, 'has_many', true, parent[:item].name)
-      elsif parent[:item].parent[:association].name == 'has_one'
-        update_model(parent[:item].name, name, 'has_one')
-        update_model(grand_parent[:item].name, name, 'has_one', true, parent[:item].name)
+    if parent_through?
+      if grand_parent_has_many?
+        update_model(self, parent[:item], grand_parent_association)
+        update_model(grand_parent[:item], self, grand_parent_association, parent[:item])
+        update_model(self, grand_parent[:item], grand_parent_association, parent[:item])
+
+      elsif grand_parent_has_one?
+        update_model(parent[:item], self, grand_parent_association)
+        update_model(grand_parent[:item], self, grand_parent_association, parent[:item])
       end
     end
-
     associations.each do |association|
-      next unless %w[has_many has_one].include? association.name
+      next unless association.has_many? || association.has_one?
 
       association.second_items.each do |second_item|
-        update_model(name, second_item.name, association.name)
+        update_model(self, second_item, association)
       end
     end
   end

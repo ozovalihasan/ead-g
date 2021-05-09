@@ -15,7 +15,7 @@ class EAD
   def check_implement_items
     ead_id = '8'
     block = Block.find(ead_id)
-    block.sub_blocks.map do |sub_block|
+    block.sub_blocks.each do |sub_block|
       Item.new(sub_block)
     end
 

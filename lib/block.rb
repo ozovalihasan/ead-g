@@ -11,7 +11,7 @@ class Block
     @type = item['type']
     @association = item['association']
     @sub_blocks = []
-    item['subItemIds'].map do |sub_item_id|
+    item['subItemIds'].each do |sub_item_id|
       sub_item_id = sub_item_id.to_s
       @sub_blocks << Block.new(sub_item_id, items)
     end

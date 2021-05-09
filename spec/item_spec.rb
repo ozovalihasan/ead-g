@@ -272,19 +272,19 @@ describe Item do
     }
     @block = Block.new('9', items)
     Item.new(@block)
-    @item = Item.all.select { |item| item.name == 'appointment' }[0]
-    @item2 = Item.all.select { |item| item.name == 'patient' }[0]
-    @item3 = Item.all.select { |item| item.name == 'physician' }[0]
+    @appointment = Item.all.select { |item| item.name == 'appointment' }[0]
+    @patient = Item.all.select { |item| item.name == 'patient' }[0]
+    @physician = Item.all.select { |item| item.name == 'physician' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@item.name).to eq('appointment')
-      expect(@item.parent[:item].name).to eq('physician')
-      expect(@item.parent[:association].name).to eq('has_many')
-      expect(@item2.grand_parent[:item].name).to eq('physician')
-      expect(@item.associations[0].name).to eq(':through')
-      expect(@item.parent[:item].attributes[0].name).to eq('name')
+      expect(@appointment.name).to eq('appointment')
+      expect(@appointment.parent[:item].name).to eq('physician')
+      expect(@appointment.parent[:association].name).to eq('has_many')
+      expect(@patient.grand_parent[:item].name).to eq('physician')
+      expect(@appointment.associations[0].name).to eq(':through')
+      expect(@appointment.parent[:item].attributes[0].name).to eq('name')
     end
   end
 
@@ -302,7 +302,7 @@ describe Item do
                  'bundle exec rails generate model Appointment physician:references patient:references'
                ]).to include call_with
       end
-      @item.create_migration
+      @appointment.create_migration
     end
   end
 
@@ -328,7 +328,8 @@ describe Item do
       allow(File).to receive(:new).and_return(mock_model_file)
       allow(mock_model_file).to receive(:close)
       allow(FileUtils).to receive(:mv)
-      @item2.add_associations_to_model
+      @patient.add_associations_to_model
+
       expect(mock_file.content).to eq([
                                         'class MockClass', "  has_many :appointments\n",
                                         'end',
@@ -337,6 +338,20 @@ describe Item do
                                         'end',
                                         'class MockClass',
                                         "  has_many :physicians, through: :appointments\n",
+                                        'end'
+                                      ])
+      @physician.add_associations_to_model
+      expect(mock_file.content).to eq([
+                                        'class MockClass', "  has_many :appointments\n",
+                                        'end',
+                                        'class MockClass',
+                                        "  has_many :patients, through: :appointments\n",
+                                        'end',
+                                        'class MockClass',
+                                        "  has_many :physicians, through: :appointments\n",
+                                        'end',
+                                        'class MockClass',
+                                        "  has_many :appointments\n",
                                         'end'
                                       ])
     end

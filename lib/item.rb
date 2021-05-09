@@ -4,11 +4,12 @@ require 'fileutils'
 require 'active_support/core_ext/string'
 
 class Item
-  attr_accessor :name, :parent, :associations, :attributes
+  attr_accessor :name, :parent, :parent_association, :associations, :attributes
 
-  def initialize(block, parent = { item: nil, association: nil })
+  def initialize(block, parent = nil, parent_association = nil)
     @name = block.content.downcase.singularize
     @parent = parent
+    @parent_association = parent_association
     @attributes = []
     @associations = []
 
@@ -24,7 +25,7 @@ class Item
   end
 
   def grand_parent
-    parent[:item].parent
+    parent.parent
   end
 
   def add_attribute_container(block)
@@ -42,41 +43,27 @@ class Item
   end
 
   def grand_parent_association
-    grand_parent[:association] || nil
+    parent.parent_association
   end
 
   def grand_parent_has_many?
-    return false unless grand_parent_association
-
-    grand_parent[:association].has_many?
+    grand_parent_association&.has_many?
   end
 
   def grand_parent_has_one?
-    return false unless grand_parent_association
-
-    grand_parent[:association].has_one?
-  end
-
-  def parent_association
-    parent[:association] || nil
+    grand_parent_association&.has_one?
   end
 
   def parent_through?
-    return false unless parent_association
-
-    parent[:association].through?
+    parent_association&.through?
   end
 
   def parent_has_many?
-    return false unless parent_association
-
-    parent[:association].has_many?
+    parent_association&.has_many?
   end
 
   def parent_has_one?
-    return false unless parent_association
-
-    parent[:association].has_one?
+    parent_association&.has_one?
   end
 
   def self.all
@@ -107,9 +94,9 @@ class Item
     attributes.each { |attribute| attribute.add_to(command) }
 
     if parent_has_many? || parent_has_one?
-      add_references(command, parent[:item])
+      add_references(command, parent)
     elsif parent_through? && grand_parent_has_one?
-      add_references(command, parent[:item])
+      add_references(command, parent)
     end
 
     if parent_has_many? && through_association
@@ -159,13 +146,13 @@ class Item
 
     if parent_through?
       if grand_parent_has_many?
-        update_model(self, parent[:item], grand_parent_association)
-        update_model(grand_parent[:item], self, grand_parent_association, parent[:item])
-        update_model(self, grand_parent[:item], grand_parent_association, parent[:item])
+        update_model(self, parent, grand_parent_association)
+        update_model(grand_parent, self, grand_parent_association, parent)
+        update_model(self, grand_parent, grand_parent_association, parent)
 
       elsif grand_parent_has_one?
-        update_model(parent[:item], self, grand_parent_association)
-        update_model(grand_parent[:item], self, grand_parent_association, parent[:item])
+        update_model(parent, self, grand_parent_association)
+        update_model(grand_parent, self, grand_parent_association, parent)
       end
     end
     associations.each do |association|

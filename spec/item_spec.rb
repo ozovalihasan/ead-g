@@ -280,11 +280,11 @@ describe Item do
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
       expect(@appointment.name).to eq('appointment')
-      expect(@appointment.parent[:item].name).to eq('physician')
-      expect(@appointment.parent[:association].name).to eq('has_many')
-      expect(@patient.grand_parent[:item].name).to eq('physician')
+      expect(@appointment.parent.name).to eq('physician')
+      expect(@appointment.parent_association.name).to eq('has_many')
+      expect(@patient.grand_parent.name).to eq('physician')
       expect(@appointment.associations[0].name).to eq(':through')
-      expect(@appointment.parent[:item].attributes[0].name).to eq('name')
+      expect(@appointment.parent.attributes[0].name).to eq('name')
     end
   end
 
@@ -305,7 +305,6 @@ describe Item do
       end
       @appointment.create_migration
       @physician.create_migration
-
     end
   end
 

@@ -11,15 +11,8 @@ class Association
 
   def add_second_items(block)
     block.sub_blocks.map do |sub_block|
-      Item.new(sub_block, parent_of_second_items)
+      Item.new(sub_block, first_item, self)
     end
-  end
-
-  def parent_of_second_items
-    {
-      item: first_item,
-      association: self
-    }
   end
 
   def has_many?

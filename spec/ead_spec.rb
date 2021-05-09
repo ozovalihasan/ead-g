@@ -52,10 +52,7 @@ describe EAD do
   end
 
   describe '.check_implement_items' do
-    it 'checks block having EAD content and create models adn associations' do
-      module Kernel
-        def system(arg1); end
-      end
+    it 'checks block having EAD content and create models and associations' do
       allow(File).to receive(:read).and_return(@items)
       mock_file = ''
       allow(File).to receive(:open).and_return(mock_file)

@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'ead'
+
+EAD.new.start(ARGV)

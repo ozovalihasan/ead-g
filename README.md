@@ -32,7 +32,7 @@ There are two choices to use the generated JSON file;
 
 ⚠️: Save your files before running the gem.
 
-⚠️⚠️: Please double check generated files by the gem.
+⚠️⚠️: Please double-check generated files by the gem.
 
 ⚠️⚠️⚠️: EAD is still under development. So, it is not recommended to use this gem with ongoing projects. 
 
@@ -44,10 +44,10 @@ EAD is a tool to initialize any Ruby on Rails project quickly by implementing as
 
 EAD contains two parts;
 
-- A user interface(called as EAD) to generate JSON file
-- A gem(called as EAD gem) to modify the files of Ruby on Rails project by using the generated JSON file
+- A user interface(called 'EAD') to generate JSON file
+- A gem(called 'EAD gem' or 'ead') to modify the files of Ruby on Rails project by using the generated JSON file
 
-This repository contains code of the EAD gem.
+This repository contains the code of the EAD gem.
 
 EAD can be accessible from [this repository](https://github.com/ozovalihasan/ead) or [here](https://ead.ozovalihasan.com/) 
 

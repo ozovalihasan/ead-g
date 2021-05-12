@@ -10,6 +10,13 @@ class EAD
     items = JSON.parse(file)
     ead_id = '8'
     Block.new(ead_id, items)
+    Block.all.each do |block|
+      next unless block.cloneable
+
+      block.clone_blocks.map! do |id|
+        Block.find(id.to_s)
+      end
+    end
   end
 
   def check_implement_items

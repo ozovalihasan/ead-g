@@ -3,7 +3,7 @@ require 'association'
 require 'fileutils'
 require 'active_support/core_ext/string'
 
-class Item
+class ItemBase
   attr_accessor :name, :parent, :parent_association, :associations, :attributes
 
   def initialize(block, parent = nil, parent_association = nil)
@@ -12,7 +12,6 @@ class Item
     @parent_association = parent_association
     @attributes = []
     @associations = []
-
     block.sub_blocks.each do |sub_block|
       if sub_block.attribute
         add_to_attributes(sub_block)
@@ -162,5 +161,16 @@ class Item
         update_model(self, second_item, association)
       end
     end
+  end
+end
+
+class Item < ItemBase
+end
+
+class ItemClone < ItemBase
+  attr_accessor :clone_parent
+
+  def initialize(block, _parent = nil, _parent_association = nil)
+    super(block, parent = nil, parent_association = nil)
   end
 end

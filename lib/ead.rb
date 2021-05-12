@@ -23,10 +23,19 @@ class EAD
     ead_id = '8'
     block = Block.find(ead_id)
     block.sub_blocks.each do |sub_block|
-      Item.new(sub_block)
+      if sub_block.entity
+        Item.new(sub_block)
+      elsif sub_block.entity_clone
+        ItemClone.new(sub_block)
+      end
     end
 
     Item.all.reverse.each do |item|
+      item.create_migration
+      item.add_associations_to_model
+    end
+
+    ItemClone.all.reverse.each do |item|
       item.create_migration
       item.add_associations_to_model
     end

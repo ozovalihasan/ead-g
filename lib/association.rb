@@ -11,7 +11,11 @@ class Association
 
   def add_second_items(block)
     block.sub_blocks.map do |sub_block|
-      Item.new(sub_block, first_item, self)
+      if sub_block.entity
+        Item.new(sub_block, first_item, self)
+      elsif sub_block.entity_clone
+        ItemClone.new(sub_block, first_item, self)
+      end
     end
   end
 

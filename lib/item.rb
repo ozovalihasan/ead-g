@@ -82,9 +82,6 @@ class ItemBase
     through_association.second_items.first
   end
 
-  def model_name
-    name.capitalize
-  end
 
   def create_migration
     def add_references(command, item)
@@ -176,6 +173,9 @@ class Item < ItemBase
     super(block, parent, parent_association)
     @clones = []
   end
+  def model_name
+    name.capitalize
+  end
 end
 
 class ItemClone < ItemBase
@@ -184,5 +184,9 @@ class ItemClone < ItemBase
   def initialize(block, parent = nil, parent_association = nil)
     super(block, parent, parent_association)
     @clone_parent = block.clone_parent
+  end
+
+  def model_name
+    clone_parent.name.capitalize
   end
 end

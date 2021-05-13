@@ -70,6 +70,10 @@ class ItemBase
     ObjectSpace.each_object(self).to_a
   end
 
+  def self.find(id)
+    all.find { |item| item.id == id }
+  end
+
   def through_association
     associations.find { |association| association.through? }
   end

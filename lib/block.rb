@@ -28,6 +28,6 @@ class Block
   end
 
   def self.find(id)
-    all.each { |block| return block if block.id == id }
+    all.find { |block| block.id == id }
   end
 end

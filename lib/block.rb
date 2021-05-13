@@ -1,6 +1,6 @@
 class Block
   attr_accessor :id, :content, :category, :attribute_container, :attribute, :type, :association, :sub_blocks,
-                :clone_blocks, :cloneable, :entity, :entity_clone
+                :clone_blocks, :cloneable, :entity, :entity_clone, :clone_parent
 
   def initialize(id, items)
     item = items[id]
@@ -15,6 +15,7 @@ class Block
     @entity_clone = item['entityClone']
     @cloneable = item['cloneable']
     @clone_blocks = item['cloneChildren']
+    @clone_parent = item['cloneParent'].to_s
     @sub_blocks = []
     item['subItemIds'].each do |sub_item_id|
       sub_item_id = sub_item_id.to_s

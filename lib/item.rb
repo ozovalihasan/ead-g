@@ -4,9 +4,10 @@ require 'fileutils'
 require 'active_support/core_ext/string'
 
 class ItemBase
-  attr_accessor :name, :parent, :parent_association, :associations, :attributes
+  attr_accessor :name, :parent, :parent_association, :associations, :attributes, :id
 
   def initialize(block, parent = nil, parent_association = nil)
+    @id = block.id
     @name = block.content.downcase.singularize
     @parent = parent
     @parent_association = parent_association
@@ -165,12 +166,19 @@ class ItemBase
 end
 
 class Item < ItemBase
+  attr_accessor :clones
+
+  def initialize(block, parent = nil, parent_association = nil)
+    super(block, parent, parent_association)
+    @clones = []
+  end
 end
 
 class ItemClone < ItemBase
   attr_accessor :clone_parent
 
-  def initialize(block, _parent = nil, _parent_association = nil)
-    super(block, parent = nil, parent_association = nil)
+  def initialize(block, parent = nil, parent_association = nil)
+    super(block, parent, parent_association)
+    @clone_parent = block.clone_parent
   end
 end

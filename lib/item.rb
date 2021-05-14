@@ -268,7 +268,7 @@ class Item < ItemBase
     end
 
     if parent_has_many? && through_association
-      through_child.create_migration
+      through_child.create_migration if through_child.not_clone?
       add_references(command, through_child)
     end
 

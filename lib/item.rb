@@ -209,7 +209,7 @@ class ItemBase
   end
 
   def not_clone?
-    instance_of?(Item)
+    !clone?
   end
 
   def real_item

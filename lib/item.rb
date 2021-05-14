@@ -82,42 +82,17 @@ class ItemBase
     through_association.second_items.first
   end
 
-
-  def create_migration
-    def add_references(command, item)
-      command << " #{item.name}:references"
-    end
-
-    return if File.exist?("./app/models/#{name}.rb")
-
-    command = 'bundle exec rails generate model '
-    command << model_name
-    attributes.each { |attribute| attribute.add_to(command) }
-
-    if parent_has_many? || parent_has_one?
-      add_references(command, parent)
-    elsif parent_through? && grand_parent_has_one?
-      add_references(command, parent)
-    end
-
-    if parent_has_many? && through_association
-      through_child.create_migration
-      add_references(command, through_child)
-    end
-
-    system(command)
-  end
-
   def add_associations_to_model
     def through?(item)
       item.present?
     end
 
-    def update_model(start_item, end_item, association, intermediate_item = nil)
+    def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic = false)
       return unless association.has_one? || association.has_many?
 
-      start_model = start_item.name
-      end_model = end_item.name
+      start_model = start_item.not_clone? ? start_item.name : start_item.clone_parent.name
+      end_model = end_item.not_clone? ? end_item.name : end_item.clone_parent.name
+      poly_as = end_item.name if end_item.name
       intermediate_model = intermediate_item.name if intermediate_item
 
       if association.has_many?
@@ -130,6 +105,7 @@ class ItemBase
       f.each do |line|
         if line.include? 'end'
           line_association = "  #{association.name} :#{end_model}"
+          line_association << ", as: :#{poly_as}" if polymorphic
           line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
           line_association << "\n"
           tempfile << line_association
@@ -156,25 +132,97 @@ class ItemBase
         update_model(grand_parent, self, grand_parent_association, parent)
       end
     end
+
     associations.each do |association|
       next unless association.has_many? || association.has_one?
 
       association.second_items.each do |second_item|
-        update_model(self, second_item, association)
+        if second_item.not_clone? && second_item.polymorphic && (second_item.polymorphic_names.include? name)
+          update_model(self, second_item, association, nil, true)
+        elsif second_item.clone? && second_item.clone_parent.polymorphic && (second_item.clone_parent.polymorphic_names.include? name)
+          update_model(self, second_item, association, nil, true)
+        else
+          update_model(self, second_item, association)
+        end
       end
     end
+  end
+
+  def clone?
+    instance_of?(ItemClone)
+  end
+
+  def not_clone?
+    instance_of?(Item)
+  end
+
+  def real_model
+    clone? ? parent_clone : self
   end
 end
 
 class Item < ItemBase
-  attr_accessor :clones
+  attr_accessor :clones, :polymorphic, :polymorphic_names
 
   def initialize(block, parent = nil, parent_association = nil)
     super(block, parent, parent_association)
     @clones = []
+    @polymorphic = false
+    @polymorphic_names = []
   end
+
   def model_name
     name.capitalize
+  end
+
+  def all_parent_has_many?
+    parent_association&.has_many?
+  end
+
+  def create_migration
+    def add_references(command, item)
+      command << " #{item.name}:references"
+    end
+
+    def add_polymorphic(command, poly_name)
+      command << " #{poly_name}:references{polymorphic}"
+    end
+    return if File.exist?("./app/models/#{name}.rb")
+
+    command = 'bundle exec rails generate model '
+    command << model_name
+    attributes.each { |attribute| attribute.add_to(command) }
+
+  
+
+    all_parents_name = [self, *clones].map do |item|
+      item.parent.name if item.parent
+    end
+
+    all_parents_name.compact!
+    @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
+    @polymorphic = true if @polymorphic_names.size > 0
+
+    [self, *clones].each do |item|
+      if item.parent && !@polymorphic_names.include?(item.parent.name)
+        if item.parent_has_many? || item.parent_has_one?
+          add_references(command, item.parent)
+        elsif item.parent_through? && item.grand_parent_has_one?
+          add_references(command, item.parent)
+        end
+      end
+    end
+
+    @polymorphic_names.each do |poly_name|
+      add_polymorphic(command, poly_name)
+    end
+
+    if parent_has_many? && through_association
+      through_child.create_migration
+      add_references(command, through_child)
+    end
+    p command
+    system(command)
   end
 end
 

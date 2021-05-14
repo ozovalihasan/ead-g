@@ -136,7 +136,7 @@ class ItemBase
           end
         end
 
-        migration_name = end_item.clone? ? end_item.clone_parent.name : end_item.name
+        migration_name = end_item.real_item.name
         open_migration_file(migration_name) do |file, tempfile|
           file.each do |line|
             if line.include? "t.references :#{start_item.name}, null: false, foreign_key: true"

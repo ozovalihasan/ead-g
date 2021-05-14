@@ -54,6 +54,10 @@ class ItemBase
     grand_parent_association&.has_one?
   end
 
+  def grand_parent_self?
+    real_item == grand_parent.real_item
+  end
+
   def parent_through?
     parent_association&.through?
   end

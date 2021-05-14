@@ -208,8 +208,8 @@ class ItemBase
     instance_of?(Item)
   end
 
-  def real_model
-    clone? ? parent_clone : self
+  def real_item
+    clone? ? clone_parent : self
   end
 end
 

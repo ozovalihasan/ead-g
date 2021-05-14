@@ -87,38 +87,90 @@ class ItemBase
       item.present?
     end
 
+    def open_migration_file(model_migration_name, &block)
+      tempfile = File.open('./db/migrate/migration_update.rb', 'w')
+      file_name = Dir["./db/migrate/*_#{model_migration_name.pluralize}.rb"].first
+      file = File.new(file_name)
+
+      block.call(file, tempfile)
+
+      file.close
+      tempfile.close
+
+      FileUtils.mv(
+        './db/migrate/migration_update.rb',
+        file_name
+      )
+    end
+
+    def open_model_file(model, &block)
+      tempfile = File.open('./app/models/model_update.rb', 'w')
+      file = File.new("./app/models/#{model}.rb")
+
+      block.call(file, tempfile)
+
+      file.close
+      tempfile.close
+
+      FileUtils.mv(
+        './app/models/model_update.rb',
+        "./app/models/#{model}.rb"
+      )
+    end
+
     def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic = false)
+      start_model = start_item.not_clone? ? start_item.name : start_item.clone_parent.name
       return unless association.has_one? || association.has_many?
 
-      start_model = start_item.not_clone? ? start_item.name : start_item.clone_parent.name
-      end_model = end_item.not_clone? ? end_item.name : end_item.clone_parent.name
-      poly_as = end_item.name if end_item.name
+      end_model = end_item.name
+      poly_as = start_item.name
       intermediate_model = intermediate_item.name if intermediate_item
+
+      if start_item.clone? && !polymorphic
+        open_model_file(end_item.clone_parent.name) do |file, tempfile|
+          file.each do |line|
+            if line.include? "belongs_to :#{start_item.name}"
+              line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\", foreign_key: \"#{start_item.name}_id\"\n"
+            end
+            tempfile << line
+          end
+        end
+
+        migration_name = end_item.clone? ? end_item.clone_parent.name : end_item.name
+        open_migration_file(migration_name) do |file, tempfile|
+          file.each do |line|
+            if line.include? "t.references :#{start_item.name}, null: false, foreign_key: true"
+              line = "      t.references :#{start_item.name}, null: false, foreign_key: { to_table: :#{start_item.clone_parent.name.pluralize}}\n"
+            end
+            tempfile << line
+          end
+        end
+
+      end
 
       if association.has_many?
         end_model = end_model.pluralize
         intermediate_model = intermediate_model.pluralize if intermediate_model
       end
 
-      tempfile = File.open('./app/models/model_update.rb', 'w')
-      f = File.new("./app/models/#{start_model}.rb")
-      f.each do |line|
-        if line.include? 'end'
-          line_association = "  #{association.name} :#{end_model}"
-          line_association << ", as: :#{poly_as}" if polymorphic
-          line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
-          line_association << "\n"
-          tempfile << line_association
+      open_model_file(start_model) do |file, tempfile|
+        file.each do |line|
+          if line.include? 'end'
+            line_association = "  #{association.name} :#{end_model}"
+            if end_item.clone? && (end_item.clone_parent.name != end_model.singularize)
+              line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
+            end
+            if start_item.clone? && (start_item.clone_parent.name != start_item.name) && !polymorphic
+              line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
+            end
+            line_association << ", as: :#{poly_as}" if polymorphic
+            line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
+            line_association << "\n"
+            tempfile << line_association
+          end
+          tempfile << line
         end
-        tempfile << line
       end
-      f.close
-      tempfile.close
-
-      FileUtils.mv(
-        './app/models/model_update.rb',
-        "./app/models/#{start_model}.rb"
-      )
     end
 
     if parent_through?
@@ -193,8 +245,6 @@ class Item < ItemBase
     command << model_name
     attributes.each { |attribute| attribute.add_to(command) }
 
-  
-
     all_parents_name = [self, *clones].map do |item|
       item.parent.name if item.parent
     end
@@ -221,7 +271,7 @@ class Item < ItemBase
       through_child.create_migration
       add_references(command, through_child)
     end
-    p command
+
     system(command)
   end
 end

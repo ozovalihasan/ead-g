@@ -144,7 +144,7 @@ class ItemBase
         open_migration_file(migration_name) do |file, tempfile|
           file.each do |line|
             if line.include? "t.references :#{start_item.name}, null: false, foreign_key: true"
-              line = "      t.references :#{start_item.name}, null: false, foreign_key: { to_table: :#{start_item.clone_parent.name.pluralize}}\n"
+              line = "      t.references :#{start_item.name}, null: #{end_item.real_item == start_item.real_item}, foreign_key: { to_table: :#{start_item.clone_parent.name.pluralize} }\n"
             end
             tempfile << line
           end

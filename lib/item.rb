@@ -24,7 +24,7 @@ class ItemBase
     end
   end
 
-  def grand_parent
+  def grand
     parent.parent
   end
 
@@ -42,20 +42,20 @@ class ItemBase
     @associations << Association.new(self, block)
   end
 
-  def grand_parent_association
+  def grand_association
     parent.parent_association
   end
 
-  def grand_parent_has_many?
-    grand_parent_association&.has_many?
+  def grand_has_many?
+    grand_association&.has_many?
   end
 
-  def grand_parent_has_one?
-    grand_parent_association&.has_one?
+  def grand_has_one?
+    grand_association&.has_one?
   end
 
-  def grand_parent_real_self?
-    real_item == grand_parent.real_item
+  def grand_real_self?
+    real_item == grand.real_item
   end
 
   def parent_through?
@@ -75,11 +75,11 @@ class ItemBase
   end
 
   def parent_through_has_one?
-    parent_through? && grand_parent_has_one?
+    parent_through? && grand_has_one?
   end
 
   def parent_through_has_many?
-    parent_through? && grand_parent_has_many
+    parent_through? && grand_has_many
   end
 
   def self.all
@@ -204,20 +204,20 @@ class ItemBase
 
   def add_associations_to_model
     if parent_through_has_many?
-      if grand_parent_real_self?
-        update_model(grand_parent, self, grand_parent_association, parent)
+      if grand_real_self?
+        update_model(grand, self, grand_association, parent)
       else
-        update_model(self, parent, grand_parent_association)
-        update_model(grand_parent, self, grand_parent_association, parent)
-        update_model(self, grand_parent, grand_parent_association, parent)
+        update_model(self, parent, grand_association)
+        update_model(grand, self, grand_association, parent)
+        update_model(self, grand, grand_association, parent)
       end
     elsif parent_through_has_one?
-      # if grand_parent_real_self?
+      # if grand_real_self?
 
       # else
       # end
-      update_model(parent, self, grand_parent_association)
-      update_model(grand_parent, self, grand_parent_association, parent)
+      update_model(parent, self, grand_association)
+      update_model(grand, self, grand_association, parent)
     end
 
     associations.each do |association|

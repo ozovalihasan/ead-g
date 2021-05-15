@@ -281,17 +281,9 @@ class Item < ItemBase
     @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
   end
 
-  def check_polymorphic(command)
+  def check_polymorphic(_command)
     update_polymorphic_names
     @polymorphic = true if @polymorphic_names.size.positive?
-
-    [self, *clones].each do |item|
-      next unless item.parent && !@polymorphic_names.include?(item.parent.name) && (
-        item.parent_has_any? || item.parent_through_has_one?
-      )
-
-      add_references(command, item)
-    end
   end
 
   def create_migration
@@ -310,6 +302,14 @@ class Item < ItemBase
     if parent_has_many? && through_association
       through_child.create_migration if through_child.not_clone?
       add_references(command, through_child)
+    end
+
+    [self, *clones].each do |item|
+      next unless item.parent && !@polymorphic_names.include?(item.parent.name) && (
+        item.parent_has_any? || item.parent_through_has_one?
+      )
+
+      add_references(command, item.parent)
     end
 
     system(command)

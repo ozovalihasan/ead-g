@@ -135,6 +135,10 @@ class ItemBase
     end
   end
 
+  def clone_name_different?
+    clone? && (clone_parent.name != start_item.name)
+  end
+
   def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic = false)
     start_model = start_item.real_item.name
     return unless association.has_one? || association.has_many?
@@ -180,10 +184,10 @@ class ItemBase
       file.each do |line|
         if line.include? 'end'
           line_association = "  #{association.name} :#{end_model}"
-          if end_item.clone? && (end_item.clone_parent.name != end_item.name)
+          if end_item.clone_name_different?
             line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
           end
-          if start_item.clone? && (start_item.clone_parent.name != start_item.name) && !polymorphic
+          if start_item.clone_name_different? && !polymorphic
             line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
           end
           line_association << ", as: :#{poly_as}" if polymorphic

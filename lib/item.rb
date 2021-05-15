@@ -79,7 +79,7 @@ class ItemBase
   end
 
   def parent_through_has_many?
-    parent_through? && grand_has_many
+    parent_through? && grand_has_many?
   end
 
   def self.all

@@ -98,121 +98,127 @@ class ItemBase
     through_association.second_items.first
   end
 
-  def add_associations_to_model
-    def through?(item)
-      item.present?
-    end
+  def through?(item)
+    item.present?
+  end
 
-    def open_migration_file(model_migration_name, &block)
-      tempfile = File.open('./db/migrate/migration_update.rb', 'w')
-      file_name = Dir["./db/migrate/*_#{model_migration_name.pluralize}.rb"].first
-      file = File.new(file_name)
+  def open_file(tempfile_name, file_name, &block)
+    tempfile = File.open(tempfile_name, 'w')
+    file = File.new(file_name)
 
+    block.call(file, tempfile)
+
+    file.close
+    tempfile.close
+
+    FileUtils.mv(
+      tempfile_name,
+      file_name
+    )
+  end
+
+  def open_migration_file(model_migration_name, &block)
+    tempfile_name = './db/migrate/migration_update.rb'
+    file_name = Dir["./db/migrate/*_#{model_migration_name.pluralize}.rb"].first
+
+    open_file(tempfile_name, file_name) do |file, tempfile|
       block.call(file, tempfile)
-
-      file.close
-      tempfile.close
-
-      FileUtils.mv(
-        './db/migrate/migration_update.rb',
-        file_name
-      )
     end
+  end
 
-    def open_model_file(model, &block)
-      tempfile = File.open('./app/models/model_update.rb', 'w')
-      file = File.new("./app/models/#{model}.rb")
+  def open_model_file(model, &block)
+    tempfile_name = './app/models/model_update.rb'
+    file_name = "./app/models/#{model}.rb"
 
+    open_file(tempfile_name, file_name) do |file, tempfile|
       block.call(file, tempfile)
-
-      file.close
-      tempfile.close
-
-      FileUtils.mv(
-        './app/models/model_update.rb',
-        "./app/models/#{model}.rb"
-      )
     end
+  end
 
-    def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic = false)
-      start_model = start_item.not_clone? ? start_item.name : start_item.clone_parent.name
-      return unless association.has_one? || association.has_many?
+  def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic = false)
+    start_model = start_item.real_item.name
+    return unless association.has_one? || association.has_many?
 
-      end_model = end_item.name
-      poly_as = start_item.name
-      intermediate_model = intermediate_item.name if intermediate_item
-
-      if start_item.clone? && !polymorphic
-        open_model_file(end_item.clone_parent.name) do |file, tempfile|
-          file.each do |line|
-            if line.include? "belongs_to :#{start_item.name}"
-              line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\""
-              line << if end_item.real_item == start_item.real_item
-                        ", optional: true \n"
-                      else
-                        ", foreign_key: \"#{start_item.name}_id\"\n"
-                      end
-            end
-            tempfile << line
-          end
-        end
-
-        migration_name = end_item.real_item.name
-        open_migration_file(migration_name) do |file, tempfile|
-          file.each do |line|
-            if line.include? "t.references :#{start_item.name}, null: false, foreign_key: true"
-              line = "      t.references :#{start_item.name}, null: #{end_item.real_item == start_item.real_item}, foreign_key: { to_table: :#{start_item.clone_parent.name.pluralize} }\n"
-            end
-            tempfile << line
-          end
-        end
-
-      end
-
-      if association.has_many?
-        end_model = end_model.pluralize
-        intermediate_model = intermediate_model.pluralize if intermediate_model
-      end
-
-      open_model_file(start_model) do |file, tempfile|
+    if start_item.clone? && !polymorphic
+      open_model_file(end_item.real_item.name) do |file, tempfile|
         file.each do |line|
-          if line.include? 'end'
-            line_association = "  #{association.name} :#{end_model}"
-            if end_item.clone? && (end_item.clone_parent.name != end_model.singularize)
-              line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
-            end
-            if start_item.clone? && (start_item.clone_parent.name != start_item.name) && !polymorphic
-              line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
-            end
-            line_association << ", as: :#{poly_as}" if polymorphic
-            line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
-            line_association << "\n"
-            tempfile << line_association
+          if line.include? "belongs_to :#{start_item.name}"
+
+            line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\""
+            line << if end_item.real_item == start_item.real_item
+                      ", optional: true \n"
+                    else
+                      ", foreign_key: \"#{start_item.name}_id\"\n"
+                    end
           end
           tempfile << line
         end
       end
+
+      migration_name = end_item.real_item.name
+      open_migration_file(migration_name) do |file, tempfile|
+        file.each do |line|
+          if line.include? "t.references :#{start_item.name}, null: false, foreign_key: true"
+            line = "      t.references :#{start_item.name}, null: #{end_item.real_item == start_item.real_item}, foreign_key: { to_table: :#{start_item.clone_parent.name.pluralize} }\n"
+          end
+          tempfile << line
+        end
+      end
+
     end
 
-    if parent_through?
-      if grand_parent_has_many?
+    end_model = end_item.name
+    poly_as = start_item.name
+    intermediate_model = intermediate_item.name if intermediate_item
+
+    if association.has_many?
+      end_model = end_model.pluralize
+      intermediate_model = intermediate_model.pluralize if intermediate_model
+    end
+
+    open_model_file(start_model) do |file, tempfile|
+      file.each do |line|
+        if line.include? 'end'
+          line_association = "  #{association.name} :#{end_model}"
+          if end_item.clone? && (end_item.clone_parent.name != end_item.name)
+            line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
+          end
+          if start_item.clone? && (start_item.clone_parent.name != start_item.name) && !polymorphic
+            line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
+          end
+          line_association << ", as: :#{poly_as}" if polymorphic
+          line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
+          line_association << "\n"
+          tempfile << line_association
+        end
+        tempfile << line
+      end
+    end
+  end
+
+  def add_associations_to_model
+    if parent_through_has_many?
+      if grand_parent_self?
+        update_model(grand_parent, self, grand_parent_association, parent)
+      else
         update_model(self, parent, grand_parent_association)
         update_model(grand_parent, self, grand_parent_association, parent)
         update_model(self, grand_parent, grand_parent_association, parent)
-
-      elsif grand_parent_has_one?
-        update_model(parent, self, grand_parent_association)
-        update_model(grand_parent, self, grand_parent_association, parent)
       end
+    elsif parent_through_has_one?
+      # if grand_parent_self?
+
+      # else
+      # end
+      update_model(parent, self, grand_parent_association)
+      update_model(grand_parent, self, grand_parent_association, parent)
     end
 
     associations.each do |association|
-      next unless association.has_many? || association.has_one?
+      next unless association.has_any?
 
       association.second_items.each do |second_item|
-        if second_item.not_clone? && second_item.polymorphic && (second_item.polymorphic_names.include? name)
-          update_model(self, second_item, association, nil, true)
-        elsif second_item.clone? && second_item.clone_parent.polymorphic && (second_item.clone_parent.polymorphic_names.include? name)
+        if second_item.real_item.polymorphic && (second_item.real_item.polymorphic_names.include? name)
           update_model(self, second_item, association, nil, true)
         else
           update_model(self, second_item, association)
@@ -252,37 +258,43 @@ class Item < ItemBase
     parent_association&.has_many?
   end
 
-  def create_migration
-    def add_references(command, item)
-      command << " #{item.name}:references"
-    end
+  def add_references(command, item)
+    command << " #{item.name}:references"
+  end
 
-    def add_polymorphic(command, poly_name)
-      command << " #{poly_name}:references{polymorphic}"
+  def add_polymorphic(command, poly_name)
+    command << " #{poly_name}:references{polymorphic}"
+  end
+
+  def update_polymorphic_names
+    all_parents_name = [self, *clones].map do |item|
+      item.parent&.name
     end
+    all_parents_name.compact!
+    @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
+  end
+
+  def check_polymorphic(command)
+    update_polymorphic_names
+    @polymorphic = true if @polymorphic_names.size.positive?
+
+    [self, *clones].each do |item|
+      next unless item.parent && !@polymorphic_names.include?(item.parent.name) && (
+        item.parent_has_any? || item.parent_through_has_one?
+      )
+
+      add_references(command, item)
+    end
+  end
+
+  def create_migration
     return if File.exist?("./app/models/#{name}.rb")
 
     command = 'bundle exec rails generate model '
     command << model_name
     attributes.each { |attribute| attribute.add_to(command) }
 
-    all_parents_name = [self, *clones].map do |item|
-      item.parent.name if item.parent
-    end
-
-    all_parents_name.compact!
-    @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
-    @polymorphic = true if @polymorphic_names.size > 0
-
-    [self, *clones].each do |item|
-      if item.parent && !@polymorphic_names.include?(item.parent.name)
-        if item.parent_has_many? || item.parent_has_one?
-          add_references(command, item.parent)
-        elsif item.parent_through? && item.grand_parent_has_one?
-          add_references(command, item.parent)
-        end
-      end
-    end
+    check_polymorphic(command)
 
     @polymorphic_names.each do |poly_name|
       add_polymorphic(command, poly_name)

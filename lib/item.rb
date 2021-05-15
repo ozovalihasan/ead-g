@@ -188,7 +188,7 @@ class ItemBase
             line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
           end
 
-          if end_item.polymorphic
+          if end_item.real_item.polymorphic
             line_association << ", as: :#{poly_as}"
           elsif start_item.clone_name_different?
             line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""

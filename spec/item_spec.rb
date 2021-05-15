@@ -308,7 +308,7 @@ describe Item do
     end
   end
 
-  describe '#add_associations_to_model' do
+  describe '#add_associations' do
     it 'updates model files of Ruby on Rails project' do
       class MockFile
         attr_reader :content
@@ -330,7 +330,7 @@ describe Item do
       allow(File).to receive(:new).and_return(mock_model_file)
       allow(mock_model_file).to receive(:close)
       allow(FileUtils).to receive(:mv)
-      @patient.add_associations_to_model
+      @patient.add_associations
 
       expect(mock_file.content).to eq([
                                         'class MockClass', "  has_many :appointments\n",
@@ -342,7 +342,7 @@ describe Item do
                                         "  has_many :physicians, through: :appointments\n",
                                         'end'
                                       ])
-      @physician.add_associations_to_model
+      @physician.add_associations
       expect(mock_file.content).to eq([
                                         'class MockClass', "  has_many :appointments\n",
                                         'end',

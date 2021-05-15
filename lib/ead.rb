@@ -38,11 +38,11 @@ class EAD
 
     Item.all.reverse.each do |item|
       item.create_migration
-      item.add_associations_to_model
+      item.add_associations
     end
 
     ItemClone.all.reverse.each do |item_clone|
-      item_clone.add_associations_to_model
+      item_clone.add_associations
     end
   end
 

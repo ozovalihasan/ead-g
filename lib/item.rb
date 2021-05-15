@@ -204,7 +204,7 @@ class ItemBase
     end
   end
 
-  def add_associations_to_model
+  def add_associations
     if parent_through_has_many?
       if grand_real_self_real?
         update_model(grand, self, grand_association, parent)

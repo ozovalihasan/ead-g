@@ -226,7 +226,7 @@ class ItemBase
       next unless association.has_any?
 
       association.second_items.each do |second_item|
-        if second_item.real_item.polymorphic && (second_item.real_item.polymorphic_names.include? name)
+        if second_item.real_item.polymorphic && second_item.real_item.polymorphic_names.include?(name)
           update_model(self, second_item, association, nil, true)
         else
           update_model(self, second_item, association)

@@ -27,6 +27,10 @@ class Association
     name == 'has_one'
   end
 
+  def has_any?
+    has_one? || has_many?
+  end
+
   def through?
     name == ':through'
   end

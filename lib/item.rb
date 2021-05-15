@@ -102,7 +102,7 @@ class ItemBase
     item.present?
   end
 
-  def open_file(tempfile_name, file_name, &block)
+  def open_close_file(tempfile_name, file_name, &block)
     tempfile = File.open(tempfile_name, 'w')
     file = File.new(file_name)
 
@@ -121,7 +121,7 @@ class ItemBase
     tempfile_name = './db/migrate/migration_update.rb'
     file_name = Dir["./db/migrate/*_#{model_migration_name.pluralize}.rb"].first
 
-    open_file(tempfile_name, file_name) do |file, tempfile|
+    open_close_file(tempfile_name, file_name) do |file, tempfile|
       block.call(file, tempfile)
     end
   end
@@ -130,7 +130,7 @@ class ItemBase
     tempfile_name = './app/models/model_update.rb'
     file_name = "./app/models/#{model}.rb"
 
-    open_file(tempfile_name, file_name) do |file, tempfile|
+    open_close_file(tempfile_name, file_name) do |file, tempfile|
       block.call(file, tempfile)
     end
   end

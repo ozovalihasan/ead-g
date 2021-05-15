@@ -79,7 +79,7 @@ class ItemBase
   end
 
   def through_association
-    associations.find { |association| association.through? }
+    associations.find(&:through?)
   end
 
   def through_child

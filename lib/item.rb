@@ -187,10 +187,12 @@ class ItemBase
           if end_item.clone_name_different?
             line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
           end
-          if start_item.clone_name_different? && !polymorphic
+
+          if end_item.polymorphic
+            line_association << ", as: :#{poly_as}"
+          elsif start_item.clone_name_different?
             line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
           end
-          line_association << ", as: :#{poly_as}" if polymorphic
           line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
           line_association << "\n"
           tempfile << line_association

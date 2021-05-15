@@ -134,11 +134,12 @@ class ItemBase
         open_model_file(end_item.clone_parent.name) do |file, tempfile|
           file.each do |line|
             if line.include? "belongs_to :#{start_item.name}"
-              if end_item.real_item == start_item.real_item
-                line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\", optional: true \n"
-              else
-                line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\", foreign_key: \"#{start_item.name}_id\"\n"
-              end
+              line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\""
+              line << if end_item.real_item == start_item.real_item
+                        ", optional: true \n"
+                      else
+                        ", foreign_key: \"#{start_item.name}_id\"\n"
+                      end
             end
             tempfile << line
           end

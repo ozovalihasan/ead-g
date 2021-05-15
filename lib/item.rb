@@ -136,7 +136,7 @@ class ItemBase
   end
 
   def clone_name_different?
-    clone? && (clone_parent.name != start_item.name)
+    clone? && (clone_parent.name != name)
   end
 
   def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic = false)

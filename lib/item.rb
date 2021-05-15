@@ -54,7 +54,7 @@ class ItemBase
     grand_association&.has_one?
   end
 
-  def grand_real_self?
+  def grand_real_self_real?
     real_item == grand.real_item
   end
 
@@ -204,7 +204,7 @@ class ItemBase
 
   def add_associations_to_model
     if parent_through_has_many?
-      if grand_real_self?
+      if grand_real_self_real?
         update_model(grand, self, grand_association, parent)
       else
         update_model(self, parent, grand_association)
@@ -212,7 +212,7 @@ class ItemBase
         update_model(self, grand, grand_association, parent)
       end
     elsif parent_through_has_one?
-      # if grand_real_self?
+      # if grand_real_self_real?
 
       # else
       # end

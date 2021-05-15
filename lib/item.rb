@@ -70,6 +70,18 @@ class ItemBase
     parent_association&.has_one?
   end
 
+  def parent_has_any?
+    parent_has_one? || parent_has_many?
+  end
+
+  def parent_through_has_one?
+    parent_through? && grand_parent_has_one?
+  end
+
+  def parent_through_has_many?
+    parent_through? && grand_parent_has_many
+  end
+
   def self.all
     ObjectSpace.each_object(self).to_a
   end

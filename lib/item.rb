@@ -264,6 +264,8 @@ class Item < ItemBase
   end
 
   def add_references(command, item)
+    return if command.include? " #{item.name}:references"
+
     command << " #{item.name}:references"
   end
 

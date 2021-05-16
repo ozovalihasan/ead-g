@@ -208,16 +208,13 @@ class ItemBase
     if parent_through_has_many?
       if grand_real_self_real?
         update_model(grand, self, grand_association, parent)
+        update_model(self, grand, grand_association, parent)
       else
         update_model(self, parent, grand_association)
         update_model(grand, self, grand_association, parent)
         update_model(self, grand, grand_association, parent)
       end
     elsif parent_through_has_one?
-      # if grand_real_self_real?
-
-      # else
-      # end
       update_model(parent, self, grand_association)
       update_model(grand, self, grand_association, parent)
     end

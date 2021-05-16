@@ -299,19 +299,18 @@ class Item < ItemBase
       add_polymorphic(command, poly_name)
     end
 
-    if parent_has_many? && through_association
-      through_child.create_migration if through_child.not_clone?
-      add_references(command, through_child)
-    end
-
     [self, *clones].each do |item|
+      if item.parent_has_many? && item.through_association
+        item.through_child.create_migration if item.through_child.not_clone?
+        add_references(command, item.through_child)
+      end
+
       next unless item.parent && !@polymorphic_names.include?(item.parent.name) && (
         item.parent_has_any? || item.parent_through_has_one?
       )
 
       add_references(command, item.parent)
     end
-
     system(command)
   end
 end

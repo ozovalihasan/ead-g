@@ -151,22 +151,29 @@ class ItemBase
     end_model_file = {}
     end_migration_file = {}
 
-    if start_item.clone? && !polymorphic_end && !intermediate_item
-      if end_item.reals_same?(start_item)
-        end_model_file['optional'] = 'true'
-      else
-        end_model_file['foreign_key'] = "\"#{start_item.name}_id\""
-      end
-      end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
-      if start_item.clone_parent.name != start_item.name
-        end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
-      end
-      end_migration_file['null'] = 'true' if end_item.real_item == start_item.real_item
+    if start_item.clone?
+      if !polymorphic_end && !intermediate_item
 
-    elsif start_item.clone? && polymorphic_end && !intermediate_item
-      end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
-      end_model_file['optional'] = 'true' if end_item.real_item == start_item.real_item
-      end_migration_file['null'] = 'true' if end_item.real_item == start_item.real_item
+        if end_item.reals_same?(start_item)
+          end_model_file['optional'] = 'true'
+        else
+          end_model_file['foreign_key'] = "\"#{start_item.name}_id\""
+        end
+        end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+        if start_item.clone_parent.name != start_item.name
+          end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
+        end
+        end_migration_file['null'] = 'true' if end_item.reals_same?(start_item)
+
+      elsif polymorphic_end && !intermediate_item
+
+        end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+        if end_item.reals_same?(start_item)
+          end_model_file['optional'] = 'true'
+          end_migration_file['null'] = 'true'
+        end
+
+      end
     end
 
     open_model_file(end_item.real_item.name) do |file, tempfile|

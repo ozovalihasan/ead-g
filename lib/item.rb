@@ -333,7 +333,7 @@ class Item < ItemBase
         add_references(command, item.through_child) if item.through_child.real_item != item.parent.real_item
       end
 
-      next unless item.parent && !@polymorphic_names.include?(item.parent.name) && (
+      next unless item.parent && !item.one_polymorphic_names?(item.parent) && (
         item.parent_has_any? || item.parent_through_has_one?
       )
 

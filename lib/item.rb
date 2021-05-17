@@ -209,7 +209,7 @@ class ItemBase
     migration_name = end_item.real_item.name
     open_migration_file(migration_name) do |file, tempfile|
       file.each do |line|
-        if line.include? "t.references :#{start_item.name}"
+        if line.match(/t.references :#{start_item.name}/)
           line.gsub!("\n", ' ')
           end_model_file.each do |key, value|
             if line.include? key

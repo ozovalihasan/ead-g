@@ -330,7 +330,7 @@ class Item < ItemBase
     [self, *clones].each do |item|
       if item.parent_has_many? && item.through_association
         item.through_child.create_migration if item.through_child.not_clone?
-        add_references(command, item.through_child)
+        add_references(command, item.through_child) if item.through_child.real_item != item.parent.real_item
       end
 
       next unless item.parent && !@polymorphic_names.include?(item.parent.name) && (

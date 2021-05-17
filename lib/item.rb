@@ -247,13 +247,17 @@ class ItemBase
       next unless association.has_any?
 
       association.second_items.each do |second_item|
-        if second_item.real_item.polymorphic && second_item.real_item.polymorphic_names.include?(name)
+        if second_item.one_polymorphic_names?(self)
           update_model(self, second_item, association, nil, true)
         else
           update_model(self, second_item, association)
         end
       end
     end
+  end
+
+  def one_polymorphic_names?(item)
+    real_item.polymorphic && real_item.polymorphic_names.include?(item.name)
   end
 
   def clone?

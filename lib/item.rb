@@ -245,14 +245,14 @@ class ItemBase
 
   def add_associations
     if parent_through_has_many?
-      if grand_real_self_real?
-        update_model(grand, self, grand_association, parent)
-        update_model(self, grand, grand_association, parent)
-      else
-        update_model(self, parent, grand_association)
-        update_model(grand, self, grand_association, parent)
+      update_model(self, parent, grand_association) unless grand_real_self_real?
+      if parent.one_polymorphic_names?(grand)
+        update_model(self, grand, grand_association, parent, false, true)
+      elsif !grand_real_self_real?
         update_model(self, grand, grand_association, parent)
       end
+      update_model(grand, self, grand_association, parent)
+
     elsif parent_through_has_one?
       update_model(parent, self, grand_association)
       update_model(grand, self, grand_association, parent)

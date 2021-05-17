@@ -58,6 +58,10 @@ class ItemBase
     real_item == grand.real_item
   end
 
+  def reals.same?(item)
+    real_item == item.real_item
+  end
+
   def parent_through?
     parent_association&.through?
   end

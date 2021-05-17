@@ -144,33 +144,57 @@ class ItemBase
 
     return unless association.has_one? || association.has_many?
 
+    end_model_file = {}
+    end_migration_file = {}
+
     if start_item.clone? && !polymorphic_end
-      open_model_file(end_item.real_item.name) do |file, tempfile|
-        file.each do |line|
-          if line.include? "belongs_to :#{start_item.name}"
-
-            line = "  belongs_to :#{start_item.name}, class_name: \"#{start_item.clone_parent.name.capitalize}\""
-            line << if end_item.real_item == start_item.real_item
-                      ", optional: true \n"
-                    else
-                      ", foreign_key: \"#{start_item.name}_id\"\n"
-                    end
-          end
-          tempfile << line
-        end
+      end_model_file['optional'] = 'true' if end_item.real_item == start_item.real_item
+      end_model_file['foreign_key'] = "\"#{start_item.name}_id\"" unless end_item.real_item == start_item.real_item
+      end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+      if start_item.clone_parent.name != start_item.name
+        end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
       end
+      end_migration_file['null'] = 'true' if end_item.real_item == start_item.real_item
 
-      migration_name = end_item.real_item.name
-      open_migration_file(migration_name) do |file, tempfile|
-        file.each do |line|
-          if line.include? "t.references :#{start_item.name}, null: false, foreign_key: true"
-            line.gsub('null: false', "null: #{end_item.real_item == start_item.real_item}")
-            line.gsub('foreign_key: true', "foreign_key: { to_table: :#{start_item.clone_parent.name.pluralize} }")
+    elsif start_item.clone? && polymorphic_end && !intermediate_item
+      end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+      end_model_file['optional'] = 'true' if end_item.real_item == start_item.real_item
+      end_migration_file['null'] = 'true' if end_item.real_item == start_item.real_item
+    end
+
+    open_model_file(end_item.real_item.name) do |file, tempfile|
+      file.each do |line|
+        if line.include? "belongs_to :#{start_item.name}"
+          line.gsub!("\n", ' ')
+          end_model_file.each do |key, value|
+            if line.include? key
+              line.gsub!(/#{key}: ([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
+            else
+              line << ", #{key}: #{value}"
+            end
           end
-          tempfile << line
+          line << "\n"
         end
+        tempfile << line
       end
+    end
 
+    migration_name = end_item.real_item.name
+    open_migration_file(migration_name) do |file, tempfile|
+      file.each do |line|
+        if line.include? "t.references :#{start_item.name}"
+          line.gsub!("\n", ' ')
+          end_model_file.each do |key, value|
+            if line.include? key
+              line.gsub!(/#{key}: ([, ])/, "#{key}: #{Regexp.last_match(1)}")
+            else
+              line << ", #{value}"
+            end
+          end
+          line << "\n"
+        end
+        tempfile << line
+      end
     end
 
     end_model = end_item.name

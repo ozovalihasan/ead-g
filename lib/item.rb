@@ -55,7 +55,7 @@ class ItemBase
   end
 
   def grand_real_self_real?
-    real_item == grand.real_item
+    reals_same? grand
   end
 
   def reals.same?(item)
@@ -151,9 +151,12 @@ class ItemBase
     end_model_file = {}
     end_migration_file = {}
 
-    if start_item.clone? && !polymorphic_end
-      end_model_file['optional'] = 'true' if end_item.real_item == start_item.real_item
-      end_model_file['foreign_key'] = "\"#{start_item.name}_id\"" unless end_item.real_item == start_item.real_item
+    if start_item.clone? && !polymorphic_end && !intermediate_item
+      if end_item.reals_same?(start_item)
+        end_model_file['optional'] = 'true'
+      else
+        end_model_file['foreign_key'] = "\"#{start_item.name}_id\""
+      end
       end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
       if start_item.clone_parent.name != start_item.name
         end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
@@ -249,13 +252,15 @@ class ItemBase
 
   def add_associations
     if parent_through_has_many?
-      update_model(self, parent, grand_association) unless grand_real_self_real?
-      if parent.one_polymorphic_names?(grand)
-        update_model(self, grand, grand_association, parent, false, true)
-      elsif !grand_real_self_real?
+      unless grand_real_self_real?
+        update_model(self, parent, grand_association)
         update_model(self, grand, grand_association, parent)
       end
-      update_model(grand, self, grand_association, parent)
+      if parent.one_polymorphic_names?(grand)
+        update_model(grand, self, grand_association, parent, false, true)
+      else
+        update_model(grand, self, grand_association, parent)
+      end
 
     elsif parent_through_has_one?
       update_model(parent, self, grand_association)

@@ -58,7 +58,7 @@ class ItemBase
     reals_same? grand
   end
 
-  def reals.same?(item)
+  def reals_same?(item)
     real_item == item.real_item
   end
 

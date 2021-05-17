@@ -139,7 +139,7 @@ class ItemBase
     clone? && (clone_parent.name != name)
   end
 
-  def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic_end = false)
+  def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic_end = false, polymorphic_intermediate = false)
     start_model = start_item.real_item.name
 
     return unless association.has_one? || association.has_many?

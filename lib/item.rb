@@ -150,59 +150,65 @@ class ItemBase
 
     end_model_file = {}
     end_migration_file = {}
-
     if start_item.clone?
-      if !polymorphic_end && !intermediate_item
+      if intermediate_item
 
-        if end_item.reals_same?(start_item)
-          end_model_file['optional'] = 'true'
-        else
-          end_model_file['foreign_key'] = "\"#{start_item.name}_id\""
-        end
-        end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
-        if start_item.clone_parent.name != start_item.name
-          end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
-        end
-        end_migration_file['null'] = 'true' if end_item.reals_same?(start_item)
-
-      elsif polymorphic_end && !intermediate_item
-
-        end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+        'hasan'
+      elsif polymorphic_end
         if end_item.reals_same?(start_item)
           end_model_file['optional'] = 'true'
           end_migration_file['null'] = 'true'
         end
 
+      elsif !polymorphic_end
+
+        if end_item.reals_same?(start_item)
+          end_model_file['optional'] = 'true'
+          end_migration_file['null'] = 'true'
+        elsif start_item.clone_name_different?
+          end_model_file['foreign_key'] = "\"#{start_item.name}_id\""
+        end
+
+        if start_item.clone_name_different?
+          end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+          end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
+        end
+
       end
     end
 
-    open_model_file(end_item.real_item.name) do |file, tempfile|
-      line_found = false
-      file.each do |line|
-        if line.match(/belongs_to :#{start_item.name}/)
-          line_found = true
-          line.gsub!("\n", ' ')
-          end_model_file.each do |key, value|
-            if line.include? key
-              line.gsub!(/#{key}: ([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
-            else
-              line << ", #{key}: #{value}"
+    unless intermediate_item
+      open_model_file(end_item.real_item.name) do |file, tempfile|
+        line_found = false
+
+        file.each do |line|
+          if line.match(/belongs_to :#{start_item.name}/)
+            line_found = true
+            line.gsub!("\n", ' ')
+            end_model_file.each do |key, value|
+              if line.include? key
+                line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
+              else
+                line << ", #{key}: #{value}"
+              end
             end
-          end
-          line << "\n"
-        elsif line.include?('end') && !line_found
-          line_association = "  belongs_to :#{start_item.name}"
-          end_model_file.each do |key, value|
-            if line_association.include? key
-              line_association.gsub!(/#{key}: ([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
-            else
-              line_association << ", #{key}: #{value}"
+            line << "\n"
+          elsif line.include?('end') && !line_found
+            line_association = "  belongs_to :#{start_item.name}"
+
+            end_model_file.each do |key, value|
+              if line_association.include? key
+                line_association.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
+              else
+                line_association << ", #{key}: #{value}"
+              end
             end
+
+            line_association << "\n"
+            tempfile << line_association
           end
-          line_association << "\n"
-          tempfile << line_association
+          tempfile << line
         end
-        tempfile << line
       end
     end
 
@@ -211,9 +217,9 @@ class ItemBase
       file.each do |line|
         if line.match(/t.references :#{start_item.name}/)
           line.gsub!("\n", ' ')
-          end_model_file.each do |key, value|
+          end_migration_file.each do |key, value|
             if line.include? key
-              line.gsub!(/#{key}: ([, ])/, "#{key}: #{Regexp.last_match(1)}")
+              line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
             else
               line << ", #{key}: #{value}"
             end
@@ -236,7 +242,7 @@ class ItemBase
     open_model_file(start_model) do |file, tempfile|
       file.each do |line|
         if line.include? 'end'
-          line_association = if polymorphic_intermediate
+          line_association = if intermediate_item&.one_polymorphic_names?(end_item)
                                if association.has_many?
                                  "  #{association.name} :#{end_item.real_item.name.pluralize}"
                                else
@@ -246,7 +252,7 @@ class ItemBase
                                "  #{association.name} :#{end_model}"
                              end
 
-          if end_item.clone_name_different? && (!polymorphic_intermediate || !intermediate_item.real_item.polymorphic_names.include?(end_item.name))
+          if end_item.clone_name_different? && (!polymorphic_intermediate || !intermediate_item.one_polymorphic_names?(end_item))
             line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
           end
 
@@ -258,7 +264,7 @@ class ItemBase
 
           line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
 
-          if polymorphic_intermediate
+          if polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)
             line_association << ", source: :#{end_item.name}, source_type: '#{end_item.real_item.name.capitalize}' "
           end
 

@@ -202,7 +202,7 @@ class ItemBase
             if line.include? key
               line.gsub!(/#{key}: ([, ])/, "#{key}: #{Regexp.last_match(1)}")
             else
-              line << ", #{value}"
+              line << ", #{key}: #{value}"
             end
           end
           line << "\n"

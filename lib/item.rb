@@ -318,10 +318,6 @@ class Item < ItemBase
     name.capitalize
   end
 
-  def all_parent_has_many?
-    parent_association&.has_many?
-  end
-
   def add_references(command, item)
     return if command.include? " #{item.name}:references"
 

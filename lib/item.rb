@@ -248,8 +248,10 @@ class ItemBase
     poly_as = start_item.name
 
     open_model_file(start_model) do |file, tempfile|
+      line_found = false
       file.each do |line|
-        if line.include? 'end'
+        if (line.include?('end') || line.include?("through: :#{end_item.name.pluralize}")) && !line_found
+          line_found = true
           line_association = if intermediate_item&.one_polymorphic_names?(end_item)
                                if association.has_many?
                                  "  #{association.name} :#{end_item.real_item.name.pluralize}"

@@ -155,10 +155,7 @@ class ItemBase
 
         'hasan'
       elsif polymorphic_end
-        if end_item.reals_same?(start_item)
-          end_model_file['optional'] = 'true'
-          end_migration_file['null'] = 'true'
-        end
+        end_model_file['optional'] = 'true' if end_item.reals_same?(start_item)
 
       elsif !polymorphic_end
 

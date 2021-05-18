@@ -4,11 +4,12 @@ require 'fileutils'
 require 'active_support/core_ext/string'
 
 class ItemBase
-  attr_accessor :name, :parent, :parent_association, :associations, :attributes, :id
+  attr_accessor :name, :parent, :parent_association, :associations, :attributes, :id, :twin_name
 
   def initialize(block, parent = nil, parent_association = nil)
     @id = block.id
-    @name = block.content.downcase.singularize
+    @name = block.content.split(' || ')[0].downcase.singularize
+    @twin_name = block.content.split(' || ')[1]&.downcase&.singularize
     @parent = parent
     @parent_association = parent_association
     @attributes = []
@@ -227,14 +228,24 @@ class ItemBase
       end
     end
 
-    end_model = end_item.name
-    poly_as = start_item.name
-    intermediate_model = intermediate_item.name if intermediate_item
+    end_model = if start_item.parent_through_has_many? && !intermediate_item && start_item == end_item.through_child && start_item.reals_same?(end_item.parent)
+                  end_item.twin_name
+                else
+                  end_item.name
+                end
+
+    intermediate_model = if intermediate_item && start_item.parent_through_has_many? && (start_item == intermediate_item.through_child) && start_item.reals_same?(end_item)
+                           intermediate_item.twin_name
+                         elsif intermediate_item
+                           intermediate_item.name
+                         end
 
     if association.has_many?
       end_model = end_model.pluralize
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
+
+    poly_as = start_item.name
 
     open_model_file(start_model) do |file, tempfile|
       file.each do |line|
@@ -276,7 +287,7 @@ class ItemBase
   def add_associations
     if parent_through?
 
-      if parent_through_has_many? && !grand_real_self_real?
+      if parent_through_has_many?
         update_model(self, parent, grand_association)
 
         if parent.one_polymorphic_names?(grand)
@@ -380,7 +391,7 @@ class Item < ItemBase
     [self, *clones].each do |item|
       if item.parent_has_many? && item.through_association
         item.through_child.create_migration if item.through_child.not_clone?
-        add_references(command, item.through_child) if item.through_child.real_item != item.parent.real_item
+        add_references(command, item.through_child)
       end
 
       next unless item.parent && !item.one_polymorphic_names?(item.parent) && (

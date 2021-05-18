@@ -231,7 +231,7 @@ class ItemBase
       end
     end
 
-    end_model = if start_item.parent_through_has_many? && !intermediate_item && start_item == end_item.through_child && start_item.reals_same?(end_item.parent)
+    end_model = if start_item.parent_through_has_many? && !intermediate_item && (start_item == end_item.through_child) && start_item.reals_same?(end_item.parent)
                   end_item.twin_name
                 else
                   end_item.name

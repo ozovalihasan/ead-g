@@ -293,9 +293,13 @@ class ItemBase
     if parent_through?
 
       if parent_through_has_many?
-        update_model(self, parent, grand_association)
+        if parent.one_polymorphic_names?(self)
+          update_model(self, parent, grand_association, nil, true)
+        else
+          update_model(self, parent, grand_association)
+        end
 
-        if parent.one_polymorphic_names?(grand)
+        if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
           update_model(self, grand, grand_association, parent, false, true)
         else
           update_model(self, grand, grand_association, parent)
@@ -305,7 +309,7 @@ class ItemBase
         update_model(parent, self, grand_association)
       end
 
-      if parent.one_polymorphic_names?(grand)
+      if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
         update_model(grand, self, grand_association, parent, false, true)
       else
         update_model(grand, self, grand_association, parent)
@@ -369,9 +373,9 @@ class Item < ItemBase
 
   def update_polymorphic_names
     all_parents_name = [self, *clones].map do |item|
-      item.parent&.name
+      [item.parent&.name, item.through_association && item.through_child.name]
     end
-    all_parents_name.compact!
+    all_parents_name.flatten!.compact!
     @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
   end
 

@@ -282,8 +282,13 @@ class ItemBase
                                "  #{association.name} :#{end_model}"
                              end
 
-          if end_item.clone_name_different? && (!polymorphic_intermediate || !intermediate_item.one_polymorphic_names?(end_item))
-            line_association << ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
+          if end_item.clone_name_different? && !(polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item))
+
+            line_association << if intermediate_item
+                                  ", source: :#{start_item.name}"
+                                else
+                                  ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
+                                end
           end
 
           if polymorphic_end

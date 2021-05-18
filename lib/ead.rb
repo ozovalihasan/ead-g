@@ -38,6 +38,9 @@ class EAD
 
     Item.all.reverse.each do |item|
       item.create_migration
+    end
+
+    Item.all.reverse.each do |item|
       item.add_associations
     end
 

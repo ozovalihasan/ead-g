@@ -295,7 +295,7 @@ class ItemBase
           line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
 
           if polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)
-            line_association << ", source: :#{end_item.name}, source_type: '#{end_item.real_item.name.capitalize}' "
+            line_association << ", source: :#{end_item.name}, source_type: \"#{end_item.real_item.name.capitalize}\" "
           end
 
           line_association << "\n"

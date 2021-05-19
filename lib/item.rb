@@ -165,7 +165,7 @@ class ItemBase
         end
 
         if start_item.clone? && !polymorphic_end && start_item.clone_name_different?
-          end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
+          end_model_file['class_name'] = "\"#{start_item.clone_parent.name.camelize}\""
           end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
         end
       end
@@ -271,7 +271,7 @@ class ItemBase
           line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
 
           if polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)
-            line_association << ", source: :#{end_item.name}, source_type: \"#{end_item.real_item.name.capitalize}\" "
+            line_association << ", source: :#{end_item.name}, source_type: \"#{end_item.real_item.name.camelize}\" "
           end
 
           line_association << "\n"
@@ -351,7 +351,7 @@ class Item < ItemBase
   end
 
   def model_name
-    name.capitalize
+    name.camelize
   end
 
   def add_references(command, item)
@@ -415,6 +415,6 @@ class ItemClone < ItemBase
   end
 
   def model_name
-    clone_parent.name.capitalize
+    clone_parent.name.camelize
   end
 end

@@ -8,8 +8,8 @@ class ItemBase
 
   def initialize(block, parent = nil, parent_association = nil)
     @id = block.id
-    @name = block.content.split(' || ')[0].downcase.singularize
-    @twin_name = block.content.split(' || ')[1]&.downcase&.singularize
+    @name = block.content.split(' || ')[0].underscore.singularize
+    @twin_name = block.content.split(' || ')[1]&.underscore&.singularize
     @parent = parent
     @parent_association = parent_association
     @attributes = []

@@ -252,10 +252,6 @@ class ItemBase
                                "  #{association.name} :#{end_model}"
                              end
 
-          if end_item.clone_name_different? && !(polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)) && (intermediate_item && association.has_many?)
-            line_association << ", source: :#{end_item.name}"
-          end
-
           if !intermediate_item && end_item.clone_name_different?
             line_association << ", class_name: \"#{end_item.real_item.name.camelize}\""
           end

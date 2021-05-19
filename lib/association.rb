@@ -15,6 +15,8 @@ class Association
         Item.new(sub_block, first_item, self)
       elsif sub_block.entity_clone
         ItemClone.new(sub_block, first_item, self)
+      elsif sub_block.entity_container
+        add_second_items(sub_block)
       end
     end
   end

@@ -1,6 +1,6 @@
 class Block
   attr_accessor :id, :content, :category, :attribute_container, :attribute, :type, :association, :sub_blocks,
-                :clone_blocks, :cloneable, :entity, :entity_clone, :clone_parent
+                :clone_blocks, :cloneable, :entity, :entity_clone, :clone_parent, :entity_container
 
   def initialize(id, items)
     item = items[id]
@@ -9,6 +9,7 @@ class Block
     @category = item['category']
     @attribute_container = item['attributeContainer']
     @entity = item['entity']
+    @entity_container = item['entityContainer']
     @attribute = item['attribute']
     @type = item['type']
     @association = item['association']

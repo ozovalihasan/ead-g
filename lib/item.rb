@@ -171,11 +171,8 @@ class ItemBase
       end
 
       open_model_file(end_item.real_item.name) do |file, tempfile|
-        line_found = false
-
         file.each do |line|
           if line.match(/belongs_to :#{start_item.name}/)
-            line_found = true
             line.gsub!("\n", ' ')
             end_model_file.each do |key, value|
               if line.include? key
@@ -185,19 +182,7 @@ class ItemBase
               end
             end
             line << "\n"
-          elsif line.include?('end') && !line_found
-            line_association = "  belongs_to :#{start_item.name}"
 
-            end_model_file.each do |key, value|
-              if line_association.include? key
-                line_association.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
-              else
-                line_association << ", #{key}: #{value}"
-              end
-            end
-
-            line_association << "\n"
-            tempfile << line_association
           end
           tempfile << line
         end

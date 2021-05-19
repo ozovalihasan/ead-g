@@ -239,8 +239,6 @@ class ItemBase
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
 
-    poly_as = start_item.name
-
     open_model_file(start_model) do |file, tempfile|
       line_found = false
       file.each do |line|
@@ -258,7 +256,7 @@ class ItemBase
 
           unless intermediate_item
             if polymorphic_end
-              line_association << ", as: :#{poly_as}"
+              line_association << ", as: :#{start_item.name}"
             elsif start_item.clone_name_different?
               line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
             end

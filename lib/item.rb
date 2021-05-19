@@ -144,66 +144,58 @@ class ItemBase
     clone? && (clone_parent.name != name)
   end
 
+  def change_file_line(file, tempfile, start_item, line_content)
+    file.each do |line|
+      if line.match(/belongs_to :#{start_item.name}/)
+        line.gsub!("\n", ' ')
+        line_content.each do |key, value|
+          if line.include? key
+            line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
+          else
+            line << ", #{key}: #{value}"
+          end
+        end
+        line << "\n"
+
+      end
+      tempfile << line
+    end
+  end
+
   def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic_end = false, polymorphic_intermediate = false)
     start_model = start_item.real_item.name
 
     return unless association.has_one? || association.has_many?
 
-    end_model_file = {}
-    end_migration_file = {}
+    start_model_file = {}
+    end_model_line = {}
+    end_migration_line = {}
 
     unless intermediate_item
       if association.has_one? && start_item.parent&.reals_same?(end_item)
-        end_model_file['optional'] = 'true'
-        end_migration_file['null'] = 'true'
+        end_model_line['optional'] = 'true'
+        end_migration_line['null'] = 'true'
       end
 
       if association.has_any?
         if end_item.reals_same?(start_item)
-          end_model_file['optional'] = 'true'
-          end_migration_file['null'] = 'true'
+          end_model_line['optional'] = 'true'
+          end_migration_line['null'] = 'true'
         end
 
         if start_item.clone? && !polymorphic_end && start_item.clone_name_different?
-          end_model_file['class_name'] = "\"#{start_item.clone_parent.name.camelize}\""
-          end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
+          end_model_line['class_name'] = "\"#{start_item.clone_parent.name.camelize}\""
+          end_migration_line['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
         end
       end
 
       open_model_file(end_item.real_item.name) do |file, tempfile|
-        file.each do |line|
-          if line.match(/belongs_to :#{start_item.name}/)
-            line.gsub!("\n", ' ')
-            end_model_file.each do |key, value|
-              if line.include? key
-                line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
-              else
-                line << ", #{key}: #{value}"
-              end
-            end
-            line << "\n"
-
-          end
-          tempfile << line
-        end
+        change_file_line(file, tempfile, start_item, end_model_line)
       end
-    end
 
-    migration_name = end_item.real_item.name
-    open_migration_file(migration_name) do |file, tempfile|
-      file.each do |line|
-        if line.match(/t.references :#{start_item.name}/)
-          line.gsub!("\n", ' ')
-          end_migration_file.each do |key, value|
-            if line.include? key
-              line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
-            else
-              line << ", #{key}: #{value}"
-            end
-          end
-          line << "\n"
-        end
-        tempfile << line
+      migration_name = end_item.real_item.name
+      open_migration_file(migration_name) do |file, tempfile|
+        change_file_line(file, tempfile, start_item, end_migration_line)
       end
     end
 
@@ -224,33 +216,41 @@ class ItemBase
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
 
+    start_model_file[association.name] = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
+                                           ":#{end_item.real_item.name.pluralize}"
+                                         else
+                                           ":#{end_model}"
+                                         end
+
+    unless intermediate_item
+      start_model_file['class_name'] = "\"#{end_item.real_item.name.camelize}\"" if end_item.clone_name_different?
+
+      if polymorphic_end
+        start_model_file['as'] = ":#{start_item.name}"
+      elsif start_item.clone_name_different?
+        start_model_file['foreign_key'] = "\"#{start_item.name.singularize}_id\""
+      end
+    end
+
+    start_model_file['through'] = ":#{intermediate_model}" if through?(intermediate_item)
+
+    if polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)
+      start_model_file['source'] = ":#{end_item.name}"
+      start_model_file['source_type'] = "\"#{end_item.real_item.name.camelize}\" "
+    end
+
     open_model_file(start_model) do |file, tempfile|
       line_found = false
       file.each do |line|
         if (line.include?('end') || line.include?("through: :#{end_model}")) && !line_found
           line_found = true
-          line_association = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
-                               "  #{association.name} :#{end_item.real_item.name.pluralize}"
-                             else
-                               "  #{association.name} :#{end_model}"
-                             end
-
-          if !intermediate_item && end_item.clone_name_different?
-            line_association << ", class_name: \"#{end_item.real_item.name.camelize}\""
-          end
-
-          unless intermediate_item
-            if polymorphic_end
-              line_association << ", as: :#{start_item.name}"
-            elsif start_item.clone_name_different?
-              line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
-            end
-          end
-
-          line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)
-
-          if polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)
-            line_association << ", source: :#{end_item.name}, source_type: \"#{end_item.real_item.name.camelize}\" "
+          line_association = ''
+          start_model_file.each do |key, value|
+            line_association << if %w[has_many has_one].include?(key)
+                                  "  #{key} #{value}"
+                                else
+                                  ", #{key}: #{value}"
+                                end
           end
 
           line_association << "\n"

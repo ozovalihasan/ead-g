@@ -151,51 +151,19 @@ class ItemBase
 
     end_model_file = {}
     end_migration_file = {}
-
-    if start_item.clone?
-      if intermediate_item
-
-        # will be updated
-      elsif polymorphic_end
+    unless intermediate_item
+      if association.has_many?
         if end_item.reals_same?(start_item)
           end_model_file['optional'] = 'true'
           end_migration_file['null'] = 'true'
         end
 
-      elsif !polymorphic_end
-
-        if end_item.reals_same?(start_item)
-          end_model_file['optional'] = 'true'
-          end_migration_file['null'] = 'true'
-        elsif start_item.clone_name_different?
-          end_model_file['foreign_key'] = "\"#{start_item.name}_id\""
-        end
-
-        if start_item.clone_name_different?
+        if start_item.clone? && (!polymorphic_end && start_item.clone_name_different?)
           end_model_file['class_name'] = "\"#{start_item.clone_parent.name.capitalize}\""
           end_migration_file['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
         end
-
-      end
-    elsif intermediate_item
-      # will be updated
-
-    elsif polymorphic_end
-      if end_item.reals_same?(start_item)
-        end_model_file['optional'] = 'true'
-        end_migration_file['null'] = 'true'
       end
 
-    elsif !polymorphic_end
-
-      if end_item.reals_same?(start_item)
-        end_model_file['optional'] = 'true'
-        end_migration_file['null'] = 'true'
-      end
-
-    end
-
-    unless intermediate_item
       open_model_file(end_item.real_item.name) do |file, tempfile|
         line_found = false
 

@@ -246,29 +246,26 @@ class ItemBase
       file.each do |line|
         if (line.include?('end') || line.include?("through: :#{end_model}")) && !line_found
           line_found = true
-          line_association = if intermediate_item&.one_polymorphic_names?(end_item)
-                               if association.has_many?
-                                 "  #{association.name} :#{end_item.real_item.name.pluralize}"
-                               else
-                                 "  #{association.name} :#{end_item.real_item.name}"
-                               end
+          line_association = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
+                               "  #{association.name} :#{end_item.real_item.name.pluralize}"
                              else
                                "  #{association.name} :#{end_model}"
                              end
 
-          if end_item.clone_name_different? && !(polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item))
-
-            line_association << if intermediate_item
-                                  ", source: :#{start_item.name}"
-                                else
-                                  ", class_name: \"#{end_item.clone_parent.name.capitalize}\""
-                                end
+          if end_item.clone_name_different? && !(polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)) && (intermediate_item && association.has_many?)
+            line_association << ", source: :#{end_item.name}"
           end
 
-          if polymorphic_end
-            line_association << ", as: :#{poly_as}"
-          elsif start_item.clone_name_different? && !intermediate_item
-            line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
+          if !intermediate_item && end_item.clone_name_different?
+            line_association << ", class_name: \"#{end_item.real_item.name.camelize}\""
+          end
+
+          unless intermediate_item
+            if polymorphic_end
+              line_association << ", as: :#{poly_as}"
+            elsif start_item.clone_name_different?
+              line_association << ", foreign_key: \"#{start_item.name.singularize}_id\""
+            end
           end
 
           line_association << ", through: :#{intermediate_model}" if through?(intermediate_item)

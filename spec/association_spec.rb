@@ -39,7 +39,7 @@ describe Association do
         'category' => 'association'
       },
       '14' => {
-        'content' => 'entity2',
+        'content' => 'entity3',
         'subItemIds' => [
           15
         ],
@@ -55,46 +55,59 @@ describe Association do
         'category' => 'association'
       },
       '16' => {
-        'content' => 'entity2',
+        'content' => 'entity4',
         'subItemIds' => [],
         'entity' => true,
         'category' => 'entity'
       }
     }
     @block = Block.new('10', items)
-    @item = Item.new(@block)
+    @item1 = Item.new(@block)
+    @association1 = @item1.associations.first
+    @item2 = @association1.second_items.first
+    @association2 = @item2.associations.first
+    @item3 = @association2.second_items.first
+    @association3 = @item3.associations.first
   end
 
   describe '#initialize' do
     it 'is created correctly' do
-      expect(Association.all[0].first_item.class).to eq(Item)
-      expect(Association.all[0].name).to eq('has_many')
-      expect(Association.all[0].second_items.size).to eq(1)
+      expect(@association1.first_item.class).to eq(Item)
+      expect(@association1.name).to eq('has_many')
+      expect(@association1.second_items.size).to eq(1)
     end
   end
 
   describe '#has_many?' do
-    it "returns whether an instance's content is 'has_many'" do
-      expect(Association.all[0].has_many?).to eq(true)
+    it "returns whether an instance's name is 'has_many'" do
+      expect(@association1.has_many?).to eq(true)
     end
   end
 
-  describe '#has_one' do
-    it "returns whether an instance's content is 'has_one'" do
-      expect(Association.all[1].has_one?).to eq(true)
+  describe '#add_second_items?' do
+    it 'adds items to second_items of association' do
+      expect(@association1.second_items.size).to eq(1)
+      @association1.add_second_items(@block.sub_blocks.first)
+      expect(@association1.second_items.size).to eq(2)
+    end
+  end
+
+  describe '#has_one?' do
+    it "returns whether an instance's name is 'has_one'" do
+      expect(@association2.has_one?).to eq(true)
     end
   end
 
   describe '#has_any?' do
-    it "returns whether an instance's content is 'has_many' or 'has_one'" do
-      expect(Association.all[0].has_any?).to eq(true)
-      expect(Association.all[1].has_any?).to eq(true)
+    it "returns whether an instance's name is 'has_many' or 'has_one'" do
+      expect(@association1.has_any?).to eq(true)
+      expect(@association2.has_any?).to eq(true)
     end
   end
 
   describe '#through?' do
-    it "returns whether an instance's content is ':through'" do
-      expect(Association.all[2].through?).to eq(true)
+    it "returns whether an instance's name is ':through'" do
+      expect(@association3.through?).to eq(true)
     end
   end
 

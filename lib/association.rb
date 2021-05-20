@@ -5,16 +5,17 @@ class Association
 
   def initialize(first_item, association_block)
     @first_item = first_item
-    @second_items = add_second_items(association_block)
+    @second_items = []
+    add_second_items(association_block)
     @name = association_block.content
   end
 
   def add_second_items(block)
-    block.sub_blocks.map do |sub_block|
+    block.sub_blocks.each do |sub_block|
       if sub_block.entity
-        Item.new(sub_block, first_item, self)
+        second_items << Item.new(sub_block, first_item, self)
       elsif sub_block.entity_clone
-        ItemClone.new(sub_block, first_item, self)
+        second_items << ItemClone.new(sub_block, first_item, self)
       elsif sub_block.entity_container
         add_second_items(sub_block)
       end

@@ -6,34 +6,34 @@ describe Attribute do
   before do
     ObjectSpace.garbage_collect
     items = {
-      '9' => {
+      '10' => {
         'content' => 'entity1',
         'subItemIds' => [
-          10, 11, 12
+          11, 12, 13
         ],
         'category' => 'entity'
       },
-      '10' => {
+      '11' => {
         'content' => 'attribute1',
         'subItemIds' => [],
         'attribute' => true,
         'type' => 'string',
         'category' => 'attribute'
       },
-      '11' => {
+      '12' => {
         'content' => 'attribute2',
-        'subItemIds' => [12],
+        'subItemIds' => [13],
         'attribute' => true,
         'type' => 'string',
         'category' => 'attribute'
       },
-      '12' => {
+      '13' => {
         'content' => 'attribute container',
-        'subItemIds' => [13],
+        'subItemIds' => [14],
         'attributeContainer' => true,
         'category' => 'attributeContainer'
       },
-      '13' => {
+      '14' => {
         'content' => 'attribute3',
         'subItemIds' => [],
         'attribute' => true,
@@ -42,7 +42,7 @@ describe Attribute do
       }
     }
 
-    @block = Block.new('9', items)
+    @block = Block.new('10', items)
     @item = Item.new(@block)
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end

@@ -108,38 +108,38 @@ class ItemBase
     clone? && (clone_parent.name != name)
   end
 
+  def update_end_model_migration_files(start_item, end_item, association, polymorphic_end = false)
+    end_model_line = {}
+    end_migration_line = {}
+    if association.has_one? && start_item.parent&.reals_same?(end_item)
+      end_model_line['optional'] = 'true'
+      end_migration_line['null'] = 'true'
+    end
+
+    if association.has_any?
+      if end_item.reals_same?(start_item)
+        end_model_line['optional'] = 'true'
+        end_migration_line['null'] = 'true'
+      end
+
+      if start_item.clone? && !polymorphic_end && start_item.clone_name_different?
+        end_model_line['class_name'] = "\"#{start_item.clone_parent.name.camelize}\""
+        end_migration_line['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
+      end
+    end
+
+    ProjectFile.update_line(end_item.real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
+
+    migration_name = end_item.real_item.name
+    ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
+  end
+
   def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic_end = false, polymorphic_intermediate = false)
     start_model = start_item.real_item.name
 
     return unless association.has_one? || association.has_many?
 
-    start_model_file = {}
-    end_model_line = {}
-    end_migration_line = {}
-
-    unless intermediate_item
-      if association.has_one? && start_item.parent&.reals_same?(end_item)
-        end_model_line['optional'] = 'true'
-        end_migration_line['null'] = 'true'
-      end
-
-      if association.has_any?
-        if end_item.reals_same?(start_item)
-          end_model_line['optional'] = 'true'
-          end_migration_line['null'] = 'true'
-        end
-
-        if start_item.clone? && !polymorphic_end && start_item.clone_name_different?
-          end_model_line['class_name'] = "\"#{start_item.clone_parent.name.camelize}\""
-          end_migration_line['foreign_key'] = "{ to_table: :#{start_item.clone_parent.name.pluralize} }"
-        end
-      end
-
-      ProjectFile.update_line(end_item.real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
-
-      migration_name = end_item.real_item.name
-      ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
-    end
+    update_end_model_migration_files(start_item, end_item, association, polymorphic_end) unless intermediate_item
 
     end_model = if start_item.parent_through_has_many? && !intermediate_item && (start_item == end_item.through_child) && start_item.reals_same?(end_item.parent)
                   end_item.twin_name
@@ -158,6 +158,7 @@ class ItemBase
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
 
+    start_model_file = {}
     start_model_file[association.name] = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
                                            ":#{end_item.real_item.name.pluralize}"
                                          else
@@ -184,33 +185,33 @@ class ItemBase
     ProjectFile.add_line(start_model, 'model', end_model, start_model_file)
   end
 
-  def add_associations
-    if parent_through?
-
-      if parent_through_has_many?
-        if parent.one_polymorphic_names?(self)
-          update_model(self, parent, grand_association, nil, true)
-        else
-          update_model(self, parent, grand_association)
-        end
-
-        if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
-          update_model(self, grand, grand_association, parent, false, true)
-        else
-          update_model(self, grand, grand_association, parent)
-        end
-
-      elsif parent_through_has_one?
-        update_model(parent, self, grand_association)
+  def parent_through_add_associations
+    if parent_through_has_many?
+      if parent.one_polymorphic_names?(self)
+        update_model(self, parent, grand_association, nil, true)
+      else
+        update_model(self, parent, grand_association)
       end
 
       if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
-        update_model(grand, self, grand_association, parent, false, true)
+        update_model(self, grand, grand_association, parent, false, true)
       else
-        update_model(grand, self, grand_association, parent)
+        update_model(self, grand, grand_association, parent)
       end
 
+    elsif parent_through_has_one?
+      update_model(parent, self, grand_association)
     end
+
+    if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
+      update_model(grand, self, grand_association, parent, false, true)
+    else
+      update_model(grand, self, grand_association, parent)
+    end
+  end
+
+  def add_associations
+    parent_through_add_associations if parent_through?
 
     associations.each do |association|
       next unless association.has_any?

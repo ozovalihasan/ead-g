@@ -144,9 +144,9 @@ class ItemBase
     clone? && (clone_parent.name != name)
   end
 
-  def change_file_line(file, tempfile, start_item, line_content)
+  def change_file_line(file, tempfile, keywords, line_content)
     file.each do |line|
-      if line.match(/belongs_to :#{start_item.name}/)
+      if line.match(keywords)
         line.gsub!("\n", ' ')
         line_content.each do |key, value|
           if line.include? key
@@ -190,12 +190,12 @@ class ItemBase
       end
 
       open_model_file(end_item.real_item.name) do |file, tempfile|
-        change_file_line(file, tempfile, start_item, end_model_line)
+        change_file_line(file, tempfile, /belongs_to :#{start_item.name}/, end_model_line)
       end
 
       migration_name = end_item.real_item.name
       open_migration_file(migration_name) do |file, tempfile|
-        change_file_line(file, tempfile, start_item, end_migration_line)
+        change_file_line(file, tempfile, /t.references :#{start_item.name}/, end_migration_line)
       end
     end
 

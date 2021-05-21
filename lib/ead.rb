@@ -1,5 +1,4 @@
 require 'json'
-require 'fileutils'
 require 'item'
 require 'item_clone'
 require 'block'

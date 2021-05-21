@@ -1,7 +1,6 @@
 require 'item'
 require 'block'
 require 'active_support/core_ext/string'
-require 'fileutils'
 
 describe Item do
   before do

@@ -1,7 +1,6 @@
 require 'item_base'
 require 'attribute'
 require 'association'
-require 'fileutils'
 require 'active_support/core_ext/string'
 
 class Item < ItemBase

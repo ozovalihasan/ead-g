@@ -1,3 +1,5 @@
+require 'project_file'
+
 class ItemBase
   attr_accessor :name, :parent, :parent_association, :associations, :attributes, :id, :twin_name
 
@@ -102,59 +104,8 @@ class ItemBase
     item.present?
   end
 
-  def open_close_file(tempfile_name, file_name, &block)
-    tempfile = File.open(tempfile_name, 'w')
-    file = File.new(file_name)
-
-    block.call(file, tempfile)
-
-    file.close
-    tempfile.close
-
-    FileUtils.mv(
-      tempfile_name,
-      file_name
-    )
-  end
-
-  def open_migration_file(model_migration_name, &block)
-    tempfile_name = './db/migrate/migration_update.rb'
-    file_name = Dir["./db/migrate/*_#{model_migration_name.pluralize}.rb"].first
-
-    open_close_file(tempfile_name, file_name) do |file, tempfile|
-      block.call(file, tempfile)
-    end
-  end
-
-  def open_model_file(model, &block)
-    tempfile_name = './app/models/model_update.rb'
-    file_name = "./app/models/#{model}.rb"
-
-    open_close_file(tempfile_name, file_name) do |file, tempfile|
-      block.call(file, tempfile)
-    end
-  end
-
   def clone_name_different?
     clone? && (clone_parent.name != name)
-  end
-
-  def change_file_line(file, tempfile, keywords, line_content)
-    file.each do |line|
-      if line.match(keywords)
-        line.gsub!("\n", ' ')
-        line_content.each do |key, value|
-          if line.include? key
-            line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
-          else
-            line << ", #{key}: #{value}"
-          end
-        end
-        line << "\n"
-
-      end
-      tempfile << line
-    end
   end
 
   def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic_end = false, polymorphic_intermediate = false)
@@ -184,14 +135,10 @@ class ItemBase
         end
       end
 
-      open_model_file(end_item.real_item.name) do |file, tempfile|
-        change_file_line(file, tempfile, /belongs_to :#{start_item.name}/, end_model_line)
-      end
+      ProjectFile.update_line(end_item.real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
 
       migration_name = end_item.real_item.name
-      open_migration_file(migration_name) do |file, tempfile|
-        change_file_line(file, tempfile, /t.references :#{start_item.name}/, end_migration_line)
-      end
+      ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
     end
 
     end_model = if start_item.parent_through_has_many? && !intermediate_item && (start_item == end_item.through_child) && start_item.reals_same?(end_item.parent)
@@ -234,26 +181,7 @@ class ItemBase
       start_model_file['source_type'] = "\"#{end_item.real_item.name.camelize}\" "
     end
 
-    open_model_file(start_model) do |file, tempfile|
-      line_found = false
-      file.each do |line|
-        if (line.include?('end') || line.include?("through: :#{end_model}")) && !line_found
-          line_found = true
-          line_association = ''
-          start_model_file.each do |key, value|
-            line_association << if %w[has_many has_one].include?(key)
-                                  "  #{key} #{value}"
-                                else
-                                  ", #{key}: #{value}"
-                                end
-          end
-
-          line_association << "\n"
-          tempfile << line_association
-        end
-        tempfile << line
-      end
-    end
+    ProjectFile.add_line(start_model, 'model', end_model, start_model_file)
   end
 
   def add_associations

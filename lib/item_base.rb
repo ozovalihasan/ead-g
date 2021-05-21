@@ -108,7 +108,9 @@ class ItemBase
     clone? && (clone_parent.name != name)
   end
 
-  def update_end_model_migration_files(start_item, end_item, association, polymorphic_end = false)
+  def update_end_model_migration_files(start_item, end_item, association)
+    polymorphic_end = end_item.one_polymorphic_names?(start_item)
+
     end_model_line = {}
     end_migration_line = {}
     if association.has_one? && start_item.parent&.reals_same?(end_item)
@@ -134,12 +136,12 @@ class ItemBase
     ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
   end
 
-  def update_model(start_item, end_item, association, intermediate_item = nil, polymorphic_end = false, polymorphic_intermediate = false)
+  def update_model(start_item, end_item, association, intermediate_item = nil)
     start_model = start_item.real_item.name
 
     return unless association.has_one? || association.has_many?
 
-    update_end_model_migration_files(start_item, end_item, association, polymorphic_end) unless intermediate_item
+    update_end_model_migration_files(start_item, end_item, association) unless intermediate_item
 
     end_model = if start_item.parent_through_has_many? && !intermediate_item && (start_item == end_item.through_child) && start_item.reals_same?(end_item.parent)
                   end_item.twin_name
@@ -165,21 +167,20 @@ class ItemBase
                                            ":#{end_model}"
                                          end
 
-    unless intermediate_item
+    if intermediate_item
+      start_model_file['through'] = ":#{intermediate_model}"
+      if intermediate_item.one_polymorphic_names?(end_item)
+        start_model_file['source'] = ":#{end_item.name}"
+        start_model_file['source_type'] = "\"#{end_item.real_item.name.camelize}\" "
+      end
+    elsif !intermediate_item
       start_model_file['class_name'] = "\"#{end_item.real_item.name.camelize}\"" if end_item.clone_name_different?
 
-      if polymorphic_end
+      if end_item.one_polymorphic_names?(start_item)
         start_model_file['as'] = ":#{start_item.name}"
       elsif start_item.clone_name_different?
         start_model_file['foreign_key'] = "\"#{start_item.name.singularize}_id\""
       end
-    end
-
-    start_model_file['through'] = ":#{intermediate_model}" if through?(intermediate_item)
-
-    if polymorphic_intermediate && intermediate_item.one_polymorphic_names?(end_item)
-      start_model_file['source'] = ":#{end_item.name}"
-      start_model_file['source_type'] = "\"#{end_item.real_item.name.camelize}\" "
     end
 
     ProjectFile.add_line(start_model, 'model', end_model, start_model_file)
@@ -187,27 +188,14 @@ class ItemBase
 
   def parent_through_add_associations
     if parent_through_has_many?
-      if parent.one_polymorphic_names?(self)
-        update_model(self, parent, grand_association, nil, true)
-      else
-        update_model(self, parent, grand_association)
-      end
-
-      if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
-        update_model(self, grand, grand_association, parent, false, true)
-      else
-        update_model(self, grand, grand_association, parent)
-      end
+      update_model(self, parent, grand_association)
+      update_model(self, grand, grand_association, parent)
 
     elsif parent_through_has_one?
       update_model(parent, self, grand_association)
     end
 
-    if parent.one_polymorphic_names?(grand) || parent.one_polymorphic_names?(self)
-      update_model(grand, self, grand_association, parent, false, true)
-    else
-      update_model(grand, self, grand_association, parent)
-    end
+    update_model(grand, self, grand_association, parent)
   end
 
   def add_associations
@@ -217,11 +205,7 @@ class ItemBase
       next unless association.has_any?
 
       association.second_items.each do |second_item|
-        if second_item.one_polymorphic_names?(self)
-          update_model(self, second_item, association, nil, true)
-        else
-          update_model(self, second_item, association)
-        end
+        update_model(self, second_item, association)
       end
     end
   end

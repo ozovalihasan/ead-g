@@ -35,8 +35,12 @@ class Item < ItemBase
     @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
   end
 
-  def check_polymorphic(_command)
+  def check_polymorphic(command)
     update_polymorphic_names
+    @polymorphic_names.each do |poly_name|
+      add_polymorphic(command, poly_name)
+    end
+
     @polymorphic = true if @polymorphic_names.size.positive?
   end
 
@@ -48,10 +52,6 @@ class Item < ItemBase
     attributes.each { |attribute| attribute.add_to(command) }
 
     check_polymorphic(command)
-
-    @polymorphic_names.each do |poly_name|
-      add_polymorphic(command, poly_name)
-    end
 
     [self, *clones].each do |item|
       if item.parent_has_many? && item.through_association

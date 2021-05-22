@@ -97,7 +97,7 @@ class ItemBase
   end
 
   def through_child
-    through_association.second_items.first
+    through_association&.second_items&.first
   end
 
   def through?(item)
@@ -106,6 +106,14 @@ class ItemBase
 
   def clone_name_different?
     clone? && (clone_parent.name != name)
+  end
+
+  def grand_many_through_reals_same?(item)
+    parent_through_has_many? && (grand == item) && reals_same?(item)
+  end
+
+  def parent_has_many_reals_same_through_child?(item)
+    item.parent_through_has_many? && (through_child == item) && item.reals_same?(parent)
   end
 
   def update_end_model_migration_files(start_item, end_item, association)
@@ -143,13 +151,13 @@ class ItemBase
 
     update_end_model_migration_files(start_item, end_item, association) unless intermediate_item
 
-    end_model = if start_item.parent_through_has_many? && !intermediate_item && (start_item == end_item.through_child) && start_item.reals_same?(end_item.parent)
+    end_model = if end_item.parent_has_many_reals_same_through_child?(start_item)
                   end_item.twin_name
                 else
                   end_item.name
                 end
 
-    intermediate_model = if intermediate_item && start_item.parent_through_has_many? && (start_item == intermediate_item.through_child) && start_item.reals_same?(end_item)
+    intermediate_model = if start_item.grand_many_through_reals_same?(end_item)
                            intermediate_item.twin_name
                          elsif intermediate_item
                            intermediate_item.name

@@ -3,7 +3,7 @@ class ProjectFile
     case type
     when 'migration'
       tempfile_name = './db/migrate/migration_update.rb'
-      file_name = Dir["./db/migrate/*_#{name.pluralize}.rb"].first
+      file_name = Dir.glob("./db/migrate/*_#{name.pluralize}.rb").first
     when 'model'
       tempfile_name = './app/models/model_update.rb'
       file_name = "./app/models/#{name}.rb"

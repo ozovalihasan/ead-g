@@ -22,10 +22,6 @@ class ItemBase
     end
   end
 
-  def grand
-    parent.parent
-  end
-
   def add_attribute_container(block)
     block.sub_blocks.each do |attribute|
       add_to_attributes(attribute)
@@ -38,6 +34,10 @@ class ItemBase
 
   def add_to_associations(block)
     @associations << Association.new(self, block)
+  end
+
+  def grand
+    parent.parent
   end
 
   def grand_association
@@ -84,14 +84,6 @@ class ItemBase
     parent_through? && grand_has_many?
   end
 
-  def self.all
-    ObjectSpace.each_object(self).to_a
-  end
-
-  def self.find(id)
-    all.find { |item| item.id == id }
-  end
-
   def through_association
     associations.find(&:through?)
   end
@@ -108,6 +100,22 @@ class ItemBase
     clone? && (clone_parent.name != name)
   end
 
+  def one_polymorphic_names?(item)
+    real_item.polymorphic && real_item.polymorphic_names.include?(item.name)
+  end
+
+  def clone?
+    instance_of?(ItemClone)
+  end
+
+  def not_clone?
+    !clone?
+  end
+
+  def real_item
+    clone? ? clone_parent : self
+  end
+
   def grand_many_through_reals_same?(item)
     parent_through_has_many? && (grand == item) && reals_same?(item)
   end
@@ -116,18 +124,18 @@ class ItemBase
     item.parent_through_has_many? && (through_child == item) && item.reals_same?(parent)
   end
 
-  def update_end_model_migration_files(start_item, end_item, association)
-    polymorphic_end = end_item.one_polymorphic_names?(start_item)
+  def update_end_model_migration_files(start_item, association)
+    polymorphic_end = one_polymorphic_names?(start_item)
 
     end_model_line = {}
     end_migration_line = {}
-    if association.has_one? && start_item.parent&.reals_same?(end_item)
+    if association.has_one? && start_item.parent&.reals_same?(self)
       end_model_line['optional'] = 'true'
       end_migration_line['null'] = 'true'
     end
 
     if association.has_any?
-      if end_item.reals_same?(start_item)
+      if reals_same?(start_item)
         end_model_line['optional'] = 'true'
         end_migration_line['null'] = 'true'
       end
@@ -138,26 +146,26 @@ class ItemBase
       end
     end
 
-    ProjectFile.update_line(end_item.real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
+    ProjectFile.update_line(real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
 
-    migration_name = end_item.real_item.name
+    migration_name = real_item.name
     ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
   end
 
-  def update_model(start_item, end_item, association, intermediate_item = nil)
-    start_model = start_item.real_item.name
+  def update_model(end_item, association, intermediate_item = nil)
+    start_model = real_item.name
 
     return unless association.has_one? || association.has_many?
 
-    update_end_model_migration_files(start_item, end_item, association) unless intermediate_item
+    end_item.update_end_model_migration_files(self, association) unless intermediate_item
 
-    end_model = if end_item.parent_has_many_reals_same_through_child?(start_item)
+    end_model = if end_item.parent_has_many_reals_same_through_child?(self)
                   end_item.twin_name
                 else
                   end_item.name
                 end
 
-    intermediate_model = if start_item.grand_many_through_reals_same?(end_item)
+    intermediate_model = if grand_many_through_reals_same?(end_item)
                            intermediate_item.twin_name
                          elsif intermediate_item
                            intermediate_item.name
@@ -184,10 +192,10 @@ class ItemBase
     elsif !intermediate_item
       start_model_file['class_name'] = "\"#{end_item.real_item.name.camelize}\"" if end_item.clone_name_different?
 
-      if end_item.one_polymorphic_names?(start_item)
-        start_model_file['as'] = ":#{start_item.name}"
-      elsif start_item.clone_name_different?
-        start_model_file['foreign_key'] = "\"#{start_item.name.singularize}_id\""
+      if end_item.one_polymorphic_names?(self)
+        start_model_file['as'] = ":#{name}"
+      elsif clone_name_different?
+        start_model_file['foreign_key'] = "\"#{name.singularize}_id\""
       end
     end
 
@@ -196,14 +204,14 @@ class ItemBase
 
   def parent_through_add_associations
     if parent_through_has_many?
-      update_model(self, parent, grand_association)
-      update_model(self, grand, grand_association, parent)
+      update_model(parent, grand_association)
+      update_model(grand, grand_association, parent)
 
     elsif parent_through_has_one?
-      update_model(parent, self, grand_association)
+      parent.update_model(self, grand_association)
     end
 
-    update_model(grand, self, grand_association, parent)
+    grand.update_model(self, grand_association, parent)
   end
 
   def add_associations
@@ -213,24 +221,16 @@ class ItemBase
       next unless association.has_any?
 
       association.second_items.each do |second_item|
-        update_model(self, second_item, association)
+        update_model(second_item, association)
       end
     end
   end
 
-  def one_polymorphic_names?(item)
-    real_item.polymorphic && real_item.polymorphic_names.include?(item.name)
+  def self.all
+    ObjectSpace.each_object(self).to_a
   end
 
-  def clone?
-    instance_of?(ItemClone)
-  end
-
-  def not_clone?
-    !clone?
-  end
-
-  def real_item
-    clone? ? clone_parent : self
+  def self.find(id)
+    all.find { |item| item.id == id }
   end
 end

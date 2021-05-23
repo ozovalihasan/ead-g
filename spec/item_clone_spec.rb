@@ -19,25 +19,25 @@ describe ItemClone do
       parent.clones << item_clone
     end
 
-    @fotograph = ItemClone.all.select { |item| item.name == 'fotograph' }[0]
+    @photograph = ItemClone.all.select { |item| item.name == 'photograph' }[0]
     # @picture = Item.all.select { |item| item.name == 'picture' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@fotograph.id).to eq('17')
-      expect(@fotograph.name).to eq('fotograph')
-      expect(@fotograph.parent.name).to eq('imageable')
-      expect(@fotograph.parent_association.name).to eq('has_many')
-      expect(@fotograph.attributes.size).to eq(0)
-      expect(@fotograph.associations.first.name).to eq(':through')
-      expect(@fotograph.clone_parent.name).to eq('picture')
+      expect(@photograph.id).to eq('17')
+      expect(@photograph.name).to eq('photograph')
+      expect(@photograph.parent.name).to eq('imageable')
+      expect(@photograph.parent_association.name).to eq('has_many')
+      expect(@photograph.attributes.size).to eq(0)
+      expect(@photograph.associations.first.name).to eq(':through')
+      expect(@photograph.clone_parent.name).to eq('picture')
     end
   end
 
   describe '#model_name' do
     it 'returns camelized clone parent name ' do
-      expect(@fotograph.model_name).to eq('Picture')
+      expect(@photograph.model_name).to eq('Picture')
     end
   end
 end

@@ -152,12 +152,8 @@ class ItemBase
     ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
   end
 
-  def update_model(end_item, association, intermediate_item = nil)
+  def update_start_model_file(end_item, association, intermediate_item = nil)
     start_model = real_item.name
-
-    return unless association.has_one? || association.has_many?
-
-    end_item.update_end_model_migration_files(self, association) unless intermediate_item
 
     end_model = if end_item.parent_has_many_reals_same_through_child?(self)
                   end_item.twin_name
@@ -176,30 +172,37 @@ class ItemBase
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
 
-    start_model_file = {}
-    start_model_file[association.name] = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
-                                           ":#{end_item.real_item.name.pluralize}"
-                                         else
-                                           ":#{end_model}"
-                                         end
+    line_content = {}
+    line_content[association.name] = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
+                                       ":#{end_item.real_item.name.pluralize}"
+                                     else
+                                       ":#{end_model}"
+                                     end
 
     if intermediate_item
-      start_model_file['through'] = ":#{intermediate_model}"
+      line_content['through'] = ":#{intermediate_model}"
       if intermediate_item.one_polymorphic_names?(end_item)
-        start_model_file['source'] = ":#{end_item.name}"
-        start_model_file['source_type'] = "\"#{end_item.real_item.name.camelize}\" "
+        line_content['source'] = ":#{end_item.name}"
+        line_content['source_type'] = "\"#{end_item.real_item.name.camelize}\" "
       end
     elsif !intermediate_item
-      start_model_file['class_name'] = "\"#{end_item.real_item.name.camelize}\"" if end_item.clone_name_different?
+      line_content['class_name'] = "\"#{end_item.real_item.name.camelize}\"" if end_item.clone_name_different?
 
       if end_item.one_polymorphic_names?(self)
-        start_model_file['as'] = ":#{name}"
+        line_content['as'] = ":#{name}"
       elsif clone_name_different?
-        start_model_file['foreign_key'] = "\"#{name.singularize}_id\""
+        line_content['foreign_key'] = "\"#{name.singularize}_id\""
       end
     end
 
-    ProjectFile.add_line(start_model, 'model', end_model, start_model_file)
+    ProjectFile.add_line(start_model, 'model', end_model, line_content)
+  end
+
+  def update_model(end_item, association, intermediate_item = nil)
+    return unless association.has_one? || association.has_many?
+
+    end_item.update_end_model_migration_files(self, association) unless intermediate_item
+    update_start_model_file(end_item, association, intermediate_item)
   end
 
   def parent_through_add_associations

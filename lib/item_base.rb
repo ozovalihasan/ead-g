@@ -195,7 +195,7 @@ class ItemBase
       end
     end
 
-    ProjectFile.add_line(start_model, 'model', end_model, line_content)
+    ProjectFile.add_line(start_model, end_model, line_content)
   end
 
   def update_model(end_item, association, intermediate_item = nil)

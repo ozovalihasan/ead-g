@@ -43,8 +43,8 @@ class ProjectFile
     end
   end
 
-  def self.add_line(name, type, end_model, line_content)
-    open_close(name, type) do |file, tempfile|
+  def self.add_line(name, end_model, line_content)
+    open_close(name, 'model') do |file, tempfile|
       line_found = false
       file.each do |line|
         if (line.include?('end') || line.include?("through: :#{end_model}")) && !line_found

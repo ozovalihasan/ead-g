@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="./documents/images/ead-logo.svg" alt="EAD Logo" style="height: 200px; width: 200px"/>
+</p>
+
+
 # ead(Entity Association Diagram gem)
 
 ead is a gem used to generate/modify files of Ruby on Rails projects by using a generated JSON file by EAD. EAD can be accessible from [this repository](https://github.com/ozovalihasan/ead) or [here](https://ead.ozovalihasan.com/) 
@@ -32,10 +37,15 @@ There are two choices to use the generated JSON file;
 
 ⚠️: Save your files before running the gem.
 
-⚠️⚠️: Please double-check generated files by the gem.
+⚠️⚠️: Please double-check the generated files by the gem.
 
 ⚠️⚠️⚠️: EAD is still under development. So, it is not recommended to use this gem with ongoing projects. 
 
+- If all files are generated as expected,
+
+  ```sh
+  $ bundle exec rails db:migrate
+  ```
 
 ## Getting Started
 
@@ -55,6 +65,10 @@ EAD can be accessible from [this repository](https://github.com/ozovalihasan/ead
 
 - Ruby
 - RSpec
+
+## Supported Versions
+
+The project is developed by using a sample Rails project. Ruby v2.7.2 and Rails v6.1.3.2 are used for this sample project. So, the previous versions of Ruby and Rails may cause some problems.
 
 ## Test ead
 

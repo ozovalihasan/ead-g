@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.files = Dir.glob('{bin,lib}/**/*')
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.required_ruby_version = '>= 2.5.1'
+  s.required_ruby_version = '>= 2.7.2'
 
   s.add_development_dependency 'activesupport', '~> 5.2'
   s.add_development_dependency 'bundler', '~> 2.2'

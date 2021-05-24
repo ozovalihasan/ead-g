@@ -2,7 +2,6 @@ require 'json'
 require 'item'
 require 'item_clone'
 require 'block'
-require 'byebug'
 
 class EAD
   def import_JSON(user_arguments)

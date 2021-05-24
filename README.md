@@ -68,7 +68,7 @@ EAD can be accessible from [this repository](https://github.com/ozovalihasan/ead
 
 ## Supported Versions
 
-The project is developed by using a sample Rails project. Ruby v2.7.2 and Rails v6.1.3.2 are used for this sample project. So, the previous versions of Ruby and Rails may cause some problems.
+The project is developed by using a sample Rails project. Ruby v2.7.2 and Rails v6.1.3.2 are used for this sample project. So, any previous versions of Ruby and Rails may cause some problems.
 
 ## Test ead
 

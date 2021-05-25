@@ -22,7 +22,7 @@ There are two choices to use the generated JSON file;
   ```sh
   $ ead 'path_of_the_generated_file'
   ```
-  * Don't forget to put quotation marks('). It is not necessary put quotation marks, if path_of_the_generated_file doesn't include any "(". But, usage of quotaino marks is encouraged to be  
+  * Don't forget to put quotation marks('). It is not necessary put quotation marks, if path_of_the_generated_file doesn't include any "(". But, usage of quotation marks is encouraged to be on the safe side. 
 
 - Move the generated JSON file (its name must be 'EAD.json') to the root folder of your project. Then, 
   ```sh
@@ -33,7 +33,7 @@ There are two choices to use the generated JSON file;
   ```sh
   $ ead './name_of_the_file'
   ```
-  * Don't forget to put quotation marks(').
+  * Don't forget to put quotation marks('). It is not necessary put quotation marks, if path_of_the_generated_file doesn't include any "(". But, usage of quotation marks is encouraged to be on the safe side. 
 
 ⚠️: Save your files before running the gem.
 

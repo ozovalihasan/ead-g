@@ -5,32 +5,53 @@ describe EAD do
   before do
     ObjectSpace.garbage_collect
     @items = {
-      '8' => {
-        'content' => 'EAD',
-        'subItemIds' => [
-          9
-        ],
-        'category' => 'EAD'
-      },
       '9' => {
-        'content' => 'entity1',
+        'content' => 'EAD',
         'subItemIds' => [
           10
         ],
-        'category' => 'entity'
+        'category' => 'EAD'
       },
       '10' => {
-        'content' => 'association1',
+        'content' => 'entity1',
         'subItemIds' => [
           11
+        ],
+        'entity' => true,
+        'category' => 'entity',
+        'cloneable' => true,
+        'cloneChildren' => []
+      },
+      '11' => {
+        'content' => 'association1',
+        'subItemIds' => [
+          12
         ],
         'association' => true,
         'category' => 'association'
       },
-      '11' => {
+      '12' => {
+        'content' => 'entity container',
+        'subItemIds' => [13, 14],
+        'entityContainer' => true,
+        'category' => 'entityContainer'
+      },
+      '13' => {
         'content' => 'entity2',
         'subItemIds' => [],
-        'category' => 'entity'
+        'entity' => true,
+        'category' => 'entity',
+        'cloneChildren' => [
+          14
+        ],
+        'cloneable' => true
+      },
+      '14' => {
+        'content' => 'entityClone1',
+        'subItemIds' => [],
+        'category' => 'entityClone',
+        'entityClone' => true,
+        'cloneParent' => 13
       }
     }
     @items = @items.to_json
@@ -41,18 +62,31 @@ describe EAD do
     it 'imports JSON file and creates blocks by using imported data' do
       allow(File).to receive(:read).and_return(@items)
       @ead.import_JSON([])
-      expect(Block.all.size).to eq(4)
+      expect(Block.all.size).to eq(6)
     end
 
     it 'imports JSON file with custom path and creates blocks by using imported data' do
       allow(File).to receive(:read).with('custom.json').and_return(@items)
       @ead.import_JSON(['custom.json'])
-      expect(Block.all.size).to eq(4)
+      expect(Block.all.size).to eq(6)
+    end
+  end
+
+  describe '#create_items' do
+    it 'creates all necessary instances of Item and ItemClone' do
+      allow(File).to receive(:read).and_return(@items)
+      @ead.import_JSON([])
+      ead_id = '9'
+      block = Block.find(ead_id)
+      @ead.create_items(block)
+      expect(Item.all.size).to eq(2)
+      expect(ItemClone.all.size).to eq(1)
     end
   end
 
   describe '.check_implement_items' do
     it 'checks block having EAD content and create models and associations' do
+      require 'item'
       allow(File).to receive(:read).and_return(@items)
       mock_file = ''
       allow(File).to receive(:open).and_return(mock_file)
@@ -65,15 +99,16 @@ describe EAD do
 
       call_create_migration = 0
       allow_any_instance_of(Item).to receive(:create_migration) { |_arg| call_create_migration += 1 }
-      call_add_associations_to_model = 0
-      allow_any_instance_of(Item).to receive(:add_associations_to_model) { |_arg| call_add_associations_to_model += 1 }
+      call_add_associations = 0
+      allow_any_instance_of(Item).to receive(:add_associations) { |_arg| call_add_associations += 1 }
 
       @ead.import_JSON([])
       @ead.check_implement_items
+
       expect(Item.all.size).to eq(2)
       expect(Association.all.size).to eq(1)
       expect(call_create_migration).to eq(2)
-      expect(call_add_associations_to_model).to eq(2)
+      expect(call_add_associations).to eq(2)
     end
   end
 

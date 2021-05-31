@@ -24,7 +24,7 @@ class EAD
         Item.new(sub_block)
       elsif sub_block.entity_clone
         ItemClone.new(sub_block)
-      elsif sub_block.entity_container
+      elsif sub_block.entity_container || sub_block.entity_association
         create_items(sub_block)
       end
     end
@@ -43,10 +43,6 @@ class EAD
 
     Item.all.reverse.each do |item|
       item.create_migration
-    end
-
-    Item.all.reverse.each do |item|
-      item.add_associations
     end
 
     ItemClone.all.reverse.each do |item_clone|

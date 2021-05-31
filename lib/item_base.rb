@@ -14,17 +14,9 @@ class ItemBase
     block.sub_blocks.each do |sub_block|
       if sub_block.attribute
         add_to_attributes(sub_block)
-      elsif sub_block.attribute_container
-        add_attribute_container(sub_block)
       elsif sub_block.association
         add_to_associations(sub_block)
       end
-    end
-  end
-
-  def add_attribute_container(block)
-    block.sub_blocks.each do |attribute|
-      add_to_attributes(attribute)
     end
   end
 

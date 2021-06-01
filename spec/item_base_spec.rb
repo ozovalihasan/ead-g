@@ -18,42 +18,33 @@ describe Item do
       parent.clones << item_clone
     end
 
-    @account_history = Item.all.select { |item| item.name == 'account_history' }[0]
+    @account_history = ItemClone.all.select { |item| item.name == 'account_history' }[0]
     @followed = ItemClone.all.select { |item| item.name == 'followed' }[0]
     @fan = ItemClone.all.select { |item| item.name == 'fan' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@followed.id).to eq('36')
+      expect(@followed.id).to eq('33')
       expect(@followed.name).to eq('followed')
       expect(@followed.twin_name).to eq('following')
       expect(@followed.parent.name).to eq('famous_person')
       expect(@followed.parent_association.name).to eq('has_many')
       expect(@followed.associations[0].name).to eq(':through')
-      expect(@account_history.attributes[0].name).to eq('credit_rating')
-    end
-  end
-
-  describe '#add_attribute_container' do
-    it 'adds each attribute inside of attribute container to attributes of item' do
-      expect(@account_history.attributes.size).to eq(2)
-
-      block = Block.find('55')
-      @account_history.add_attribute_container(block)
-
-      expect(@account_history.attributes.size).to eq(4)
+      expect(@account_history.clone_parent.attributes[0].name).to eq('credit_rating')
     end
   end
 
   describe '#add_to_attributes' do
     it 'adds an attribute to attributes of item' do
-      expect(@account_history.attributes.size).to eq(2)
+      parent = @account_history.clone_parent
+      expect(parent.attributes.size).to eq(2)
 
-      block = Block.find('57')
-      @account_history.add_to_attributes(block)
+      block = Block.find('49')
 
-      expect(@account_history.attributes.size).to eq(3)
+      parent.add_to_attributes(block)
+
+      expect(parent.attributes.size).to eq(3)
     end
   end
 
@@ -115,7 +106,7 @@ describe Item do
 
   describe '#parent_has_one?' do
     it "returns boolean showing whether the association between parent item and self is 'has_one?'" do
-      account = Item.all.select { |item| item.name == 'account' }[0]
+      account = ItemClone.all.select { |item| item.name == 'account' }[0]
       expect(@followed.parent_has_one?).to eq(false)
       expect(account.parent_has_one?).to eq(true)
     end
@@ -123,7 +114,7 @@ describe Item do
 
   describe '#parent_has_any?' do
     it "returns boolean showing whether the association between parent item and self is 'has_one?' or 'has_many?'" do
-      account = Item.all.select { |item| item.name == 'account' }[0]
+      account = ItemClone.all.select { |item| item.name == 'account' }[0]
       expect(@followed.parent_has_any?).to eq(true)
       expect(account.parent_has_any?).to eq(true)
       expect(@fan.parent_has_any?).to eq(false)
@@ -146,9 +137,9 @@ describe Item do
     end
   end
 
-  describe '#through_association?' do
+  describe '#through_association' do
     it "returns the ':through' association between self and any child" do
-      account = Item.all.select { |item| item.name == 'account' }[0]
+      account = ItemClone.all.select { |item| item.name == 'account' }[0]
 
       expect(account.through_association.name).to eq(':through')
     end
@@ -156,7 +147,7 @@ describe Item do
 
   describe '#through_child?' do
     it "returns the first item having ':through' association" do
-      account = Item.all.select { |item| item.name == 'account' }[0]
+      account = ItemClone.all.select { |item| item.name == 'account' }[0]
 
       expect(account.through_association.name).to eq(':through')
     end
@@ -190,21 +181,23 @@ describe Item do
 
   describe '#clone?' do
     it 'returns boolean showing whether an item is clone or not' do
-      expect(@account_history.clone?).to eq(false)
+      expect(@account_history.clone?).to eq(true)
       expect(@fan.clone?).to eq(true)
+      expect(Item.all.first.clone?).to eq(false)
     end
   end
 
   describe '#not_clone?' do
     it 'returns boolean showing whether an item is clone or not' do
-      expect(@account_history.not_clone?).to eq(true)
+      expect(Item.all.first.not_clone?).to eq(true)
       expect(@fan.not_clone?).to eq(false)
     end
   end
 
-  describe '#real_item?' do
+  describe '#real_item' do
     it "returns the real of clone or self if it isn't clone" do
-      expect(@account_history.real_item).to eq(@account_history)
+      user = Item.all.select { |item| item.name == 'user' }[0]
+      expect(user.real_item).to eq(user)
       expect(@fan.real_item.name).to eq('user')
     end
   end
@@ -335,13 +328,13 @@ describe Item do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(ItemBase.all.size).to eq(22)
+      expect(ItemBase.all.size).to eq(24)
     end
   end
 
   describe '.find' do
     it 'returns found item by using id' do
-      expect(ItemBase.find('24').name).to eq('letter')
+      expect(ItemBase.find('25').name).to eq('supplier')
     end
   end
 end

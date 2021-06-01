@@ -6,43 +6,49 @@ describe Attribute do
   before do
     ObjectSpace.garbage_collect
     items = {
-      '10' => {
+      '12' => {
         'content' => 'entity1',
         'subItemIds' => [
-          11, 12, 13
+          14,
+          13
         ],
-        'category' => 'entity'
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'factory' => false,
+        'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entity',
+        'cloneable' => true,
+        'cloneChildren' => []
       },
-      '11' => {
+      '13' => {
+        'content' => 'attribute2',
+        'subItemIds' => [],
+        'attribute' => true,
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'type' => 'text',
+        'expand' => true,
+        'category' => 'attribute'
+      },
+      '14' => {
         'content' => 'attribute1',
         'subItemIds' => [],
         'attribute' => true,
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'isDropDisabled' => false,
+        'factory' => false,
         'type' => 'string',
-        'category' => 'attribute'
-      },
-      '12' => {
-        'content' => 'attribute2',
-        'subItemIds' => [13],
-        'attribute' => true,
-        'type' => 'string',
-        'category' => 'attribute'
-      },
-      '13' => {
-        'content' => 'attribute container',
-        'subItemIds' => [14],
-        'attributeContainer' => true,
-        'category' => 'attributeContainer'
-      },
-      '14' => {
-        'content' => 'attribute3',
-        'subItemIds' => [],
-        'attribute' => true,
-        'type' => 'float',
+        'expand' => true,
         'category' => 'attribute'
       }
     }
 
-    @block = Block.new('10', items)
+    @block = Block.new('12', items)
     @item = Item.new(@block)
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end
@@ -64,7 +70,7 @@ describe Attribute do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(Attribute.all.size).to eq(3)
+      expect(Attribute.all.size).to eq(2)
     end
   end
 end

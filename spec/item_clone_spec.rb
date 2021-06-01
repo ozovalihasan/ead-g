@@ -20,12 +20,11 @@ describe ItemClone do
     end
 
     @photograph = ItemClone.all.select { |item| item.name == 'photograph' }[0]
-    # @picture = Item.all.select { |item| item.name == 'picture' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@photograph.id).to eq('17')
+      expect(@photograph.id).to eq('41')
       expect(@photograph.name).to eq('photograph')
       expect(@photograph.parent.name).to eq('imageable')
       expect(@photograph.parent_association.name).to eq('has_many')

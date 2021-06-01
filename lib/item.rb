@@ -4,13 +4,21 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Item < ItemBase
-  attr_accessor :clones, :polymorphic, :polymorphic_names
+  attr_accessor :attributes, :clones, :polymorphic, :polymorphic_names
 
-  def initialize(block, parent = nil, parent_association = nil)
-    super(block, parent, parent_association)
+  def initialize(block)
+    super(block)
     @clones = []
     @polymorphic = false
     @polymorphic_names = []
+    @attributes = []
+    block.sub_blocks.each do |sub_block|
+      add_to_attributes(sub_block)
+    end
+  end
+
+  def add_to_attributes(block)
+    @attributes << Attribute.new(block.content, block.type)
   end
 
   def model_name
@@ -28,7 +36,7 @@ class Item < ItemBase
   end
 
   def update_polymorphic_names
-    all_parents_name = [self, *clones].map do |item|
+    all_parents_name = clones.map do |item|
       [item.parent&.name, item.through_association && item.through_child.name]
     end
     all_parents_name.flatten!.compact!
@@ -53,11 +61,8 @@ class Item < ItemBase
 
     check_polymorphic(command)
 
-    [self, *clones].each do |item|
-      if item.parent_has_many? && item.through_association
-        item.through_child.create_migration if item.through_child.not_clone?
-        add_references(command, item.through_child)
-      end
+    clones.each do |item|
+      add_references(command, item.through_child) if item.parent_has_many? && item.through_association
 
       next unless item.parent && !item.one_polymorphic_names?(item.parent) && (
         item.parent_has_any? || item.parent_through_has_one?

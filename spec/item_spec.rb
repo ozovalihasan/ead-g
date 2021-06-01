@@ -28,10 +28,20 @@ describe Item do
       expect(@account_history.id).to eq('23')
       expect(@account_history.name).to eq('account_history')
       expect(@account_history.attributes[0].name).to eq('credit_rating')
-      expect(@account_history.associations).to eq([])
       expect(@account_history.clones.size).to eq(1)
       expect(@account_history.polymorphic).to eq(false)
       expect(@account_history.polymorphic_names).to eq([])
+    end
+  end
+
+  describe '#add_to_attributes' do
+    it 'adds an attribute to attributes of item' do
+      expect(@account_history.attributes.size).to eq(2)
+
+      block = Block.find('49')
+      @account_history.add_to_attributes(block)
+
+      expect(@account_history.attributes.size).to eq(3)
     end
   end
 

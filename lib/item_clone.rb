@@ -1,5 +1,6 @@
 require 'item_base'
 require 'association'
+require 'project_file'
 
 class ItemClone < ItemBase
   attr_accessor :clone_parent, :parent, :parent_association, :associations

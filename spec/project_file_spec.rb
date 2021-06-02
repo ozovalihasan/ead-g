@@ -1,5 +1,6 @@
 require 'ead'
 require 'project_file'
+
 describe ProjectFile do
   describe '.update_line' do
     it 'opens, updates and closes a file' do

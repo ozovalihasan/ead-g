@@ -3,7 +3,6 @@ require 'item_clone'
 require 'block'
 require 'active_support/core_ext/string'
 require 'ead'
-require 'project_file'
 
 describe ItemClone do
   before do

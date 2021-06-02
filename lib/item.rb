@@ -36,8 +36,16 @@ class Item < ItemBase
   end
 
   def update_polymorphic_names
+    return if clones.size.zero?
+
     all_parents_name = clones.map do |item|
-      [item.parent&.name, item.through_association && item.through_child.name]
+      if item.through_association && item.parent_has_many?
+        [item.parent&.name, item.through_child.name]
+      elsif !item.parent_through_has_many?
+        [item.parent&.name]
+      else
+        []
+      end
     end
     all_parents_name.flatten!.compact!
     @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq

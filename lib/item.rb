@@ -38,17 +38,26 @@ class Item < ItemBase
   def update_polymorphic_names
     return if clones.size.zero?
 
-    all_parents_name = clones.map do |item|
+    belong_parents = []
+    clones.each do |item|
       if item.through_association && item.parent_has_many?
-        [item.parent&.name, item.through_child.name]
-      elsif !item.parent_through_has_many?
-        [item.parent&.name]
-      else
-        []
+        belong_parents << item.parent
+        belong_parents << item.through_child
+      elsif !item.parent_through_has_many? && item.parent
+        belong_parents << item.parent
       end
     end
-    all_parents_name.flatten!.compact!
-    @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
+    belong_parent_names = belong_parents.map(&:name)
+
+    filtered_parent_names = belong_parent_names.find_all do |parent_name|
+      belong_parent_names.count(parent_name) > 1
+    end.uniq
+
+    @polymorphic_names = filtered_parent_names.find_all do |parent_name|
+      belong_parents.find_all do |item|
+        item.name == parent_name
+      end.map(&:clone_parent).map(&:name).uniq.size > 1
+    end
   end
 
   def check_polymorphic(command)

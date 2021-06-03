@@ -41,11 +41,11 @@ class EAD
       parent.clones << item_clone
     end
 
-    Item.all.reverse.each do |item|
+    Item.all.each do |item|
       item.create_migration
     end
 
-    ItemClone.all.reverse.each do |item_clone|
+    ItemClone.all.each do |item_clone|
       item_clone.add_associations
     end
   end

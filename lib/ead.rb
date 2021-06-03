@@ -6,6 +6,22 @@ require 'block'
 class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
+
+    if JSON.parse(file)['version'] != '0.3.0'
+      puts "\n\n----------------"
+      puts "\e[31m#{
+        'Versions of your EAD file and the gem are not compatible.'\
+        ' So, you may have some unexpected results.'\
+        'To run your EAD file correctly, please run'
+      }\e[0m"
+
+      puts "\e[31m#{
+        "\ngem install ead -v #{JSON.parse(file)['version']}"
+      }\e[0m"
+      puts "----------------\n\n"
+
+    end
+
     items = JSON.parse(file)['items']
     ead_id = '9'
     Block.new(ead_id, items)

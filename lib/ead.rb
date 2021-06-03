@@ -6,7 +6,7 @@ require 'block'
 class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
-    items = JSON.parse(file)
+    items = JSON.parse(file)['items']
     ead_id = '9'
     Block.new(ead_id, items)
     Block.all.each do |block|

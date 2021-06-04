@@ -4,13 +4,21 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Item < ItemBase
-  attr_accessor :clones, :polymorphic, :polymorphic_names
+  attr_accessor :attributes, :clones, :polymorphic, :polymorphic_names
 
-  def initialize(block, parent = nil, parent_association = nil)
-    super(block, parent, parent_association)
+  def initialize(block)
+    super(block)
     @clones = []
     @polymorphic = false
     @polymorphic_names = []
+    @attributes = []
+    block.sub_blocks.each do |sub_block|
+      add_to_attributes(sub_block)
+    end
+  end
+
+  def add_to_attributes(block)
+    @attributes << Attribute.new(block.content, block.type)
   end
 
   def model_name
@@ -28,11 +36,28 @@ class Item < ItemBase
   end
 
   def update_polymorphic_names
-    all_parents_name = [self, *clones].map do |item|
-      [item.parent&.name, item.through_association && item.through_child.name]
+    return if clones.size.zero?
+
+    belong_parents = []
+    clones.each do |item|
+      if item.through_association && item.parent_has_many?
+        belong_parents << item.parent
+        belong_parents << item.through_child
+      elsif !item.parent_through_has_many? && item.parent
+        belong_parents << item.parent
+      end
     end
-    all_parents_name.flatten!.compact!
-    @polymorphic_names = all_parents_name.find_all { |name| all_parents_name.count(name) > 1 }.uniq
+    belong_parent_names = belong_parents.map(&:name)
+
+    filtered_parent_names = belong_parent_names.find_all do |parent_name|
+      belong_parent_names.count(parent_name) > 1
+    end.uniq
+
+    @polymorphic_names = filtered_parent_names.find_all do |parent_name|
+      belong_parents.find_all do |item|
+        item.name == parent_name
+      end.map(&:clone_parent).map(&:name).uniq.size > 1
+    end
   end
 
   def check_polymorphic(command)
@@ -53,11 +78,8 @@ class Item < ItemBase
 
     check_polymorphic(command)
 
-    [self, *clones].each do |item|
-      if item.parent_has_many? && item.through_association
-        item.through_child.create_migration if item.through_child.not_clone?
-        add_references(command, item.through_child)
-      end
+    clones.each do |item|
+      add_references(command, item.through_child) if item.parent_has_many? && item.through_association
 
       next unless item.parent && !item.one_polymorphic_names?(item.parent) && (
         item.parent_has_any? || item.parent_through_has_one?

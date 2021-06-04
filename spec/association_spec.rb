@@ -1,68 +1,218 @@
 require 'association'
-require 'item'
+require 'item_clone'
 require 'block'
 
 describe Association do
   before do
     ObjectSpace.garbage_collect
     items = {
-      '10' => {
-        'content' => 'entity1',
+      '9' => {
+        'content' => 'EAD',
         'subItemIds' => [
+          10,
           11
         ],
-        'entity' => true,
-        'category' => 'entity'
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'isDragDisabled' => true,
+        'expand' => true,
+        'category' => 'EAD'
       },
-      '11' => {
-        'content' => 'has_many',
+      '10' => {
+        'content' => 'entity container',
         'subItemIds' => [
-          12
-        ],
-        'association' => true,
-        'category' => 'association'
-      },
-      '12' => {
-        'content' => 'entity2',
-        'subItemIds' => [
+          16,
+          15,
+          14,
           13
         ],
-        'entity' => true,
-        'category' => 'entity'
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'entityContainer' => true,
+        'expand' => true,
+        'category' => 'entityContainer',
+        'factory' => false,
+        'isDropDisabled' => false
+      },
+      '11' => {
+        'content' => 'entities & associations',
+        'subItemIds' => [
+          17
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'entityAssociation' => true,
+        'expand' => true,
+        'category' => 'entityAssociation',
+        'factory' => false,
+        'isDropDisabled' => false
       },
       '13' => {
-        'content' => 'has_one',
-        'subItemIds' => [
-          14
-        ],
-        'association' => true,
-        'category' => 'association'
+        'content' => 'entity1',
+        'subItemIds' => [],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'factory' => false,
+        'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entity',
+        'cloneable' => true,
+        'cloneChildren' => [
+          17
+        ]
       },
       '14' => {
-        'content' => 'entity3',
-        'subItemIds' => [
-          15
-        ],
+        'content' => 'entity2',
+        'subItemIds' => [],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'factory' => false,
         'entity' => true,
-        'category' => 'entity'
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entity',
+        'cloneable' => true,
+        'cloneChildren' => [
+          19
+        ]
       },
       '15' => {
-        'content' => ':through',
-        'subItemIds' => [
-          16
-        ],
-        'association' => true,
-        'category' => 'association'
+        'content' => 'entity3',
+        'subItemIds' => [],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'factory' => false,
+        'entity' => true,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entity',
+        'cloneable' => true,
+        'cloneChildren' => [
+          21
+        ]
       },
       '16' => {
         'content' => 'entity4',
         'subItemIds' => [],
+        'order' => 'vertical',
+        'subdirection' => 'column',
+        'factory' => false,
         'entity' => true,
-        'category' => 'entity'
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entity',
+        'cloneable' => true,
+        'cloneChildren' => [
+          23
+        ]
+      },
+      '17' => {
+        'content' => 'entity1',
+        'subItemIds' => [
+          18
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entityClone',
+        'entityClone' => true,
+        'cloneParent' => 13,
+        'parentId' => 11,
+        'parentIndex' => 0
+      },
+      '18' => {
+        'content' => 'has_many',
+        'subItemIds' => [
+          19
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'association' => true,
+        'expand' => true,
+        'category' => 'association'
+      },
+      '19' => {
+        'content' => 'entity2',
+        'subItemIds' => [
+          20
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entityClone',
+        'entityClone' => true,
+        'cloneParent' => 14,
+        'parentId' => 18,
+        'parentIndex' => 0
+      },
+      '20' => {
+        'content' => 'has_one',
+        'subItemIds' => [
+          21
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'association' => true,
+        'expand' => true,
+        'category' => 'association'
+      },
+      '21' => {
+        'content' => 'entity3',
+        'subItemIds' => [
+          22
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entityClone',
+        'entityClone' => true,
+        'cloneParent' => 15,
+        'parentId' => 20,
+        'parentIndex' => 0
+      },
+      '22' => {
+        'content' => ':through',
+        'subItemIds' => [
+          23
+        ],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'isDropDisabled' => false,
+        'factory' => false,
+        'association' => true,
+        'expand' => true,
+        'category' => 'association'
+      },
+      '23' => {
+        'content' => 'entity4',
+        'subItemIds' => [],
+        'order' => 'horizontal',
+        'subdirection' => 'row',
+        'factory' => false,
+        'expand' => true,
+        'isDropDisabled' => false,
+        'category' => 'entityClone',
+        'entityClone' => true,
+        'cloneParent' => 16,
+        'parentId' => 22,
+        'parentIndex' => 0
       }
     }
-    @block = Block.new('10', items)
-    @item1 = Item.new(@block)
+
+    Block.new('9', items)
+    @block = Block.find('17')
+    @item1 = ItemClone.new(Block.find('17'))
     @association1 = @item1.associations.first
     @item2 = @association1.second_items.first
     @association2 = @item2.associations.first
@@ -72,7 +222,7 @@ describe Association do
 
   describe '#initialize' do
     it 'is created correctly' do
-      expect(@association1.first_item.class).to eq(Item)
+      expect(@association1.first_item.class).to eq(ItemClone)
       expect(@association1.name).to eq('has_many')
       expect(@association1.second_items.size).to eq(1)
     end

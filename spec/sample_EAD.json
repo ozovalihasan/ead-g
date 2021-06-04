@@ -1,717 +1,707 @@
 {
-    "0": {
-        "content": "Initialize your project from EAD",
-        "subItemIds": [
-            1,
-            9
-        ],
-        "order": "vertical",
-        "subdirection": "row",
-        "isDropDisabled": true,
-        "isDragDisabled": true,
-        "expand": true,
-        "color": "#FFF"
-    },
-    "1": {
-        "content": "Elements",
-        "subItemIds": [
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": true,
-        "isDragDisabled": true,
-        "expand": true,
-        "factory": true,
-        "color": "#FFF",
-        "category": "factory"
-    },
-    "2": {
-        "content": "has_many",
-        "subItemIds": [],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": true,
-        "factory": true,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "3": {
-        "content": "has_one",
-        "subItemIds": [],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": true,
-        "factory": true,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "4": {
-        "content": ":through",
-        "subItemIds": [],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": true,
-        "factory": true,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "5": {
-        "content": "attribute container",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "isDropDisabled": true,
-        "factory": true,
-        "type": "string",
-        "expand": true,
-        "attributeContainer": true,
-        "color": "#AAFAE9",
-        "category": "attributeContainer"
-    },
-    "6": {
-        "content": "attribute",
-        "subItemIds": [],
-        "attribute": true,
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": true,
-        "factory": true,
-        "type": "string",
-        "expand": true,
-        "color": "#AAFAE9",
-        "category": "attribute"
-    },
-    "7": {
-        "content": "entity",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": true,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": true,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": []
-    },
-    "8": {
-        "content": "entity container",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": true,
-        "entityContainer": true,
-        "expand": true,
-        "isDropDisabled": true,
-        "color": "#94F6EA",
-        "category": "entityContainer"
-    },
-    "9": {
-        "content": "EAD",
-        "subItemIds": [
-            11,
-            30,
-            19
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "isDragDisabled": true,
-        "expand": true,
-        "color": "#FFF",
-        "category": "EAD"
-    },
-    "10": {
-        "content": "Employee",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            12
-        ]
-    },
-    "11": {
-        "content": "entity container",
-        "subItemIds": [
-            46,
-            33,
-            31,
-            27,
-            24,
-            14,
-            13,
-            10
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "factory": false,
-        "entityContainer": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entityContainer"
-    },
-    "12": {
-        "content": "imageable",
-        "subItemIds": [
-            15
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 10,
-        "parentId": "19",
-        "parentIndex": 0
-    },
-    "13": {
-        "content": "Picture",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            17,
-            22
-        ]
-    },
-    "14": {
-        "content": "Product",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            18
-        ]
-    },
-    "15": {
-        "content": "has_many",
-        "subItemIds": [
-            17
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "17": {
-        "content": "Photographs",
-        "subItemIds": [
-            23
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 13,
-        "parentId": 15,
-        "parentIndex": 0
-    },
-    "18": {
-        "content": "imageable",
-        "subItemIds": [
-            20
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 14,
-        "parentId": "19",
-        "parentIndex": 0
-    },
-    "19": {
-        "content": "entity container",
-        "subItemIds": [
-            32,
-            40,
-            12,
-            18
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entityContainer": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entityContainer"
-    },
-    "20": {
-        "content": "has_many",
-        "subItemIds": [
-            22
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "22": {
-        "content": "images",
-        "subItemIds": [
-            25
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 13,
-        "parentId": "20",
-        "parentIndex": 0
-    },
-    "23": {
-        "content": ":through",
-        "subItemIds": [
-            28
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "24": {
-        "content": "letter",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            29
-        ]
-    },
-    "25": {
-        "content": ":through",
-        "subItemIds": [
-            29
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "27": {
-        "content": "postcard",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            28
-        ]
-    },
-    "28": {
-        "content": "postable",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 27,
-        "parentId": "23",
-        "parentIndex": 0
-    },
-    "29": {
-        "content": "postable",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 24,
-        "parentId": 25,
-        "parentIndex": 0
-    },
-    "30": {
-        "content": "entity container",
-        "subItemIds": [
-            47
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entityContainer": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entityContainer"
-    },
-    "31": {
-        "content": "User",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            32,
-            39,
-            40,
-            43
-        ]
-    },
-    "32": {
-        "content": "Famous_person",
-        "subItemIds": [
-            34
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 31,
-        "parentId": "19",
-        "parentIndex": 0
-    },
-    "33": {
-        "content": "Relation",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            36
-        ]
-    },
-    "34": {
-        "content": "has_many",
-        "subItemIds": [
-            36
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "36": {
-        "content": "followed || following",
-        "subItemIds": [
-            44
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 33,
-        "parentId": 34,
-        "parentIndex": 0
-    },
-    "39": {
-        "content": "fan",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 31,
-        "parentId": "44",
-        "parentIndex": 0
-    },
-    "40": {
-        "content": "manager",
-        "subItemIds": [
-            41
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 31,
-        "parentId": "19",
-        "parentIndex": 0
-    },
-    "41": {
-        "content": "has_many",
-        "subItemIds": [
-            43
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "43": {
-        "content": "subordinates",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 31,
-        "parentId": 41,
-        "parentIndex": 0
-    },
-    "44": {
-        "content": ":through",
-        "subItemIds": [
-            39
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "46": {
-        "content": "Suppliers",
-        "subItemIds": [],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": [
-            47
-        ]
-    },
-    "47": {
-        "content": "Suppliers",
-        "subItemIds": [
-            48
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "orange",
-        "category": "entityClone",
-        "entityClone": true,
-        "cloneParent": 46,
-        "parentId": 30,
-        "parentIndex": 0
-    },
-    "48": {
-        "content": "has_one",
-        "subItemIds": [
-            50
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "50": {
-        "content": "Accounts",
-        "subItemIds": [
-            53
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": []
-    },
-    "53": {
-        "content": ":through",
-        "subItemIds": [
-            54
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "association": true,
-        "expand": true,
-        "color": "#C7FDED",
-        "category": "association"
-    },
-    "54": {
-        "content": "AccountHistory",
-        "subItemIds": [
-            55
-        ],
-        "order": "horizontal",
-        "subdirection": "row",
-        "factory": false,
-        "entity": true,
-        "expand": true,
-        "isDropDisabled": false,
-        "color": "#94F6EA",
-        "category": "entity",
-        "cloneable": true,
-        "cloneChildren": []
-    },
-    "55": {
-        "content": "attribute container",
-        "subItemIds": [
-            56,
-            57
-        ],
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "type": "string",
-        "expand": true,
-        "attributeContainer": true,
-        "color": "#AAFAE9",
-        "category": "attributeContainer"
-    },
-    "56": {
-        "content": "credit_rating",
-        "subItemIds": [],
-        "attribute": true,
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "type": "integer",
-        "expand": true,
-        "color": "#AAFAE9",
-        "category": "attribute"
-    },
-    "57": {
-        "content": "access_time",
-        "subItemIds": [],
-        "attribute": true,
-        "order": "vertical",
-        "subdirection": "column",
-        "isDropDisabled": false,
-        "factory": false,
-        "type": "datetime",
-        "expand": true,
-        "color": "#AAFAE9",
-        "category": "attribute"
+    "version" : "0.3.0",
+    "items": {
+        "0": {
+            "content": "Initialize your project from EAD",
+            "subItemIds": [
+                1,
+                9
+            ],
+            "order": "vertical",
+            "subdirection": "row",
+            "isDropDisabled": true,
+            "isDragDisabled": true,
+            "expand": true
+        },
+        "1": {
+            "content": "Elements",
+            "subItemIds": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+            ],
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": true,
+            "isDragDisabled": true,
+            "expand": true,
+            "factory": true,
+            "category": "factory"
+        },
+        "2": {
+            "content": "has_many",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": true,
+            "factory": true,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "3": {
+            "content": "has_one",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": true,
+            "factory": true,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "4": {
+            "content": ":through",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": true,
+            "factory": true,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "5": {
+            "content": "entities & associations",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": true,
+            "factory": true,
+            "type": "string",
+            "expand": true,
+            "entityAssociation": true,
+            "category": "entityAssociation"
+        },
+        "6": {
+            "content": "attribute",
+            "subItemIds": [],
+            "attribute": true,
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": true,
+            "factory": true,
+            "type": "string",
+            "expand": true,
+            "category": "attribute"
+        },
+        "7": {
+            "content": "entity",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": true,
+            "entity": true,
+            "expand": true,
+            "isDropDisabled": true,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": []
+        },
+        "8": {
+            "content": "entity container",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": true,
+            "entityContainer": true,
+            "expand": true,
+            "isDropDisabled": true,
+            "category": "entityContainer"
+        },
+        "9": {
+            "content": "EAD",
+            "subItemIds": [
+                22,
+                10,
+                51,
+                11
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDragDisabled": true,
+            "expand": true,
+            "category": "EAD"
+        },
+        "10": {
+            "content": "entity container",
+            "subItemIds": [
+                19,
+                18,
+                17,
+                16,
+                15,
+                14,
+                13
+            ],
+            "order": "vertical",
+            "subdirection": "column",
+            "entityContainer": true,
+            "expand": true,
+            "category": "entityContainer",
+            "factory": false,
+            "isDropDisabled": false
+        },
+        "11": {
+            "content": "entities & associations",
+            "subItemIds": [
+                44,
+                31,
+                26
+            ],
+            "order": "vertical",
+            "subdirection": "column",
+            "entityAssociation": true,
+            "expand": true,
+            "category": "entityAssociation",
+            "factory": false,
+            "isDropDisabled": false
+        },
+        "12": {
+            "content": "accounts",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                28
+            ]
+        },
+        "13": {
+            "content": "employee",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                39
+            ]
+        },
+        "14": {
+            "content": "picture",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                41,
+                46
+            ]
+        },
+        "15": {
+            "content": "product",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                44
+            ]
+        },
+        "16": {
+            "content": "letter",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                48
+            ]
+        },
+        "17": {
+            "content": "postcard",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                43
+            ]
+        },
+        "18": {
+            "content": "user",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                31,
+                35,
+                36,
+                37
+            ]
+        },
+        "19": {
+            "content": "relation",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                33
+            ]
+        },
+        "22": {
+            "content": "entity container",
+            "subItemIds": [
+                25,
+                12,
+                23
+            ],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entityContainer": true,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityContainer"
+        },
+        "23": {
+            "content": "account_history",
+            "subItemIds": [
+                50,
+                49
+            ],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                30
+            ]
+        },
+        "25": {
+            "content": "suppliers",
+            "subItemIds": [],
+            "order": "vertical",
+            "subdirection": "column",
+            "factory": false,
+            "entity": true,
+            "expand": false,
+            "isDropDisabled": false,
+            "category": "entity",
+            "cloneable": true,
+            "cloneChildren": [
+                26
+            ]
+        },
+        "26": {
+            "content": "suppliers",
+            "subItemIds": [
+                27
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 25,
+            "parentId": 11,
+            "parentIndex": 0
+        },
+        "27": {
+            "content": "has_one",
+            "subItemIds": [
+                28
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "28": {
+            "content": "accounts",
+            "subItemIds": [
+                29
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 12,
+            "parentId": 27,
+            "parentIndex": 0
+        },
+        "29": {
+            "content": ":through",
+            "subItemIds": [
+                30
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "30": {
+            "content": "account_history",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 23,
+            "parentId": 29,
+            "parentIndex": 0
+        },
+        "31": {
+            "content": "famous_person",
+            "subItemIds": [
+                32
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 18,
+            "parentId": 11,
+            "parentIndex": 0
+        },
+        "32": {
+            "content": "has_many",
+            "subItemIds": [
+                33
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "33": {
+            "content": "followed || following",
+            "subItemIds": [
+                34
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 19,
+            "parentId": 32,
+            "parentIndex": 0
+        },
+        "34": {
+            "content": ":through",
+            "subItemIds": [
+                35
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "35": {
+            "content": "fan",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 18,
+            "parentId": 34,
+            "parentIndex": 0
+        },
+        "36": {
+            "content": "manager",
+            "subItemIds": [
+                38
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 18,
+            "parentId": "51",
+            "parentIndex": 0
+        },
+        "37": {
+            "content": "subordinates",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 18,
+            "parentId": "38",
+            "parentIndex": 0
+        },
+        "38": {
+            "content": "has_many",
+            "subItemIds": [
+                37
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "39": {
+            "content": "imageable",
+            "subItemIds": [
+                40
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 13,
+            "parentId": "51",
+            "parentIndex": 0
+        },
+        "40": {
+            "content": "has_many",
+            "subItemIds": [
+                41
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "41": {
+            "content": "photographs",
+            "subItemIds": [
+                42
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 14,
+            "parentId": 40,
+            "parentIndex": 0
+        },
+        "42": {
+            "content": ":through",
+            "subItemIds": [
+                43
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "43": {
+            "content": "postable",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 17,
+            "parentId": 42,
+            "parentIndex": 0
+        },
+        "44": {
+            "content": "imageable",
+            "subItemIds": [
+                45
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 15,
+            "parentId": 11,
+            "parentIndex": 0
+        },
+        "45": {
+            "content": "has_many",
+            "subItemIds": [
+                46
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "46": {
+            "content": "images",
+            "subItemIds": [
+                47
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 14,
+            "parentId": 45,
+            "parentIndex": 0
+        },
+        "47": {
+            "content": ":through",
+            "subItemIds": [
+                48
+            ],
+            "order": "horizontal",
+            "subdirection": "row",
+            "isDropDisabled": false,
+            "factory": false,
+            "association": true,
+            "expand": true,
+            "category": "association"
+        },
+        "48": {
+            "content": "postable",
+            "subItemIds": [],
+            "order": "horizontal",
+            "subdirection": "row",
+            "factory": false,
+            "expand": true,
+            "isDropDisabled": false,
+            "category": "entityClone",
+            "entityClone": true,
+            "cloneParent": 16,
+            "parentId": 47,
+            "parentIndex": 0
+        },
+        "49": {
+            "content": "access_time",
+            "subItemIds": [],
+            "attribute": true,
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": false,
+            "factory": false,
+            "type": "datetime",
+            "expand": true,
+            "category": "attribute"
+        },
+        "50": {
+            "content": "credit_rating",
+            "subItemIds": [],
+            "attribute": true,
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": false,
+            "factory": false,
+            "type": "integer",
+            "expand": true,
+            "category": "attribute"
+        },
+        "51": {
+            "content": "entities & associations",
+            "subItemIds": [
+                36,
+                39
+            ],
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": false,
+            "factory": false,
+            "type": "string",
+            "expand": true,
+            "entityAssociation": true,
+            "category": "entityAssociation"
+        }
     }
 }

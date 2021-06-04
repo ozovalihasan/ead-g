@@ -12,13 +12,7 @@ class Association
 
   def add_second_items(block)
     block.sub_blocks.each do |sub_block|
-      if sub_block.entity
-        second_items << Item.new(sub_block, first_item, self)
-      elsif sub_block.entity_clone
-        second_items << ItemClone.new(sub_block, first_item, self)
-      elsif sub_block.entity_container
-        add_second_items(sub_block)
-      end
+      second_items << ItemClone.new(sub_block, first_item, self)
     end
   end
 

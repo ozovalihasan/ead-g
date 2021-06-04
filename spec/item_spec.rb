@@ -25,15 +25,23 @@ describe Item do
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@account_history.id).to eq('54')
+      expect(@account_history.id).to eq('23')
       expect(@account_history.name).to eq('account_history')
-      expect(@account_history.parent.name).to eq('account')
-      expect(@account_history.parent_association.name).to eq(':through')
       expect(@account_history.attributes[0].name).to eq('credit_rating')
-      expect(@account_history.associations).to eq([])
-      expect(@account_history.clones).to eq([])
+      expect(@account_history.clones.size).to eq(1)
       expect(@account_history.polymorphic).to eq(false)
       expect(@account_history.polymorphic_names).to eq([])
+    end
+  end
+
+  describe '#add_to_attributes' do
+    it 'adds an attribute to attributes of item' do
+      expect(@account_history.attributes.size).to eq(2)
+
+      block = Block.find('49')
+      @account_history.add_to_attributes(block)
+
+      expect(@account_history.attributes.size).to eq(3)
     end
   end
 
@@ -46,7 +54,7 @@ describe Item do
   describe '#add_references' do
     it 'adds references to command' do
       command = ''
-      @account_history.add_references(command, @account_history.parent)
+      @account_history.add_references(command, @account_history.clones.first.parent)
       expect(command).to eq(' account:references')
     end
   end

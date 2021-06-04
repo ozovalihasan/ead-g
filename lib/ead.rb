@@ -6,7 +6,23 @@ require 'block'
 class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
-    items = JSON.parse(file)
+
+    if JSON.parse(file)['version'] != '0.3.0'
+      puts "\n\n----------------"
+      puts "\e[31m#{
+        'Versions of your EAD file and the gem are not compatible.'\
+        ' So, you may have some unexpected results.'\
+        'To run your EAD file correctly, please run'
+      }\e[0m"
+
+      puts "\e[31m#{
+        "\ngem install ead -v #{JSON.parse(file)['version']}"
+      }\e[0m"
+      puts "----------------\n\n"
+
+    end
+
+    items = JSON.parse(file)['items']
     ead_id = '9'
     Block.new(ead_id, items)
     Block.all.each do |block|
@@ -24,7 +40,7 @@ class EAD
         Item.new(sub_block)
       elsif sub_block.entity_clone
         ItemClone.new(sub_block)
-      elsif sub_block.entity_container
+      elsif sub_block.entity_container || sub_block.entity_association
         create_items(sub_block)
       end
     end
@@ -41,15 +57,11 @@ class EAD
       parent.clones << item_clone
     end
 
-    Item.all.reverse.each do |item|
+    Item.all.each do |item|
       item.create_migration
     end
 
-    Item.all.reverse.each do |item|
-      item.add_associations
-    end
-
-    ItemClone.all.reverse.each do |item_clone|
+    ItemClone.all.each do |item_clone|
       item_clone.add_associations
     end
   end

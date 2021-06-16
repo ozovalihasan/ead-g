@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ead (0.3.0)
+    ead (0.3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -64,4 +64,4 @@ DEPENDENCIES
   rubocop (~> 1.13)
 
 BUNDLED WITH
-   2.2.17
+   2.2.20

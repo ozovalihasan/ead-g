@@ -5,7 +5,7 @@ describe EAD do
   before do
     ObjectSpace.garbage_collect
     @file = {
-      'version' => '0.3.0',
+      'version' => '0.3.1',
       'items' => {
         '0' => {
           'content' => 'Initialize your project from EAD',

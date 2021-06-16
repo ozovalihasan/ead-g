@@ -1,3 +1,5 @@
+require 'fileutils'
+
 class ProjectFile
   def self.open_close(name, type, &block)
     case type

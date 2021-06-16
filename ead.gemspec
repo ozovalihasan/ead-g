@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.required_ruby_version = '>= 2.7.2'
 
+  s.add_runtime_dependency 'rest-client', '~> 2.0', '>= 2.0.2'
+
   s.add_development_dependency 'activesupport', '~> 5.2'
   s.add_development_dependency 'bundler', '~> 2.2'
   s.add_development_dependency 'rspec', '~> 3.10'

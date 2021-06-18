@@ -2,12 +2,13 @@ require 'json'
 require 'item'
 require 'item_clone'
 require 'block'
+require 'rest-client'
 
 class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
 
-    if JSON.parse(file)['version'] != '0.3.0'
+    unless ['0.3.0','0.3.1'].include? JSON.parse(file)['version']
       puts "\n\n----------------"
       puts "\e[31m#{
         'Versions of your EAD file and the gem are not compatible.'\
@@ -20,6 +21,7 @@ class EAD
       }\e[0m"
       puts "----------------\n\n"
 
+      raise StandardError.new(msg="Incompatible version")
     end
 
     items = JSON.parse(file)['items']
@@ -66,7 +68,32 @@ class EAD
     end
   end
 
+  def check_latest_version
+    # response = RestClient::Request.new(:method => :get, :url => 'https://api.github.com/repos/ozovalihasan/ead/tags')
+    # response = JSON.parse response
+    response = JSON.parse RestClient.get 'https://api.github.com/repos/ozovalihasan/ead/tags'
+    
+    unless response.first['name'] == "v0.3.1"
+      puts "\n\n----------------"
+      puts "\n\e[33m#{
+        'A new version of this gem has been released.'\
+        ' Please check it. https://github.com/ozovalihasan/ead-g/releases'
+      }\e[0m"
+
+      puts "\n----------------\n\n"
+    end
+  rescue
+    puts "\n\n----------------"
+    puts "\n\e[31m#{
+      'If you want to check the latest version of this gem,'\
+      ' you need to have a stable internet connection.'
+    }\e[0m"
+
+    puts "\n----------------\n\n"
+  end
+
   def start(user_arguments)
+    check_latest_version
     import_JSON(user_arguments)
     check_implement_items
   end

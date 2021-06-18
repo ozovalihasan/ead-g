@@ -5,7 +5,7 @@ describe EAD do
   before do
     ObjectSpace.garbage_collect
     @file = {
-      'version' => '0.3.0',
+      'version' => '0.3.1',
       'items' => {
         '0' => {
           'content' => 'Initialize your project from EAD',
@@ -288,6 +288,44 @@ describe EAD do
       expect(Association.all.size).to eq(1)
       expect(call_create_migration).to eq(2)
       expect(call_add_associations).to eq(2)
+    end
+  end
+
+  describe '.check_latest_version' do
+    context 'if there is an internet connection' do
+      it 'checks the latest version of the gem and prints a warning about new release of the gem' do
+        response = RestClient::Response.new [{name: ''}].to_json
+
+        allow(RestClient::Request).to receive(:execute).and_return(response)
+        
+        expect { @ead.check_latest_version }.to output(
+          "\n\n----------------"\
+          "\n\n"\
+          "\e[33m"\
+          "A new version of this gem has been released."\
+          " Please check it. https://github.com/ozovalihasan/ead-g/releases"\
+          "\e[0m"\
+          "\n\n----------------\n\n"
+        ).to_stdout
+      end
+    end
+
+    context "if there isn't an internet connection" do
+      it 'prints a warning about unstable internet connection' do
+        response = StandardError
+
+        allow(RestClient::Request).to receive(:execute).and_return(response)
+
+        expect { @ead.check_latest_version }.to output(
+          "\n\n----------------"\
+          "\n\n"\
+          "\e[31m"\
+          "If you want to check the latest version of this gem,"\
+          " you need to have a stable internet connection."\
+          "\e[0m"\
+           "\n\n----------------\n\n"
+        ).to_stdout
+      end
     end
   end
 

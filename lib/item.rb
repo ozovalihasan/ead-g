@@ -69,7 +69,7 @@ class Item < ItemBase
     @polymorphic = true if @polymorphic_names.size.positive?
   end
 
-  def create_migration
+  def create_model
     return if File.exist?("./app/models/#{name}.rb")
 
     command = 'bundle exec rails generate model '

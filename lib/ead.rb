@@ -60,7 +60,7 @@ class EAD
     end
 
     Item.all.each do |item|
-      item.create_migration
+      item.create_model
     end
 
     ItemClone.all.each do |item_clone|

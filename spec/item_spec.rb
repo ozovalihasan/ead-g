@@ -88,7 +88,7 @@ describe Item do
     end
   end
 
-  describe '#create_migration' do
+  describe '#create_model' do
     it 'creates necessary commands and run them to create models in Rails project ' do
       allow(File).to receive(:exist?).and_return(false)
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
@@ -100,8 +100,8 @@ describe Item do
                ]).to include call_with
       end
 
-      @picture.create_migration
-      @account_history.create_migration
+      @picture.create_model
+      @account_history.create_model
     end
   end
 end

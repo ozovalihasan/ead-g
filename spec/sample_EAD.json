@@ -1,5 +1,5 @@
 {
-    "version" : "0.3.1",
+    "version": "0.3.1",
     "items": {
         "0": {
             "content": "Initialize your project from EAD",
@@ -254,7 +254,11 @@
         },
         "18": {
             "content": "user",
-            "subItemIds": [],
+            "subItemIds": [
+                54,
+                53,
+                52
+            ],
             "order": "vertical",
             "subdirection": "column",
             "factory": false,
@@ -702,6 +706,79 @@
             "expand": true,
             "entityAssociation": true,
             "category": "entityAssociation"
+        },
+        "52": {
+            "content": "address",
+            "subItemIds": [],
+            "attribute": true,
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": false,
+            "factory": false,
+            "type": "string",
+            "expand": true,
+            "category": "attribute"
+        },
+        "53": {
+            "content": "full_name",
+            "subItemIds": [],
+            "attribute": true,
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": false,
+            "factory": false,
+            "type": "string",
+            "expand": true,
+            "category": "attribute"
+        },
+        "54": {
+            "content": "name",
+            "subItemIds": [],
+            "attribute": true,
+            "order": "vertical",
+            "subdirection": "column",
+            "isDropDisabled": false,
+            "factory": false,
+            "type": "string",
+            "expand": true,
+            "category": "attribute"
         }
-    }
+    },
+    "restrictedDropId": -1,
+    "draggedItemId": -1,
+    "dragDropCategory": {
+        "entity": [
+            "entityContainer"
+        ],
+        "association": [
+            "entityClone"
+        ],
+        "entityAssociation": [
+            "EAD"
+        ],
+        "attribute": [
+            "entity",
+            "attributeContainer"
+        ],
+        "attributeContainer": [
+            "entity"
+        ],
+        "EAD": [
+            "entity"
+        ],
+        "factory": [],
+        "entityClone": [
+            "association",
+            "entityAssociation"
+        ],
+        "entityContainer": [
+            "EAD"
+        ]
+    },
+    "restrictedParentIds": [],
+    "disabledChildIds": [],
+    "idCount": 55,
+    "expandAll": true,
+    "compactMode": false,
+    "moreText": false
 }

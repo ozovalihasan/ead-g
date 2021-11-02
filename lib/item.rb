@@ -70,8 +70,6 @@ class Item < ItemBase
   end
 
   def create_model
-    return if File.exist?("./app/models/#{name}.rb")
-
     command = 'bundle exec rails generate model '
     command << model_name
     attributes.each { |attribute| attribute.add_to(command) }
@@ -88,5 +86,38 @@ class Item < ItemBase
       add_references(command, item.parent)
     end
     system(command)
+  end
+
+  def add_attributes
+    connect_database
+    command = "bundle exec rails g migration AddColumnsTo#{name.classify}"
+
+    exist_attributes = {}
+    ActiveRecord::Base.connection.columns(name.pluralize).each do |column| 
+      eval("exist_attributes['#{column.name}'] = '#{column.type}'")
+    end
+
+    attributes.each do |attribute|
+      unless exist_attributes[attribute.name]
+        command << " #{attribute.name}:#{attribute.type}"
+      end
+    end
+
+    system(command)
+
+  end
+
+  def connect_database
+    require 'erb'
+    require 'yaml'
+    require 'active_record'
+
+    app_env = ENV.fetch('APP_ENV', 'development')
+
+    ActiveRecord::Base.schema_format = :sql
+    ActiveRecord::Base.logger = Logger.new($stdout)
+    ActiveRecord::Base.configurations = YAML.load(ERB.new(File.read('config/database.yml')).result)
+    ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[app_env])
+
   end
 end

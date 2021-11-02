@@ -21,6 +21,7 @@ describe Item do
 
     @account_history = Item.all.select { |item| item.name == 'account_history' }[0]
     @picture = Item.all.select { |item| item.name == 'picture' }[0]
+    @user = Item.all.select { |item| item.name == 'user' }[0]
   end
 
   describe '#initialize' do
@@ -102,6 +103,56 @@ describe Item do
 
       @picture.create_model
       @account_history.create_model
+    end
+  end
+
+  describe '#add_attributes' do
+    class MockClass 
+      attr_reader :name, :type
+      
+      def initialize(name: "mock_name", type: "mock_type")
+        @name = name
+        @type = type
+      end
+    end
+    it 'adds attributes not added currently' do
+      allow_any_instance_of(Item).to receive(:connect_database)
+
+      stub_const("ActiveRecord::Base", double) 
+
+    
+
+      allow(ActiveRecord::Base).to receive_message_chain(:connection, :columns).and_return( [MockClass.new] )
+
+      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+        expect([
+                 'bundle exec rails g migration AddColumnsToUser name:string full_name:string address:string',
+               ]).to include call_with
+      end
+      
+      @user.add_attributes
+      
+    end
+  end
+
+  describe '#connect_database' do
+    it 'connects to database configured correctly' do
+      require 'yaml'
+      require 'erb'
+
+      stub_const("ActiveRecord::Base", double) 
+
+      allow(@user).to receive(:require)
+      allow(@user).to receive(:require).with('active_record')
+      allow(ActiveRecord::Base).to receive(:schema_format=)
+      allow(ActiveRecord::Base).to receive(:logger=)
+      allow(ActiveRecord::Base).to receive(:configurations=)
+      allow(ActiveRecord::Base).to receive(:configurations).and_return({})
+      allow(ActiveRecord::Base).to receive(:establish_connection)
+      allow(File).to receive(:read).with('config/database.yml').and_return("default: &default")
+      
+      
+      @user.connect_database
     end
   end
 end

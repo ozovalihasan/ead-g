@@ -21,7 +21,7 @@ class EAD
       }\e[0m"
       puts "----------------\n\n"
 
-      raise StandardError.new(msg="Incompatible version")
+      raise StandardError.new(msg: "Incompatible version")
     end
 
     items = JSON.parse(file)['items']
@@ -60,7 +60,11 @@ class EAD
     end
 
     Item.all.each do |item|
-      item.create_model
+      if File.exist?("./app/models/#{item.name}.rb")
+        item.add_attributes
+      else
+        item.create_model
+      end
     end
 
     ItemClone.all.each do |item_clone|

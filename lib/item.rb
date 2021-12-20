@@ -4,7 +4,7 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Item < ItemBase
-  attr_accessor :attributes, :clones, :polymorphic, :polymorphic_names
+  attr_accessor :attributes, :clones, :polymorphic, :polymorphic_names, :generated_by_ead
 
   def initialize(block)
     super(block)
@@ -12,6 +12,7 @@ class Item < ItemBase
     @polymorphic = false
     @polymorphic_names = []
     @attributes = []
+    @generated_by_ead = false
     block.sub_blocks.each do |sub_block|
       add_to_attributes(sub_block)
     end
@@ -25,10 +26,15 @@ class Item < ItemBase
     name.camelize
   end
 
-  def add_references(command, item)
-    return if command.include? " #{item.name}:references"
+  def add_references(command, item_clone)
+    
+    unless File.exist?("./app/models/#{item_clone.clone_parent.name}.rb")  
+      item_clone.clone_parent.create_model
+      item_clone.clone_parent.generated_by_ead = true
+    end
+    return if command.include? " #{item_clone.name}:references"
 
-    command << " #{item.name}:references"
+    command << " #{item_clone.name}:references"
   end
 
   def add_polymorphic(command, poly_name)
@@ -76,14 +82,14 @@ class Item < ItemBase
 
     check_polymorphic(command)
 
-    clones.each do |item|
-      add_references(command, item.through_child) if item.parent_has_many? && item.through_association
+    clones.each do |item_clone|
+      add_references(command, item_clone.through_child) if item_clone.parent_has_many? && item_clone.through_association
 
-      next unless item.parent && !item.one_polymorphic_names?(item.parent) && (
-        item.parent_has_any? || item.parent_through_has_one?
+      next unless item_clone.parent && !item_clone.one_polymorphic_names?(item_clone.parent) && (
+        item_clone.parent_has_any? || item_clone.parent_through_has_one?
       )
 
-      add_references(command, item.parent)
+      add_references(command, item_clone.parent)
     end
     system(command)
   end

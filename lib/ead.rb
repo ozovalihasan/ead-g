@@ -61,7 +61,7 @@ class EAD
 
     Item.all.each do |item|
       if File.exist?("./app/models/#{item.name}.rb")
-        item.add_attributes
+        item.add_attributes unless item.generated_by_ead
       else
         item.create_model
       end

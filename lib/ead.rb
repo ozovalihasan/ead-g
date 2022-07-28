@@ -1,14 +1,13 @@
 require 'json'
 require 'item'
 require 'item_clone'
-require 'block'
 require 'rest-client'
 
 class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
 
-    unless ['0.3.0','0.3.1'].include? JSON.parse(file)['version']
+    unless ['0.4.0'].include? JSON.parse(file)['version']
       puts "\n\n----------------"
       puts "\e[31m#{
         'Versions of your EAD file and the gem are not compatible.'\
@@ -24,39 +23,45 @@ class EAD
       raise StandardError.new(msg="Incompatible version")
     end
 
-    items = JSON.parse(file)['items']
-    ead_id = '9'
-    ead_block = Block.new(ead_id, items)
-    Block.all.each do |block|
-      next unless block.cloneable
+    return file
+    
+    # items = JSON.parse(file)['items']
+    # ead_id = '9'
+    # ead_block = Block.new(ead_id, items)
+    # Block.all.each do |block|
+    #   next unless block.cloneable
 
-      block.clone_blocks.map! do |id|
-        Block.find(id.to_s)
-      end
-    end
+    #   block.clone_blocks.map! do |id|
+    #     Block.find(id.to_s)
+    #   end
+    # end
   end
 
-  def create_items(block)
-    block.sub_blocks.each do |sub_block|
-      if sub_block.entity
-        Item.new(sub_block)
-      elsif sub_block.entity_clone
-        ItemClone.new(sub_block)
-      elsif sub_block.entity_container || sub_block.entity_association
-        create_items(sub_block)
-      end
+  def create_items(file)
+    @nodes = JSON.parse(file)['nodes']
+    @edges = JSON.parse(file)['edges']
+    @tables = JSON.parse(file)['tables']
+
+    
+    @tables = @tables.map do |(id)|
+      Item.new(id, @tables)
     end
+
+    @nodes.map! do |node|
+      ItemClone.new(node)
+    end
+
+    @edges.map! do |edge|
+      Association.new(edge)
+    end
+
   end
 
-  def check_implement_items
-    ead_id = '9'
-    block = Block.find(ead_id)
-    create_items(block)
+  def check_implement_items(file)
+    create_items(file)
 
     ItemClone.all.each do |item_clone|
-      parent = Item.find(item_clone.clone_parent)
-      item_clone.clone_parent = Item.find(item_clone.clone_parent)
-      parent.clones << item_clone
+      item_clone.clone_parent.clones << item_clone
     end
 
     Item.all.each do |item|
@@ -94,7 +99,7 @@ class EAD
 
   def start(user_arguments)
     check_latest_version
-    import_JSON(user_arguments)
-    check_implement_items
+    file = import_JSON(user_arguments)
+    check_implement_items(file)
   end
 end

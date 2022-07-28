@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
   s.name = 'ead'
-  s.version = '0.3.1'
+  s.version = '0.4.0'
   s.summary = 'Compiler for JSON files created by EAD'
   s.description = 'The compiler updates/creates models and associations, used in a Ruby on Rails project, defined by EAD automatically.'
   s.authors = ['Hasan Ozovali']
@@ -22,4 +22,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler', '~> 2.2'
   s.add_development_dependency 'rspec', '~> 3.10'
   s.add_development_dependency 'rubocop', '~> 1.13'
+  s.add_development_dependency 'pry', '~> 0.14.1'
+
 end

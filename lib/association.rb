@@ -1,20 +1,23 @@
 require 'item'
 
 class Association
-  attr_accessor :first_item, :second_items, :name
+  attr_accessor :first_item, :second_item, :name
 
-  def initialize(first_item, association_block)
-    @first_item = first_item
-    @second_items = []
-    add_second_items(association_block)
-    @name = association_block.content
-  end
-
-  def add_second_items(block)
-    block.sub_blocks.each do |sub_block|
-      second_items << ItemClone.new(sub_block, first_item, self)
+  def initialize(edge ) #first_item, association_block)
+    @first_item = ItemClone.find(edge["source"])
+    @second_item = ItemClone.find(edge["target"])
+    
+    ItemClone.find(edge["source"]).add_to_associations(self)
+    ItemClone.find(edge["target"]).add_to_parent_associations(self)
+    @name = if edge["type"] === "hasMany" 
+      "has_many"
+    elsif edge["type"] === "hasOne" 
+      "has_one"
+    elsif edge["type"] === "through" 
+      ":through"
     end
   end
+  
 
   def has_many?
     name == 'has_many'

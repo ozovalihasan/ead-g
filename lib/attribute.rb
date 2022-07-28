@@ -1,9 +1,9 @@
 class Attribute
   attr_accessor :name, :type
 
-  def initialize(name, type)
-    @name = name
-    @type = type
+  def initialize(attribute)
+    @name = attribute["name"]
+    @type = attribute["type"]
   end
 
   def add_to(command)

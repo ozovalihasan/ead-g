@@ -4,21 +4,24 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Item < ItemBase
-  attr_accessor :attributes, :clones, :polymorphic, :polymorphic_names
+  
+  attr_accessor :name, :id, :twin_name, :attributes, :clones, :polymorphic, :polymorphic_names
 
-  def initialize(block)
-    super(block)
+  def initialize(item_id, tables)
+    @id = item_id
+    @name = tables[item_id]["name"].split(' || ')[0].underscore.singularize
+    @twin_name = tables[item_id]["name"].split(' || ')[1]&.underscore&.singularize
     @clones = []
     @polymorphic = false
     @polymorphic_names = []
     @attributes = []
-    block.sub_blocks.each do |sub_block|
-      add_to_attributes(sub_block)
+    tables[item_id]["attributes"].each do |(attribute_id, attribute_value)|
+      add_to_attributes(attribute_value)
     end
   end
 
-  def add_to_attributes(block)
-    @attributes << Attribute.new(block.content, block.type)
+  def add_to_attributes(attribute)
+    @attributes << Attribute.new(attribute)
   end
 
   def model_name
@@ -39,12 +42,12 @@ class Item < ItemBase
     return if clones.size.zero?
 
     belong_parents = []
-    clones.each do |item|
-      if item.through_association && item.parent_has_many?
-        belong_parents << item.parent
-        belong_parents << item.through_child
-      elsif !item.parent_through_has_many? && item.parent
-        belong_parents << item.parent
+    clones.each do |item_clone|
+      if item_clone.through_association && item_clone.parent_has_many?
+        belong_parents << item_clone.parent
+        belong_parents << item_clone.through_child
+      elsif !item_clone.parent_through_has_many? && item_clone.parent
+        belong_parents << item_clone.parent
       end
     end
     belong_parent_names = belong_parents.map(&:name)

@@ -1,6 +1,5 @@
 require 'item'
 require 'item_clone'
-require 'block'
 require 'active_support/core_ext/string'
 require 'ead'
 
@@ -8,15 +7,12 @@ describe Item do
   before do
     ObjectSpace.garbage_collect
     @ead = EAD.new
-    @ead.import_JSON(['./spec/sample_EAD.json'])
-    ead_id = '9'
-    block = Block.find(ead_id)
-    @ead.create_items(block)
-
+    file = @ead.import_JSON(['./spec/sample_EAD.json'])
+    
+    @ead.create_items(file)
+    
     ItemClone.all.each do |item_clone|
-      parent = Item.find(item_clone.clone_parent)
-      item_clone.clone_parent = Item.find(item_clone.clone_parent)
-      parent.clones << item_clone
+      item_clone.clone_parent.clones << item_clone
     end
 
     @account_history = Item.all.select { |item| item.name == 'account_history' }[0]
@@ -25,7 +21,7 @@ describe Item do
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@account_history.id).to eq('23')
+      expect(@account_history.id).to eq('20')
       expect(@account_history.name).to eq('account_history')
       expect(@account_history.attributes[0].name).to eq('credit_rating')
       expect(@account_history.clones.size).to eq(1)
@@ -38,8 +34,11 @@ describe Item do
     it 'adds an attribute to attributes of item' do
       expect(@account_history.attributes.size).to eq(2)
 
-      block = Block.find('49')
-      @account_history.add_to_attributes(block)
+      attribute = {
+        "name" => "access_time",
+        "type" => "datetime"
+      }
+      @account_history.add_to_attributes(attribute)
 
       expect(@account_history.attributes.size).to eq(3)
     end
@@ -54,7 +53,7 @@ describe Item do
   describe '#add_references' do
     it 'adds references to command' do
       command = ''
-      @account_history.add_references(command, @account_history.clones.first.parent)
+      @account_history.add_references(command, @account_history.clones.first.parent_associations.first.first_item)
       expect(command).to eq(' account:references')
     end
   end

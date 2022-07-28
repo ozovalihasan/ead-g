@@ -1,0 +1,164 @@
+{
+    "version": "0.4.0",
+    "idCounter": 86,
+    "associationType": "through",
+    "nodes": [
+        {
+            "id": "78",
+            "type": "textUpdater",
+            "position": {
+                "x": -330,
+                "y": 405
+            },
+            "data": {
+                "tableId": "74",
+                "name": "entity1"
+            },
+            "width": 138,
+            "height": 45
+        },
+        {
+            "id": "79",
+            "type": "textUpdater",
+            "position": {
+                "x": -330,
+                "y": 525
+            },
+            "data": {
+                "tableId": "75",
+                "name": "entity2"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -330,
+                "y": 525
+            },
+            "dragging": false
+        },
+        {
+            "id": "80",
+            "type": "textUpdater",
+            "position": {
+                "x": -375,
+                "y": 645
+            },
+            "data": {
+                "tableId": "76",
+                "name": "entity3"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": true,
+            "positionAbsolute": {
+                "x": -375,
+                "y": 645
+            },
+            "dragging": false
+        },
+        {
+            "id": "81",
+            "type": "textUpdater",
+            "position": {
+                "x": -210,
+                "y": 750
+            },
+            "data": {
+                "tableId": "77",
+                "name": "entity4"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -210,
+                "y": 750
+            },
+            "dragging": false
+        }
+    ],
+    "edges": [
+        {
+            "id": "82",
+            "source": "78",
+            "target": "79",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "83",
+            "source": "79",
+            "target": "80",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "label": "has one",
+            "labelStyle": {
+                "fill": "red",
+                "fontWeight": 700
+            },
+            "type": "hasOne",
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "84",
+            "source": "80",
+            "target": "81",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "label": "has one",
+            "labelStyle": {
+                "fill": "red",
+                "fontWeight": 700
+            },
+            "type": "hasOne",
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "85",
+            "source": "79",
+            "target": "81",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "markerEnd": {
+                "type": "arrow"
+            }
+        }
+    ],
+    "tables": {
+        "74": {
+            "name": "entity1",
+            "attributes": {}
+        },
+        "75": {
+            "name": "entity2",
+            "attributes": {}
+        },
+        "76": {
+            "name": "entity3",
+            "attributes": {}
+        },
+        "77": {
+            "name": "entity4",
+            "attributes": {}
+        }
+    },
+    "isConnectContinue": false,
+    "isMouseOnNode": false,
+    "mouseOnNodeId": null
+}

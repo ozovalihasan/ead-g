@@ -1,21 +1,17 @@
 require 'ead'
 require 'item'
-require 'block'
 require 'active_support/core_ext/string'
 
 describe ItemBase do
   before do
     ObjectSpace.garbage_collect
     @ead = EAD.new
-    @ead.import_JSON(['./spec/sample_EAD.json'])
-    ead_id = '9'
-    block = Block.find(ead_id)
-    @ead.create_items(block)
+    file = @ead.import_JSON(['./spec/sample_EAD.json'])
+    
+    @ead.create_items(file)
 
     ItemClone.all.each do |item_clone|
-      parent = Item.find(item_clone.clone_parent)
-      item_clone.clone_parent = Item.find(item_clone.clone_parent)
-      parent.clones << item_clone
+      item_clone.clone_parent.clones << item_clone
     end
 
     @account_history = ItemClone.all.select { |item| item.name == 'account_history' }[0]
@@ -25,7 +21,7 @@ describe ItemBase do
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@followed.id).to eq('33')
+      expect(@followed.id).to eq('48')
       expect(@followed.name).to eq('followed')
       expect(@followed.twin_name).to eq('following')
       expect(@followed.parent.name).to eq('famous_person')

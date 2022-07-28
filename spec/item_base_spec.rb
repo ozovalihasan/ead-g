@@ -19,18 +19,6 @@ describe ItemBase do
     @fan = ItemClone.all.select { |item| item.name == 'fan' }[0]
   end
 
-  describe '#initialize' do
-    it 'creates an instance of the class correctly' do
-      expect(@followed.id).to eq('48')
-      expect(@followed.name).to eq('followed')
-      expect(@followed.twin_name).to eq('following')
-      expect(@followed.parent.name).to eq('famous_person')
-      expect(@followed.parent_association.name).to eq('has_many')
-      expect(@followed.associations[0].name).to eq(':through')
-      expect(@account_history.clone_parent.attributes[0].name).to eq('credit_rating')
-    end
-  end
-
   describe '.all' do
     it 'returns all created instances' do
       expect(ItemBase.all.size).to eq(24)
@@ -39,7 +27,7 @@ describe ItemBase do
 
   describe '.find' do
     it 'returns found item by using id' do
-      expect(ItemBase.find('25').name).to eq('supplier')
+      expect(ItemBase.find('18').name).to eq('supplier')
     end
   end
 end

@@ -3,32 +3,34 @@ require 'association'
 require 'project_file'
 
 class ItemClone < ItemBase
-  attr_accessor :name, :id, :twin_name, :clone_parent, :parent, :parent_association, :associations, :parent_associations
+  attr_accessor(:name, :id, :twin_name, :clone_parent, :parent, :parent_association, :associations, :parent_associations, 
+  :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through)
 
   def initialize(node, parent = nil, parent_association = nil)
     @id = node["id"]
     @name = node["data"]["name"].split(' || ')[0].underscore.singularize
     @twin_name = node["data"]["name"].split(' || ')[1]&.underscore&.singularize
     @clone_parent = Item.find(node["data"]["tableId"])
-    @parent_associations = []
     @parent = parent
     @parent_association = parent_association
+    
+    @parent_associations = []
     @associations = []
+
+    @parents_has_one = []
+    @parents_has_many = []
+    @parents_through = []
+
+    @children_has_one = []
+    @children_has_many = []
+    @children_through = []
     # block.sub_blocks.each do |sub_block|
     #   add_to_associations(sub_block)
     # end
   end
-  
+
   def model_name
     clone_parent.name.camelize
-  end
-
-  def add_to_associations(association)
-    @associations << association
-  end
-
-  def add_to_parent_associations(association)
-    @parent_associations << association
   end
 
   def grand

@@ -16,6 +16,7 @@ describe Item do
     end
 
     @account_history = Item.all.select { |item| item.name == 'account_history' }[0]
+    @relation = Item.all.select { |item| item.name == 'relation' }[0]
     @picture = Item.all.select { |item| item.name == 'picture' }[0]
   end
 
@@ -23,24 +24,11 @@ describe Item do
     it 'creates an instance of the class correctly' do
       expect(@account_history.id).to eq('20')
       expect(@account_history.name).to eq('account_history')
-      expect(@account_history.attributes[0].name).to eq('credit_rating')
       expect(@account_history.clones.size).to eq(1)
       expect(@account_history.polymorphic).to eq(false)
       expect(@account_history.polymorphic_names).to eq([])
-    end
-  end
-
-  describe '#add_to_attributes' do
-    it 'adds an attribute to attributes of item' do
+      expect(@account_history.attributes[0].name).to eq('credit_rating')
       expect(@account_history.attributes.size).to eq(2)
-
-      attribute = {
-        "name" => "access_time",
-        "type" => "datetime"
-      }
-      @account_history.add_to_attributes(attribute)
-
-      expect(@account_history.attributes.size).to eq(3)
     end
   end
 
@@ -95,12 +83,14 @@ describe Item do
                  'bundle exec rails generate model Picture imageable:references{polymorphic} '\
                                                             'postable:references{polymorphic}',
                  'bundle exec rails generate model AccountHistory credit_rating:integer '\
-                                                'access_time:datetime account:references'
+                                                'access_time:datetime account:references',
+                 'bundle exec rails generate model Relation famous_person:references fan:references'
                ]).to include call_with
       end
 
       @picture.create_model
       @account_history.create_model
+      @relation.create_model
     end
   end
 end

@@ -10,18 +10,13 @@ class Item < ItemBase
   def initialize(item_id, tables)
     @id = item_id
     @name = tables[item_id]["name"].split(' || ')[0].underscore.singularize
-    @twin_name = tables[item_id]["name"].split(' || ')[1]&.underscore&.singularize
     @clones = []
     @polymorphic = false
     @polymorphic_names = []
     @attributes = []
-    tables[item_id]["attributes"].each do |(attribute_id, attribute_value)|
-      add_to_attributes(attribute_value)
+    tables[item_id]["attributes"].each do |(attribute_id, attribute)|
+      @attributes << Attribute.new(attribute)
     end
-  end
-
-  def add_to_attributes(attribute)
-    @attributes << Attribute.new(attribute)
   end
 
   def model_name
@@ -43,13 +38,11 @@ class Item < ItemBase
 
     belong_parents = []
     clones.each do |item_clone|
-      if item_clone.through_association && item_clone.parent_has_many?
-        belong_parents << item_clone.parent
-        belong_parents << item_clone.through_child
-      elsif !item_clone.parent_through_has_many? && item_clone.parent
-        belong_parents << item_clone.parent
+      item_clone.parent_associations.each do |association|
+        belong_parents << association.first_item
       end
     end
+
     belong_parent_names = belong_parents.map(&:name)
 
     filtered_parent_names = belong_parent_names.find_all do |parent_name|
@@ -81,14 +74,19 @@ class Item < ItemBase
 
     check_polymorphic(command)
 
-    clones.each do |item|
-      add_references(command, item.through_child) if item.parent_has_many? && item.through_association
+    clones.each do |item_clone|
+      # add_references(command, item_clone.through_child) if item_clone.parent_has_many? && item_clone.through_association
+      
+      item_clone.parents_has_many.each do |parent|
+        next unless  !item_clone.one_polymorphic_names?(parent)
+        add_references(command, parent)  
+      end
 
-      next unless item.parent && !item.one_polymorphic_names?(item.parent) && (
-        item.parent_has_any? || item.parent_through_has_one?
-      )
-
-      add_references(command, item.parent)
+      item_clone.parents_has_one.each do |parent|
+        next unless  !item_clone.one_polymorphic_names?(parent)
+        add_references(command, parent)  
+      end
+      
     end
     system(command)
   end

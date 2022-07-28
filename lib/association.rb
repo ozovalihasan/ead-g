@@ -7,14 +7,25 @@ class Association
     @first_item = ItemClone.find(edge["source"])
     @second_item = ItemClone.find(edge["target"])
     
-    ItemClone.find(edge["source"]).add_to_associations(self)
-    ItemClone.find(edge["target"]).add_to_parent_associations(self)
-    @name = if edge["type"] === "hasMany" 
-      "has_many"
+    @first_item.associations << self
+    @second_item.parent_associations << self
+
+    @name = nil
+    if edge["type"] === "hasMany" 
+      @first_item.children_has_many << @second_item
+      @second_item.parents_has_many << @first_item
+
+      @name = "has_many"
     elsif edge["type"] === "hasOne" 
-      "has_one"
+      @first_item.children_has_one << @second_item
+      @second_item.parents_has_one << @first_item
+      
+      @name = "has_one"
     elsif edge["type"] === "through" 
-      ":through"
+      @first_item.children_through << @second_item
+      @second_item.parents_through << @first_item
+      
+      @name = ":through"
     end
   end
   

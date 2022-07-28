@@ -32,6 +32,7 @@ describe Association do
     @association2 = @item2.associations.first
     @item3 = @association2.second_item
     @association3 = @item2.associations.last
+    @item4 = @association3.second_item
   end
 
   describe '#initialize' do
@@ -40,6 +41,12 @@ describe Association do
       expect(@association1.name).to eq('has_many')
       expect(@item2.associations.first).to eq(@association2)
       expect(@item2.parent_associations.any? @association1).to eq(true)
+      expect(@item2.parents_has_many.any? @item1).to eq(true)
+      expect(@item1.children_has_many.any? @item2).to eq(true)
+      expect(@item3.parents_has_one.any? @item2).to eq(true)
+      expect(@item2.children_has_one.any? @item3).to eq(true)
+      expect(@item4.parents_through.any? @item2).to eq(true)
+      expect(@item2.children_through.any? @item4).to eq(true)
     end
   end
 

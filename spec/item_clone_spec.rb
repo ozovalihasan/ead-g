@@ -38,18 +38,6 @@ describe ItemClone do
     end
   end
 
-  describe '#add_to_attributes' do
-    it 'adds an attribute to attributes of item' do
-      parent = @account_history.clone_parent
-      expect(parent.attributes.size).to eq(2)
-
-      block = Block.find('49')
-
-      parent.add_to_attributes(block)
-
-      expect(parent.attributes.size).to eq(3)
-    end
-  end
 
   describe '#grand' do
     it 'returns parent item of parent item' do

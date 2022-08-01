@@ -1,7 +1,7 @@
 {
     "version": "0.4.0",
-    "idCounter": 127,
-    "associationType": "through",
+    "idCounter": 135,
+    "associationType": "has_one",
     "nodes": [
         {
             "id": "78",
@@ -47,7 +47,7 @@
             "id": "80",
             "type": "textUpdater",
             "position": {
-                "x": -555,
+                "x": -645,
                 "y": 675
             },
             "data": {
@@ -58,7 +58,7 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -555,
+                "x": -645,
                 "y": 675
             },
             "dragging": false
@@ -67,8 +67,8 @@
             "id": "81",
             "type": "textUpdater",
             "position": {
-                "x": -360,
-                "y": 735
+                "x": -405,
+                "y": 750
             },
             "data": {
                 "tableId": "77",
@@ -78,8 +78,8 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -360,
-                "y": 735
+                "x": -405,
+                "y": 750
             },
             "dragging": false
         },
@@ -87,8 +87,8 @@
             "id": "87",
             "type": "textUpdater",
             "position": {
-                "x": -90,
-                "y": 810
+                "x": -210,
+                "y": 750
             },
             "data": {
                 "tableId": "86",
@@ -98,8 +98,8 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -90,
-                "y": 810
+                "x": -210,
+                "y": 750
             },
             "dragging": false
         },
@@ -107,8 +107,8 @@
             "id": "91",
             "type": "textUpdater",
             "position": {
-                "x": -300,
-                "y": 900
+                "x": -15,
+                "y": 840
             },
             "data": {
                 "tableId": "90",
@@ -116,10 +116,10 @@
             },
             "width": 138,
             "height": 45,
-            "selected": true,
+            "selected": false,
             "positionAbsolute": {
-                "x": -300,
-                "y": 900
+                "x": -15,
+                "y": 840
             },
             "dragging": false
         },
@@ -127,8 +127,8 @@
             "id": "96",
             "type": "textUpdater",
             "position": {
-                "x": -210,
-                "y": 555
+                "x": 0,
+                "y": 615
             },
             "data": {
                 "tableId": "95",
@@ -138,8 +138,28 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -210,
-                "y": 555
+                "x": 0,
+                "y": 615
+            },
+            "dragging": false
+        },
+        {
+            "id": "132",
+            "type": "textUpdater",
+            "position": {
+                "x": -630,
+                "y": 840
+            },
+            "data": {
+                "tableId": "131",
+                "name": "entity8"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": true,
+            "positionAbsolute": {
+                "x": -630,
+                "y": 840
             },
             "dragging": false
         }
@@ -310,7 +330,7 @@
             }
         },
         {
-            "id": "126",
+            "id": "127",
             "source": "80",
             "target": "87",
             "sourceHandle": "bottom",
@@ -322,8 +342,43 @@
             "label": "through",
             "type": "through",
             "data": {
-                "throughNodeId": "96"
+                "throughNodeId": "79"
             },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "133",
+            "source": "80",
+            "target": "132",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "81"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "134",
+            "source": "81",
+            "target": "132",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "label": "has one",
+            "labelStyle": {
+                "fill": "red",
+                "fontWeight": 700
+            },
+            "type": "hasOne",
             "markerEnd": {
                 "type": "arrow"
             }
@@ -356,6 +411,10 @@
         },
         "95": {
             "name": "entity7",
+            "attributes": {}
+        },
+        "131": {
+            "name": "entity8",
             "attributes": {}
         }
     },

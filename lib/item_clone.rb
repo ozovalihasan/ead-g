@@ -33,64 +33,68 @@ class ItemClone < ItemBase
     clone_parent.name.camelize
   end
 
-  def grand
-    parent.parent
-  end
+  # def grand
+  #   parent.parent
+  # end
 
-  def grand_association
-    parent.parent_association
-  end
+  # def grand_association
+  #   parent.parent_association
+  # end
 
-  def grand_has_many?
-    grand_association&.has_many?
-  end
+  # def grand_has_many?
+  #   grand_association&.has_many?
+  # end
 
-  def grand_has_one?
-    grand_association&.has_one?
-  end
+  # def grand_has_one?
+  #   grand_association&.has_one?
+  # end
 
-  def grand_real_self_real?
-    reals_same? grand
-  end
+  # def grand_real_self_real?
+  #   reals_same? grand
+  # end
 
-  def reals_same?(item)
-    real_item == item.real_item
-  end
+  # def reals_same?(item)
+  #   real_item == item.real_item
+  # end
 
-  def parent_through?
-    parent_association&.through?
-  end
+  # def parent_through?
+  #   parent_association&.through?
+  # end
 
-  def parent_has_many?
-    parent_association&.has_many?
-  end
+  # def parent_has_many?
+  #   parent_association&.has_many?
+  # end
 
-  def parent_has_one?
-    parent_association&.has_one?
-  end
+  # def parent_has_one?
+  #   parent_association&.has_one?
+  # end
 
-  def parent_has_any?
-    parent_has_one? || parent_has_many?
-  end
+  # def parent_has_any?
+  #   parent_has_one? || parent_has_many?
+  # end
 
-  def parent_through_has_one?
-    parent_through? && grand_has_one?
-  end
+  # def parent_through_has_one?
+  #   parent_through? && grand_has_one?
+  # end
 
-  def parent_through_has_many?
-    parent_through? && grand_has_many?
-  end
+  # def parent_through_has_many?
+  #   parent_through? && grand_has_many?
+  # end
 
-  def through_association
-    associations.find(&:through?)
-  end
+  # def through_association
+  #   associations.find(&:through?)
+  # end
 
-  def through_child
-    through_association&.second_items&.first
-  end
+  # def through_child
+  #   through_association&.second_items&.first
+  # end
 
-  def through?(item)
-    item.present?
+  # def through?(item)
+  #   item.present?
+  # end
+
+  def self.find_by_name(name)
+    all.find {|item_clone| item_clone.name == name}
   end
 
   def clone_name_different?
@@ -105,13 +109,13 @@ class ItemClone < ItemBase
     clone_parent
   end
 
-  def grand_many_through_reals_same?(item)
-    parent_through_has_many? && (grand == item) && reals_same?(item)
-  end
+  # def grand_many_through_reals_same?(item)
+  #   parent_through_has_many? && (grand == item) && reals_same?(item)
+  # end
 
-  def parent_has_many_reals_same_through_child?(item)
-    item.parent_through_has_many? && (through_child == item) && item.reals_same?(parent)
-  end
+  # def parent_has_many_reals_same_through_child?(item)
+  #   item.parent_through_has_many? && (through_child == item) && item.reals_same?(parent)
+  # end
 
   def update_end_model_migration_files(start_item, association)
     polymorphic_end = one_polymorphic_names?(start_item)

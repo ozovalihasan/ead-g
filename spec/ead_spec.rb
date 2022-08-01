@@ -10,33 +10,31 @@ describe EAD do
   end
 
   describe '.import_JSON' do
-    it 'imports JSON file and creates blocks by using imported data' do
+    it 'imports JSON file' do
       allow(File).to receive(:read).and_return(@file)
-      @ead.import_JSON([])
-      expect(Block.all.size).to eq(8)
+      file = @ead.import_JSON([])
+      expect(file).to eq(@file)
     end
 
-    it 'imports JSON file with custom path and creates blocks by using imported data' do
+    it 'imports JSON file with a custom path' do
       allow(File).to receive(:read).with('custom.json').and_return(@file)
-      @ead.import_JSON(['custom.json'])
-      expect(Block.all.size).to eq(8)
+      file = @ead.import_JSON(['custom.json'])
+      expect(file).to eq(@file)
     end
   end
 
   describe '#create_items' do
     it 'creates all necessary instances of Item and ItemClone' do
       allow(File).to receive(:read).and_return(@file)
-      @ead.import_JSON([])
-      ead_id = '9'
-      block = Block.find(ead_id)
-      @ead.create_items(block)
+      file = @ead.import_JSON([])
+      @ead.create_items(file)
       expect(Item.all.size).to eq(2)
       expect(ItemClone.all.size).to eq(2)
     end
   end
 
   describe '.check_implement_items' do
-    it 'checks block having EAD content and create models and associations' do
+    it 'creates all necessary instances of classes and create models and associations' do
       require 'item'
       allow(File).to receive(:read).and_return(@file)
       mock_file = ''
@@ -53,8 +51,8 @@ describe EAD do
       call_add_associations = 0
       allow_any_instance_of(ItemClone).to receive(:add_associations) { |_arg| call_add_associations += 1 }
 
-      @ead.import_JSON([])
-      @ead.check_implement_items
+      file = @ead.import_JSON([])
+      @ead.check_implement_items(file)
 
       expect(Item.all.size).to eq(2)
       expect(Association.all.size).to eq(1)

@@ -1,6 +1,6 @@
 {
     "version": "0.4.0",
-    "idCounter": 74,
+    "idCounter": 78,
     "associationType": "through",
     "nodes": [
         {
@@ -27,8 +27,8 @@
             "id": "32",
             "type": "textUpdater",
             "position": {
-                "x": 180,
-                "y": 300
+                "x": 45,
+                "y": 255
             },
             "data": {
                 "tableId": "25",
@@ -38,8 +38,8 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": 180,
-                "y": 300
+                "x": 45,
+                "y": 255
             },
             "dragging": false
         },
@@ -47,8 +47,8 @@
             "id": "34",
             "type": "textUpdater",
             "position": {
-                "x": 75,
-                "y": 615
+                "x": 285,
+                "y": 720
             },
             "data": {
                 "tableId": "30",
@@ -56,10 +56,10 @@
             },
             "width": 138,
             "height": 45,
-            "selected": true,
+            "selected": false,
             "positionAbsolute": {
-                "x": 75,
-                "y": 615
+                "x": 285,
+                "y": 720
             },
             "dragging": false
         },
@@ -87,8 +87,8 @@
             "id": "36",
             "type": "textUpdater",
             "position": {
-                "x": -120,
-                "y": 615
+                "x": -60,
+                "y": 570
             },
             "data": {
                 "tableId": "26",
@@ -98,8 +98,8 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -120,
-                "y": 615
+                "x": -60,
+                "y": 570
             },
             "dragging": false
         },
@@ -207,15 +207,21 @@
             "id": "54",
             "type": "textUpdater",
             "position": {
-                "x": 660,
-                "y": 765
+                "x": 705,
+                "y": 645
             },
             "data": {
                 "tableId": "18",
                 "name": "suppliers"
             },
             "width": 138,
-            "height": 45
+            "height": 45,
+            "selected": true,
+            "positionAbsolute": {
+                "x": 705,
+                "y": 645
+            },
+            "dragging": false
         },
         {
             "id": "55",
@@ -342,22 +348,6 @@
             }
         },
         {
-            "id": "60",
-            "source": "54",
-            "target": "56",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
             "id": "62",
             "source": "36",
             "target": "35",
@@ -370,22 +360,6 @@
             "label": "has many"
         },
         {
-            "id": "65",
-            "source": "36",
-            "target": "34",
-            "sourceHandle": "right",
-            "targetHandle": "left",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
             "id": "66",
             "source": "49",
             "target": "48",
@@ -396,22 +370,6 @@
             },
             "type": "hasMany",
             "label": "has many"
-        },
-        {
-            "id": "67",
-            "source": "49",
-            "target": "47",
-            "sourceHandle": "right",
-            "targetHandle": "left",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "markerEnd": {
-                "type": "arrow"
-            }
         },
         {
             "id": "69",
@@ -437,6 +395,9 @@
             "animated": true,
             "label": "through",
             "type": "through",
+            "data": {
+                "throughNodeId": "31"
+            },
             "markerEnd": {
                 "type": "arrow"
             }
@@ -466,17 +427,77 @@
             "label": "has many"
         },
         {
-            "id": "73",
-            "source": "42",
-            "target": "40",
-            "sourceHandle": "right",
-            "targetHandle": "left",
+            "id": "74",
+            "source": "47",
+            "target": "49",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
             "style": {
                 "stroke": "green"
             },
             "animated": true,
             "label": "through",
             "type": "through",
+            "data": {
+                "throughNodeId": "48"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "75",
+            "source": "36",
+            "target": "34",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "35"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "76",
+            "source": "42",
+            "target": "40",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "35"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "77",
+            "source": "54",
+            "target": "56",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "55"
+            },
             "markerEnd": {
                 "type": "arrow"
             }
@@ -535,5 +556,6 @@
     },
     "isConnectContinue": false,
     "isMouseOnNode": false,
-    "mouseOnNodeId": null
+    "mouseOnNodeId": null,
+    "selectedNodeIdForThrough": null
 }

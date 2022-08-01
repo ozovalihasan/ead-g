@@ -72,6 +72,8 @@ class EAD
     #   item_clone.add_associations
     # end
 
+    Association.set_middle_items
+    
     Association.all.each do |association|
       association.first_item.update_model(association.second_item, association)
     end

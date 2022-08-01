@@ -1,6 +1,6 @@
 {
     "version": "0.4.0",
-    "idCounter": 86,
+    "idCounter": 122,
     "associationType": "through",
     "nodes": [
         {
@@ -8,20 +8,26 @@
             "type": "textUpdater",
             "position": {
                 "x": -330,
-                "y": 405
+                "y": 375
             },
             "data": {
                 "tableId": "74",
                 "name": "entity1"
             },
             "width": 138,
-            "height": 45
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -330,
+                "y": 375
+            },
+            "dragging": false
         },
         {
             "id": "79",
             "type": "textUpdater",
             "position": {
-                "x": -330,
+                "x": -360,
                 "y": 525
             },
             "data": {
@@ -32,7 +38,7 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -330,
+                "x": -360,
                 "y": 525
             },
             "dragging": false
@@ -41,7 +47,7 @@
             "id": "80",
             "type": "textUpdater",
             "position": {
-                "x": -375,
+                "x": -480,
                 "y": 645
             },
             "data": {
@@ -50,9 +56,9 @@
             },
             "width": 138,
             "height": 45,
-            "selected": true,
+            "selected": false,
             "positionAbsolute": {
-                "x": -375,
+                "x": -480,
                 "y": 645
             },
             "dragging": false
@@ -61,8 +67,8 @@
             "id": "81",
             "type": "textUpdater",
             "position": {
-                "x": -210,
-                "y": 750
+                "x": -360,
+                "y": 735
             },
             "data": {
                 "tableId": "77",
@@ -72,15 +78,75 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": -210,
-                "y": 750
+                "x": -360,
+                "y": 735
+            },
+            "dragging": false
+        },
+        {
+            "id": "87",
+            "type": "textUpdater",
+            "position": {
+                "x": 105,
+                "y": 675
+            },
+            "data": {
+                "tableId": "86",
+                "name": "entity5"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 105,
+                "y": 675
+            },
+            "dragging": false
+        },
+        {
+            "id": "91",
+            "type": "textUpdater",
+            "position": {
+                "x": -90,
+                "y": 765
+            },
+            "data": {
+                "tableId": "90",
+                "name": "entity6"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -90,
+                "y": 765
+            },
+            "dragging": false
+        },
+        {
+            "id": "96",
+            "type": "textUpdater",
+            "position": {
+                "x": -165,
+                "y": 615
+            },
+            "data": {
+                "tableId": "95",
+                "name": "entity7"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -165,
+                "y": 615
             },
             "dragging": false
         }
     ],
     "edges": [
         {
-            "id": "82",
+            "id": "100",
             "source": "78",
             "target": "79",
             "sourceHandle": "bottom",
@@ -92,7 +158,23 @@
             "label": "has many"
         },
         {
-            "id": "83",
+            "id": "102",
+            "source": "79",
+            "target": "81",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "label": "has one",
+            "labelStyle": {
+                "fill": "red",
+                "fontWeight": 700
+            },
+            "type": "hasOne",
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "105",
             "source": "79",
             "target": "80",
             "sourceHandle": "bottom",
@@ -108,9 +190,21 @@
             }
         },
         {
-            "id": "84",
-            "source": "80",
-            "target": "81",
+            "id": "110",
+            "source": "79",
+            "target": "96",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "117",
+            "source": "96",
+            "target": "87",
             "sourceHandle": "bottom",
             "targetHandle": "top",
             "label": "has one",
@@ -124,8 +218,58 @@
             }
         },
         {
-            "id": "85",
+            "id": "118",
+            "source": "87",
+            "target": "91",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "119",
+            "source": "96",
+            "target": "91",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "87"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "120",
             "source": "79",
+            "target": "87",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "96"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "121",
+            "source": "80",
             "target": "81",
             "sourceHandle": "bottom",
             "targetHandle": "top",
@@ -135,6 +279,9 @@
             "animated": true,
             "label": "through",
             "type": "through",
+            "data": {
+                "throughNodeId": "79"
+            },
             "markerEnd": {
                 "type": "arrow"
             }
@@ -156,9 +303,22 @@
         "77": {
             "name": "entity4",
             "attributes": {}
+        },
+        "86": {
+            "name": "entity5",
+            "attributes": {}
+        },
+        "90": {
+            "name": "entity6",
+            "attributes": {}
+        },
+        "95": {
+            "name": "entity7",
+            "attributes": {}
         }
     },
     "isConnectContinue": false,
     "isMouseOnNode": false,
-    "mouseOnNodeId": null
+    "mouseOnNodeId": null,
+    "selectedNodeIdForThrough": null
 }

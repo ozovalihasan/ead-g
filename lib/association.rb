@@ -1,12 +1,16 @@
 require 'item'
 
 class Association
-  attr_accessor :first_item, :second_item, :name
+  attr_accessor :first_item, :second_item, :name, :middle_items_has_one, :middle_items_has_many, :through_item
 
   def initialize(edge ) #first_item, association_block)
     @first_item = ItemClone.find(edge["source"])
     @second_item = ItemClone.find(edge["target"])
-    
+    @through_item = nil
+
+    @middle_items_has_one = []
+    @middle_items_has_many = []
+
     @first_item.associations << self
     @second_item.parent_associations << self
 
@@ -24,11 +28,45 @@ class Association
     elsif edge["type"] === "through" 
       @first_item.children_through << @second_item
       @second_item.parents_through << @first_item
+
+      @through_item = ItemClone.find(edge["data"]["throughNodeId"])
       
       @name = ":through"
     end
   end
   
+  def self.set_middle_items
+    associations = all.select(&:through?)
+    associations.each do |association|
+
+      source = association.first_item
+      target = association.second_item
+      through_item = association.through_item
+      
+      if (source.children_has_many.include? through_item) || (target.parents_has_many.include? through_item)
+        association.middle_items_has_many << through_item
+      else
+        association.middle_items_has_one << through_item
+      end
+
+      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.children_has_many) )
+      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.children_has_one) )
+      # association.middle_items_has_one.concat( source.children_has_one.intersection(target.children_has_many) )
+      # association.middle_items_has_one.concat( source.children_has_one.intersection(target.children_has_one) )
+      
+      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.parents_has_many) )
+      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.parents_has_one) )
+      # association.middle_items_has_many.concat( source.children_has_one.intersection(target.parents_has_many) )
+      # association.middle_items_has_one.concat( source.children_has_one.intersection(target.parents_has_one) )
+
+      # association.middle_items_has_one.concat( source.parents_has_many.intersection(target.children_has_many) )
+      # association.middle_items_has_one.concat( source.parents_has_many.intersection(target.children_has_one) )
+      # association.middle_items_has_one.concat( source.parents_has_one.intersection(target.children_has_many) )
+      # association.middle_items_has_one.concat( source.parents_has_one.intersection(target.children_has_one) )
+
+    end
+
+  end
 
   def has_many?
     name == 'has_many'
@@ -49,4 +87,5 @@ class Association
   def self.all
     ObjectSpace.each_object(self).to_a
   end
+
 end

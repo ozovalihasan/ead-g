@@ -37,33 +37,35 @@ class Association
   
   def self.set_middle_items
     associations = all.select(&:through?)
-    associations.each do |association|
+    need_one_more_loop = true
 
-      source = association.first_item
-      target = association.second_item
-      through_item = association.through_item
-      
-      if (source.children_has_many.include? through_item) || (target.parents_has_many.include? through_item)
-        association.middle_items_has_many << through_item
-      else
-        association.middle_items_has_one << through_item
+    while need_one_more_loop
+      need_one_more_loop = false
+      associations.each do |association|
+
+        source = association.first_item
+        target = association.second_item
+        through_item = association.through_item
+        
+        if (
+          (source.children_has_many.include? through_item) || (target.parents_has_many.include? through_item) ||
+          (source.children_has_many_through.include? through_item) || (target.parents_has_many_through.include? through_item)
+        )
+          unless association.middle_items_has_many.include? through_item
+            need_one_more_loop = true
+            association.middle_items_has_many << through_item
+            source.children_has_many_through << target
+            target.parents_has_many_through << source
+          end
+        else
+          unless association.middle_items_has_one.include? through_item
+            need_one_more_loop = true
+            association.middle_items_has_one << through_item
+            source.children_has_one_through << target
+            target.parents_has_one_through << source
+          end
+        end
       end
-
-      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.children_has_many) )
-      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.children_has_one) )
-      # association.middle_items_has_one.concat( source.children_has_one.intersection(target.children_has_many) )
-      # association.middle_items_has_one.concat( source.children_has_one.intersection(target.children_has_one) )
-      
-      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.parents_has_many) )
-      # association.middle_items_has_many.concat( source.children_has_many.intersection(target.parents_has_one) )
-      # association.middle_items_has_many.concat( source.children_has_one.intersection(target.parents_has_many) )
-      # association.middle_items_has_one.concat( source.children_has_one.intersection(target.parents_has_one) )
-
-      # association.middle_items_has_one.concat( source.parents_has_many.intersection(target.children_has_many) )
-      # association.middle_items_has_one.concat( source.parents_has_many.intersection(target.children_has_one) )
-      # association.middle_items_has_one.concat( source.parents_has_one.intersection(target.children_has_many) )
-      # association.middle_items_has_one.concat( source.parents_has_one.intersection(target.children_has_one) )
-
     end
 
   end

@@ -4,7 +4,8 @@ require 'project_file'
 
 class ItemClone < ItemBase
   attr_accessor(:name, :id, :twin_name, :clone_parent, :parent, :parent_association, :associations, :parent_associations, 
-  :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through)
+  :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
+  :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
 
   def initialize(node, parent = nil, parent_association = nil)
     @id = node["id"]
@@ -19,10 +20,14 @@ class ItemClone < ItemBase
 
     @parents_has_one = []
     @parents_has_many = []
+    @parents_has_one_through = []
+    @parents_has_many_through = []
     @parents_through = []
 
     @children_has_one = []
     @children_has_many = []
+    @children_has_one_through = []
+    @children_has_many_through = []
     @children_through = []
     # block.sub_blocks.each do |sub_block|
     #   add_to_associations(sub_block)

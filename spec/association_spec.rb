@@ -55,17 +55,26 @@ describe Association do
   end
 
   describe '.set_middle_items' do
-    it "sets all middle items of amy 'through' association " do
+    it "sets all middle items of any 'through' association " do
       Association.set_middle_items
 
       item5 = ItemClone.find_by_name("entity5")
       item6 = ItemClone.find_by_name("entity6")
       item7 = ItemClone.find_by_name("entity7")
+      item3 = ItemClone.find_by_name("entity3")
       association = item7.associations.find(&:through?)
-      expect(association.middle_items_has_many).to include(item5)
+      expect(association.middle_items_has_one).to include(item5)
+      expect(item7.children_has_one_through).to include(item6)
+      expect(item6.parents_has_one_through).to include(item7)
+      
+      association2 = @item2.associations.find(&:through?)
+      expect(association2.middle_items_has_many).to include(item7)
 
-      association2 = @item3.associations.find(&:through?)
-      expect(association2.middle_items_has_one).to include(@item2)
+      expect(item3.children_has_many_through).to include(item7)
+      expect(item7.parents_has_many_through).to include(item3)
+
+      expect(item3.children_has_many_through).to include(item5)
+      expect(item5.parents_has_many_through).to include(item3)
     end
   end
 
@@ -97,7 +106,7 @@ describe Association do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(Association.all.size).to eq(9)
+      expect(Association.all.size).to eq(10)
     end
   end
 end

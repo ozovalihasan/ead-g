@@ -48,8 +48,8 @@ describe EAD do
 
       call_create_model = 0
       allow_any_instance_of(Item).to receive(:create_model) { |_arg| call_create_model += 1 }
-      call_add_associations = 0
-      allow_any_instance_of(ItemClone).to receive(:add_associations) { |_arg| call_add_associations += 1 }
+      call_update_model = 0
+      allow_any_instance_of(ItemClone).to receive(:update_model) { |_arg| call_update_model += 1 }
 
       file = @ead.import_JSON([])
       @ead.check_implement_items(file)
@@ -57,7 +57,7 @@ describe EAD do
       expect(Item.all.size).to eq(2)
       expect(Association.all.size).to eq(1)
       expect(call_create_model).to eq(2)
-      expect(call_add_associations).to eq(2)
+      expect(call_update_model).to eq(1)
     end
   end
 

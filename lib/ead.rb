@@ -68,8 +68,12 @@ class EAD
       item.create_model
     end
 
-    ItemClone.all.each do |item_clone|
-      item_clone.add_associations
+    # ItemClone.all.each do |item_clone|
+    #   item_clone.add_associations
+    # end
+
+    Association.all.each do |association|
+      association.first_item.update_model(association.second_item, association)
     end
   end
 

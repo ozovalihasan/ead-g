@@ -21,7 +21,7 @@ describe ItemBase do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(ItemBase.all.size).to eq(24)
+      expect(ItemBase.all.size).to eq(25)
     end
   end
 

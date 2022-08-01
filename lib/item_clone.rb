@@ -58,9 +58,9 @@ class ItemClone < ItemBase
   #   reals_same? grand
   # end
 
-  # def reals_same?(item)
-  #   real_item == item.real_item
-  # end
+  def reals_same?(item)
+    real_item == item.real_item
+  end
 
   # def parent_through?
   #   parent_association&.through?
@@ -150,32 +150,38 @@ class ItemClone < ItemBase
     ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
   end
 
-  def update_start_model_file(end_item, association, intermediate_item = nil)
+  def update_start_model_file(end_item, association)
     start_model = real_item.name
 
-    end_model = if end_item.parent_has_many_reals_same_through_child?(self)
-                  end_item.twin_name
-                else
-                  end_item.name
-                end
+    end_model = end_item.name
+    intermediate_item = association.through_item
 
-    intermediate_model = if grand_many_through_reals_same?(end_item)
-                           intermediate_item.twin_name
-                         elsif intermediate_item
-                           intermediate_item.name
-                         end
+    intermediate_model = intermediate_item.name if intermediate_item
 
-    if association.has_many?
+    if association.has_many? || (self.children_has_many_through.include? end_item)
       end_model = end_model.pluralize
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
 
     line_content = {}
-    line_content[association.name] = if intermediate_item&.one_polymorphic_names?(end_item) && association.has_many?
-                                       ":#{end_item.real_item.name.pluralize}"
-                                     else
-                                       ":#{end_model}"
-                                     end
+
+    if association.has_many? || (self.children_has_many_through.include? end_item)
+      line_content["has_many"] = if intermediate_item&.one_polymorphic_names?(end_item) && (association.has_many? || (self.children_has_many_through.include? end_item))
+        ":#{end_item.real_item.name.pluralize}"
+      else
+        ":#{end_model}"
+      end
+    end
+
+    if association.has_one? || (self.children_has_one_through.include? end_item)
+      line_content["has_one"] = if intermediate_item&.one_polymorphic_names?(end_item) && (association.has_one? || (self.children_has_one_through.include? end_item))
+        ":#{end_item.real_item.name}"
+      else
+        ":#{end_model}"
+      end
+    end
+    
+    
 
     if intermediate_item
       line_content['through'] = ":#{intermediate_model}"
@@ -196,34 +202,35 @@ class ItemClone < ItemBase
     ProjectFile.add_line(start_model, end_model, line_content)
   end
 
-  def update_model(end_item, association, intermediate_item = nil)
-    return unless association.has_one? || association.has_many?
-
-    end_item.update_end_model_migration_files(self, association) unless intermediate_item
-    update_start_model_file(end_item, association, intermediate_item)
-  end
-
-  def parent_through_add_associations
-    if parent_through_has_many?
-      update_model(parent, grand_association)
-      update_model(grand, grand_association, parent)
-
-    elsif parent_through_has_one?
-      parent.update_model(self, grand_association)
+  def update_model(end_item, association)
+    if association.has_any?
+      end_item.update_end_model_migration_files(self, association)
     end
-
-    grand.update_model(self, grand_association, parent)
+    
+    update_start_model_file(end_item, association)
   end
 
-  def add_associations
-    parent_through_add_associations if parent_through?
+  # def parent_through_add_associations
+  #   if parent_through_has_many?
+  #     update_model(parent, grand_association)
+  #     update_model(grand, grand_association, parent)
 
-    associations.each do |association|
-      next unless association.has_any?
+  #   elsif parent_through_has_one?
+  #     parent.update_model(self, grand_association)
+  #   end
 
-      association.second_items.each do |second_item|
-        update_model(second_item, association)
-      end
-    end
-  end
+  #   grand.update_model(self, grand_association, parent)
+  # end
+
+  # def add_associations
+  #   parent_through_add_associations if parent_through?
+
+  #   associations.each do |association|
+  #     next unless association.has_any?
+
+  #     association.second_items.each do |second_item|
+  #       update_model(second_item, association)
+  #     end
+  #   end
+  # end
 end

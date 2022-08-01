@@ -71,13 +71,13 @@ describe ItemClone do
   #   end
   # end
 
-  # describe '#reals_same?' do
-  #   it 'returns boolean showing whether the real items of any item and self are same' do
-  #     famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
-  #     expect(@fan.reals_same?(@account_history)).to eq(false)
-  #     expect(@fan.reals_same?(famous_person)).to eq(true)
-  #   end
-  # end
+  describe '#reals_same?' do
+    it 'returns boolean showing whether the real items of any item and self are same' do
+      famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
+      expect(@fan.reals_same?(@account_history)).to eq(false)
+      expect(@fan.reals_same?(famous_person)).to eq(true)
+    end
+  end
 
   # describe '#parent_through?' do
   #   it "returns boolean showing whether the association between parent item and self is 'through?'" do
@@ -215,15 +215,17 @@ describe ItemClone do
       end
 
       famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
-      @fan.update_end_model_migration_files(@followed, @followed.parent_associations.first)
-      @fan.update_end_model_migration_files(famous_person, @fan.associations.first)
-      @fan.update_end_model_migration_files(famous_person, @fan.associations.second)
+      @fan.update_end_model_migration_files(@followed, @followed.parent_associations[0])
+      @fan.update_end_model_migration_files(famous_person, @fan.associations.find {|association| association.name === 'has_many'})
     end
   end
 
   describe '#update_start_model_file' do
     it 'updates the model file of an item' do
+      Association.set_middle_items
+      
       allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
+        
         expect(%w[user user]).to include name
         expect(%w[followings famous_people]).to include end_model
         expect([{ 'has_many' => ':followings', 'class_name' => '"Relation"', 'foreign_key' => '"fan_id"' },
@@ -231,8 +233,9 @@ describe ItemClone do
       end
 
       famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
-      @fan.update_start_model_file(@followed, @followed.parent_association)
-      @fan.update_start_model_file(famous_person, @fan.grand_association, @followed)
+      following = ItemClone.all.select { |item| item.name == 'following' }[0]
+      @fan.update_start_model_file(following, @fan.associations.find(&:has_many?  ))
+      @fan.update_start_model_file(famous_person, @fan.associations.find(&:through?))
 
       allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
         expect(%w[postcard postcard]).to include name
@@ -242,14 +245,14 @@ describe ItemClone do
                   'source_type' => '"Employee" ' }]).to include line_content
       end
 
-      imageable = ItemClone.all.select { |item| item.name == 'imageable' && item.real_item.name == 'employee' }[0]
-      postable = ItemClone.all.select { |item| item.name == 'postable' && item.real_item.name == 'postcard' }[0]
+      imageable_employee = ItemClone.all.select { |item| item.name == 'imageable' && item.real_item.name == 'employee' }[0]
+      postable_post_card = ItemClone.all.select { |item| item.name == 'postable' && item.real_item.name == 'postcard' }[0]
       photograph = ItemClone.all.select { |item| item.name == 'photograph' }[0]
 
       photograph.clone_parent.check_polymorphic('')
 
-      postable.update_start_model_file(photograph, photograph.parent_association)
-      postable.update_start_model_file(imageable, postable.grand_association, photograph)
+      postable_post_card.update_start_model_file(photograph, postable_post_card.associations.find(&:has_many?))
+      postable_post_card.update_start_model_file(imageable_employee, postable_post_card.associations.find(&:through?))
     end
   end
 
@@ -259,50 +262,55 @@ describe ItemClone do
       allow_any_instance_of(ItemClone).to receive(:update_end_model_migration_files) do
         call_update_end_model_migration_files += 1
       end
+      
       call_update_start_model_file = 0
-      allow_any_instance_of(ItemClone).to receive(:update_start_model_file) { call_update_start_model_file += 1 }
+      allow_any_instance_of(ItemClone).to receive(:update_start_model_file) do
+        call_update_start_model_file += 1 
+      end 
 
-      @fan.update_model(@followed, @followed.parent_association)
+
+      following = ItemClone.all.select { |item| item.name == 'following' }[0]
+      @fan.update_model(following, @fan.associations.find(&:has_many?))
       expect(call_update_end_model_migration_files).to eq(1)
       expect(call_update_start_model_file).to eq(1)
     end
   end
 
-  describe '#parent_through_add_associations' do
-    it 'calls update_model method if the parent association of an item is ":though"' do
-      call_update_model = 0
-      allow_any_instance_of(ItemClone).to receive(:update_model) { call_update_model += 1 }
+  # describe '#parent_through_add_associations' do
+  #   it 'calls update_model method if the parent association of an item is ":though"' do
+  #     call_update_model = 0
+  #     allow_any_instance_of(ItemClone).to receive(:update_model) { call_update_model += 1 }
 
-      postable = ItemClone.all.select { |item| item.name == 'postable' && item.real_item.name == 'postcard' }[0]
+  #     postable = ItemClone.all.select { |item| item.name == 'postable' && item.real_item.name == 'postcard' }[0]
 
-      @fan.parent_through_add_associations
-      expect(call_update_model).to eq(3)
-      postable.parent_through_add_associations
-      expect(call_update_model).to eq(6)
-      @account_history.parent_through_add_associations
-      expect(call_update_model).to eq(8)
-    end
-  end
+  #     @fan.parent_through_add_associations
+  #     expect(call_update_model).to eq(3)
+  #     postable.parent_through_add_associations
+  #     expect(call_update_model).to eq(6)
+  #     @account_history.parent_through_add_associations
+  #     expect(call_update_model).to eq(8)
+  #   end
+  # end
 
-  describe '#add_associations' do
-    it 'calls update_model for each association and '\
-      "parent_through_add_associations if the parent association is ':through'" do
-      call_parent_through_add_associations = 0
-      allow_any_instance_of(ItemClone).to receive(:parent_through_add_associations) do
-        call_parent_through_add_associations += 1
-      end
+  # describe '#add_associations' do
+  #   it 'calls update_model for each association and '\
+  #     "parent_through_add_associations if the parent association is ':through'" do
+  #     call_parent_through_add_associations = 0
+  #     allow_any_instance_of(ItemClone).to receive(:parent_through_add_associations) do
+  #       call_parent_through_add_associations += 1
+  #     end
 
-      call_update_model = 0
-      allow_any_instance_of(ItemClone).to receive(:update_model) { call_update_model += 1 }
+  #     call_update_model = 0
+  #     allow_any_instance_of(ItemClone).to receive(:update_model) { call_update_model += 1 }
 
-      imageable = ItemClone.all.select { |item| item.name == 'imageable' && item.real_item.name == 'employee' }[0]
+  #     imageable = ItemClone.all.select { |item| item.name == 'imageable' && item.real_item.name == 'employee' }[0]
 
-      @fan.add_associations
-      expect(call_update_model).to eq(0)
-      expect(call_parent_through_add_associations).to eq(1)
-      imageable.add_associations
-      expect(call_update_model).to eq(1)
-      expect(call_parent_through_add_associations).to eq(1)
-    end
-  end
+  #     @fan.add_associations
+  #     expect(call_update_model).to eq(0)
+  #     expect(call_parent_through_add_associations).to eq(1)
+  #     imageable.add_associations
+  #     expect(call_update_model).to eq(1)
+  #     expect(call_parent_through_add_associations).to eq(1)
+  #   end
+  # end
 end

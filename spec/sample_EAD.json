@@ -1,7 +1,7 @@
 {
     "version": "0.4.0",
-    "idCounter": 78,
-    "associationType": "through",
+    "idCounter": 89,
+    "associationType": "has_many",
     "nodes": [
         {
             "id": "31",
@@ -167,19 +167,19 @@
             "id": "48",
             "type": "textUpdater",
             "position": {
-                "x": 750,
-                "y": 465
+                "x": 615,
+                "y": 510
             },
             "data": {
                 "tableId": "24",
-                "name": "followed || following"
+                "name": "following"
             },
             "width": 138,
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": 750,
-                "y": 465
+                "x": 615,
+                "y": 510
             },
             "dragging": false
         },
@@ -216,7 +216,7 @@
             },
             "width": 138,
             "height": 45,
-            "selected": true,
+            "selected": false,
             "positionAbsolute": {
                 "x": 705,
                 "y": 645
@@ -276,6 +276,21 @@
                 "y": 390
             },
             "dragging": false
+        },
+        {
+            "id": "84",
+            "type": "textUpdater",
+            "position": {
+                "x": 870,
+                "y": 525
+            },
+            "data": {
+                "tableId": "24",
+                "name": "followed"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": true
         }
     ],
     "edges": [
@@ -295,18 +310,6 @@
             "id": "37",
             "source": "34",
             "target": "35",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "51",
-            "source": "47",
-            "target": "48",
             "sourceHandle": "bottom",
             "targetHandle": "top",
             "style": {
@@ -427,25 +430,6 @@
             "label": "has many"
         },
         {
-            "id": "74",
-            "source": "47",
-            "target": "49",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "48"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
             "id": "75",
             "source": "36",
             "target": "34",
@@ -501,6 +485,57 @@
             "markerEnd": {
                 "type": "arrow"
             }
+        },
+        {
+            "id": "78",
+            "source": "49",
+            "target": "47",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "48"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            },
+            "selected": false
+        },
+        {
+            "id": "87",
+            "source": "47",
+            "target": "49",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "84"
+            },
+            "markerEnd": {
+                "type": "arrow"
+            }
+        },
+        {
+            "id": "88",
+            "source": "47",
+            "target": "84",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "type": "hasMany",
+            "label": "has many"
         }
     ],
     "tables": {

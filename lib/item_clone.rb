@@ -7,13 +7,11 @@ class ItemClone < ItemBase
   :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
   :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
 
-  def initialize(node, parent = nil, parent_association = nil)
+  def initialize(node)
     @id = node["id"]
     @name = node["data"]["name"].split(' || ')[0].underscore.singularize
     @twin_name = node["data"]["name"].split(' || ')[1]&.underscore&.singularize
     @clone_parent = Item.find(node["data"]["tableId"])
-    @parent = parent
-    @parent_association = parent_association
     
     @parent_associations = []
     @associations = []
@@ -127,11 +125,7 @@ class ItemClone < ItemBase
 
     end_model_line = {}
     end_migration_line = {}
-    if association.has_one? && start_item.parent&.reals_same?(self)
-      end_model_line['optional'] = 'true'
-      end_migration_line['null'] = 'true'
-    end
-
+    
     if association.has_any?
       if reals_same?(start_item)
         end_model_line['optional'] = 'true'

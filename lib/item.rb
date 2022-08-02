@@ -29,7 +29,7 @@ class Item < ItemBase
     command << " #{item.name}:references"
   end
 
-  def add_polymorphic(command, poly_name)
+  def add_polymorphic_reference(command, poly_name)
     command << " #{poly_name}:references{polymorphic}"
   end
 
@@ -59,7 +59,7 @@ class Item < ItemBase
   def check_polymorphic(command)
     update_polymorphic_names
     @polymorphic_names.each do |poly_name|
-      add_polymorphic(command, poly_name)
+      add_polymorphic_reference(command, poly_name)
     end
 
     @polymorphic = true if @polymorphic_names.size.positive?

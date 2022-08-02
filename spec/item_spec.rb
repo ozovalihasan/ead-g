@@ -46,10 +46,10 @@ describe Item do
     end
   end
 
-  describe '#add_polymorphic' do
+  describe '#add_polymorphic_reference' do
     it 'adds polymorphic reference to command' do
       command = ''
-      @account_history.add_polymorphic(command, 'mock_polymorphic_name')
+      @account_history.add_polymorphic_reference(command, 'mock_polymorphic_name')
       expect(command).to eq(' mock_polymorphic_name:references{polymorphic}')
     end
   end

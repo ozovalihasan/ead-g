@@ -1,34 +1,14 @@
 {
     "version": "0.4.0",
-    "idCounter": 89,
+    "idCounter": 95,
     "associationType": "has_many",
     "nodes": [
-        {
-            "id": "31",
-            "type": "textUpdater",
-            "position": {
-                "x": 285,
-                "y": 195
-            },
-            "data": {
-                "tableId": "25",
-                "name": "manager"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "dragging": false,
-            "positionAbsolute": {
-                "x": 285,
-                "y": 195
-            }
-        },
         {
             "id": "32",
             "type": "textUpdater",
             "position": {
-                "x": 45,
-                "y": 255
+                "x": -60,
+                "y": 315
             },
             "data": {
                 "tableId": "25",
@@ -38,8 +18,8 @@
             "height": 45,
             "selected": false,
             "positionAbsolute": {
-                "x": 45,
-                "y": 255
+                "x": -60,
+                "y": 315
             },
             "dragging": false
         },
@@ -290,22 +270,30 @@
             },
             "width": 138,
             "height": 45,
-            "selected": true
+            "selected": false
+        },
+        {
+            "id": "92",
+            "type": "textUpdater",
+            "position": {
+                "x": 240,
+                "y": 180
+            },
+            "data": {
+                "tableId": "25",
+                "name": "manager"
+            },
+            "width": 138,
+            "height": 45,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 240,
+                "y": 180
+            },
+            "dragging": false
         }
     ],
     "edges": [
-        {
-            "id": "33",
-            "source": "31",
-            "target": "32",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
         {
             "id": "37",
             "source": "34",
@@ -385,25 +373,6 @@
             },
             "type": "hasMany",
             "label": "has many"
-        },
-        {
-            "id": "70",
-            "source": "31",
-            "target": "68",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "31"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
         },
         {
             "id": "71",
@@ -536,6 +505,18 @@
             },
             "type": "hasMany",
             "label": "has many"
+        },
+        {
+            "id": "93",
+            "source": "92",
+            "target": "32",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "style": {
+                "stroke": "green"
+            },
+            "type": "hasMany",
+            "label": "has many"
         }
     ],
     "tables": {
@@ -590,7 +571,7 @@
         }
     },
     "isConnectContinue": false,
-    "isMouseOnNode": false,
-    "mouseOnNodeId": null,
+    "isMouseOnNode": true,
+    "mouseOnNodeId": "89",
     "selectedNodeIdForThrough": null
 }

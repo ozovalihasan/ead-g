@@ -77,13 +77,8 @@ class Item < ItemBase
     clones.each do |item_clone|
       # add_references(command, item_clone.through_child) if item_clone.parent_has_many? && item_clone.through_association
       
-      item_clone.parents_has_many.each do |parent|
-        next unless  !item_clone.one_polymorphic_names?(parent)
-        add_references(command, parent)  
-      end
-
-      item_clone.parents_has_one.each do |parent|
-        next unless  !item_clone.one_polymorphic_names?(parent)
+      (item_clone.parents_has_many + item_clone.parents_has_one).each do |parent|
+        next if item_clone.one_polymorphic_names?(parent)
         add_references(command, parent)  
       end
       

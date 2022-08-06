@@ -22,7 +22,7 @@ describe Item do
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@account_history.id).to eq('20')
+      expect(@account_history.id).to eq('12')
       expect(@account_history.name).to eq('account_history')
       expect(@account_history.clones.size).to eq(1)
       expect(@account_history.polymorphic).to eq(false)
@@ -57,7 +57,7 @@ describe Item do
   describe '#update_polymorphic_names' do
     it 'adds polymorphic reference to command' do
       @picture.update_polymorphic_names
-      expect(@picture.polymorphic_names).to eq(%w[imageable postable])
+      expect(@picture.polymorphic_names).to eq(%w[postable imageable])
     end
   end
 
@@ -66,7 +66,7 @@ describe Item do
       command = ''
       @picture.check_polymorphic(command)
       expect(@picture.polymorphic).to eq(true)
-      expect(command).to eq(' imageable:references{polymorphic} postable:references{polymorphic}')
+      expect(command).to eq(' postable:references{polymorphic} imageable:references{polymorphic}')
 
       command = ''
       @account_history.check_polymorphic(command)
@@ -80,8 +80,8 @@ describe Item do
       allow(File).to receive(:exist?).and_return(false)
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
         expect([
-                 'bundle exec rails generate model Picture imageable:references{polymorphic} '\
-                                                            'postable:references{polymorphic}',
+                 'bundle exec rails generate model Picture postable:references{polymorphic} '\
+                                                            'imageable:references{polymorphic}',
                  'bundle exec rails generate model AccountHistory credit_rating:integer '\
                                                 'access_time:datetime account:references',
                  'bundle exec rails generate model Relation famous_person:references fan:references'

@@ -23,9 +23,9 @@ describe ItemClone do
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
-      expect(@photograph.id).to eq('35')
+      expect(@photograph.id).to eq('36')
       expect(@photograph.name).to eq('photograph')
-      expect(@photograph.parents_has_many.first.name).to eq('imageable')
+      expect(@photograph.parents_has_many.first.name).to eq('postable')
       expect(@photograph.parent_associations.first.name).to eq('has_many')
       expect(@photograph.clone_parent.name).to eq('picture')
     end

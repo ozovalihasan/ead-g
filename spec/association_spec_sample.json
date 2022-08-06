@@ -1,425 +1,346 @@
 {
     "version": "0.4.0",
-    "idCounter": 135,
-    "associationType": "has_one",
+    "idCounter": 31,
+    "associationType": "through",
     "nodes": [
         {
-            "id": "78",
-            "type": "textUpdater",
+            "id": "9",
+            "type": "entity",
             "position": {
-                "x": -330,
-                "y": 375
+                "x": -225,
+                "y": 135
             },
             "data": {
-                "tableId": "74",
+                "tableId": "1",
                 "name": "entity1"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": -330,
-                "y": 375
+                "x": -225,
+                "y": 135
             },
             "dragging": false
         },
         {
-            "id": "79",
-            "type": "textUpdater",
+            "id": "10",
+            "type": "entity",
             "position": {
-                "x": -285,
-                "y": 450
+                "x": -225,
+                "y": 270
             },
             "data": {
-                "tableId": "75",
+                "tableId": "2",
                 "name": "entity2"
             },
             "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": -285,
-                "y": 450
-            },
-            "dragging": false
+            "height": 47
         },
         {
-            "id": "80",
-            "type": "textUpdater",
+            "id": "11",
+            "type": "entity",
             "position": {
-                "x": -645,
-                "y": 675
+                "x": -495,
+                "y": 435
             },
             "data": {
-                "tableId": "76",
+                "tableId": "3",
                 "name": "entity3"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": -645,
-                "y": 675
+                "x": -495,
+                "y": 435
             },
             "dragging": false
         },
         {
-            "id": "81",
-            "type": "textUpdater",
+            "id": "12",
+            "type": "entity",
             "position": {
-                "x": -405,
-                "y": 750
+                "x": -225,
+                "y": 510
             },
             "data": {
-                "tableId": "77",
+                "tableId": "4",
                 "name": "entity4"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": -405,
-                "y": 750
+                "x": -225,
+                "y": 510
             },
             "dragging": false
         },
         {
-            "id": "87",
-            "type": "textUpdater",
+            "id": "13",
+            "type": "entity",
             "position": {
-                "x": -210,
-                "y": 750
-            },
-            "data": {
-                "tableId": "86",
-                "name": "entity5"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": -210,
-                "y": 750
-            },
-            "dragging": false
-        },
-        {
-            "id": "91",
-            "type": "textUpdater",
-            "position": {
-                "x": -15,
-                "y": 840
-            },
-            "data": {
-                "tableId": "90",
-                "name": "entity6"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": -15,
-                "y": 840
-            },
-            "dragging": false
-        },
-        {
-            "id": "96",
-            "type": "textUpdater",
-            "position": {
-                "x": 0,
+                "x": -465,
                 "y": 615
             },
             "data": {
-                "tableId": "95",
-                "name": "entity7"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 0,
-                "y": 615
-            },
-            "dragging": false
-        },
-        {
-            "id": "132",
-            "type": "textUpdater",
-            "position": {
-                "x": -630,
-                "y": 840
-            },
-            "data": {
-                "tableId": "131",
+                "tableId": "8",
                 "name": "entity8"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": true,
             "positionAbsolute": {
-                "x": -630,
-                "y": 840
+                "x": -465,
+                "y": 615
+            },
+            "dragging": false
+        },
+        {
+            "id": "14",
+            "type": "entity",
+            "position": {
+                "x": 30,
+                "y": 510
+            },
+            "data": {
+                "tableId": "5",
+                "name": "entity5"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 30,
+                "y": 510
+            },
+            "dragging": false
+        },
+        {
+            "id": "15",
+            "type": "entity",
+            "position": {
+                "x": 240,
+                "y": 390
+            },
+            "data": {
+                "tableId": "7",
+                "name": "entity7"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 240,
+                "y": 390
+            },
+            "dragging": false
+        },
+        {
+            "id": "22",
+            "type": "entity",
+            "position": {
+                "x": -15,
+                "y": 645
+            },
+            "data": {
+                "tableId": "6",
+                "name": "entity6"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -15,
+                "y": 645
             },
             "dragging": false
         }
     ],
     "edges": [
         {
-            "id": "100",
-            "source": "78",
-            "target": "79",
-            "sourceHandle": "bottom",
+            "id": "17",
+            "source": "9",
+            "target": "10",
+            "sourceHandle": "bottom2",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "type": "hasMany",
             "label": "has many"
         },
         {
-            "id": "102",
-            "source": "79",
-            "target": "81",
-            "sourceHandle": "bottom",
+            "id": "18",
+            "source": "10",
+            "target": "11",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
-            }
+            "type": "hasOne"
         },
         {
-            "id": "105",
-            "source": "79",
-            "target": "80",
-            "sourceHandle": "bottom",
+            "id": "19",
+            "source": "10",
+            "target": "12",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
-            }
+            "type": "hasOne"
         },
         {
-            "id": "110",
-            "source": "79",
-            "target": "96",
-            "sourceHandle": "bottom",
+            "id": "20",
+            "source": "10",
+            "target": "15",
+            "sourceHandle": "bottom2",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "type": "hasMany",
             "label": "has many"
         },
         {
-            "id": "117",
-            "source": "96",
-            "target": "87",
-            "sourceHandle": "bottom",
+            "id": "21",
+            "source": "15",
+            "target": "14",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
-            }
+            "type": "hasOne"
         },
         {
-            "id": "119",
-            "source": "96",
-            "target": "91",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "87"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "120",
-            "source": "79",
-            "target": "87",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "96"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "121",
-            "source": "80",
-            "target": "81",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "79"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "123",
-            "source": "87",
-            "target": "91",
-            "sourceHandle": "bottom",
+            "id": "23",
+            "source": "14",
+            "target": "22",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
-            }
+            "type": "hasOne"
         },
         {
-            "id": "124",
-            "source": "80",
-            "target": "96",
-            "sourceHandle": "bottom",
+            "id": "24",
+            "source": "11",
+            "target": "12",
+            "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "animated": true,
             "label": "through",
             "type": "through",
             "data": {
-                "throughNodeId": "79"
-            },
-            "markerEnd": {
-                "type": "arrow"
+                "throughNodeId": "10"
             }
         },
         {
-            "id": "127",
-            "source": "80",
-            "target": "87",
-            "sourceHandle": "bottom",
+            "id": "25",
+            "source": "11",
+            "target": "14",
+            "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "animated": true,
             "label": "through",
             "type": "through",
             "data": {
-                "throughNodeId": "79"
-            },
-            "markerEnd": {
-                "type": "arrow"
+                "throughNodeId": "10"
             }
         },
         {
-            "id": "133",
-            "source": "80",
-            "target": "132",
-            "sourceHandle": "bottom",
+            "id": "26",
+            "source": "11",
+            "target": "15",
+            "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "animated": true,
             "label": "through",
             "type": "through",
             "data": {
-                "throughNodeId": "81"
-            },
-            "markerEnd": {
-                "type": "arrow"
+                "throughNodeId": "10"
             }
         },
         {
-            "id": "134",
-            "source": "81",
-            "target": "132",
-            "sourceHandle": "bottom",
+            "id": "27",
+            "source": "10",
+            "target": "14",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "15"
+            }
+        },
+        {
+            "id": "28",
+            "source": "15",
+            "target": "22",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "14"
+            }
+        },
+        {
+            "id": "29",
+            "source": "12",
+            "target": "13",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
+            "type": "hasOne"
+        },
+        {
+            "id": "30",
+            "source": "11",
+            "target": "13",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "12"
             }
         }
     ],
     "tables": {
-        "74": {
+        "1": {
             "name": "entity1",
             "attributes": {}
         },
-        "75": {
+        "2": {
             "name": "entity2",
             "attributes": {}
         },
-        "76": {
+        "3": {
             "name": "entity3",
             "attributes": {}
         },
-        "77": {
+        "4": {
             "name": "entity4",
             "attributes": {}
         },
-        "86": {
+        "5": {
             "name": "entity5",
             "attributes": {}
         },
-        "90": {
+        "6": {
             "name": "entity6",
             "attributes": {}
         },
-        "95": {
+        "7": {
             "name": "entity7",
             "attributes": {}
         },
-        "131": {
+        "8": {
             "name": "entity8",
             "attributes": {}
         }
     },
+    "connectionStartId": "11",
     "isConnectContinue": false,
     "isMouseOnNode": false,
+    "isMouseOnEdge": false,
     "mouseOnNodeId": null,
-    "selectedNodeIdForThrough": null
+    "mouseOnEdgeId": null,
+    "selectedNodeIdForThrough": null,
+    "showTextOnEdges": false
 }

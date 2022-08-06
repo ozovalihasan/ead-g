@@ -1,577 +1,517 @@
 {
     "version": "0.4.0",
-    "idCounter": 95,
-    "associationType": "has_many",
+    "idCounter": 53,
+    "associationType": "through",
     "nodes": [
         {
-            "id": "32",
-            "type": "textUpdater",
+            "id": "20",
+            "type": "entity",
             "position": {
-                "x": -60,
-                "y": 315
+                "x": 495,
+                "y": 165
             },
             "data": {
-                "tableId": "25",
+                "tableId": "14",
+                "name": "manager"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 495,
+                "y": 165
+            },
+            "dragging": false
+        },
+        {
+            "id": "21",
+            "type": "entity",
+            "position": {
+                "x": 495,
+                "y": 255
+            },
+            "data": {
+                "tableId": "14",
                 "name": "subordinates"
             },
             "width": 138,
-            "height": 45,
+            "height": 47
+        },
+        {
+            "id": "22",
+            "type": "entity",
+            "position": {
+                "x": 495,
+                "y": 360
+            },
+            "data": {
+                "tableId": "14",
+                "name": "clients"
+            },
+            "width": 138,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": -60,
-                "y": 315
+                "x": 495,
+                "y": 360
+            },
+            "dragging": false
+        },
+        {
+            "id": "25",
+            "type": "entity",
+            "position": {
+                "x": 1020,
+                "y": 180
+            },
+            "data": {
+                "tableId": "14",
+                "name": "famous_person"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 1020,
+                "y": 180
+            },
+            "dragging": false
+        },
+        {
+            "id": "26",
+            "type": "entity",
+            "position": {
+                "x": 840,
+                "y": 180
+            },
+            "data": {
+                "tableId": "14",
+                "name": "fan"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 840,
+                "y": 180
+            },
+            "dragging": false
+        },
+        {
+            "id": "27",
+            "type": "entity",
+            "position": {
+                "x": 840,
+                "y": 300
+            },
+            "data": {
+                "tableId": "13",
+                "name": "followings"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 840,
+                "y": 300
+            },
+            "dragging": false
+        },
+        {
+            "id": "28",
+            "type": "entity",
+            "position": {
+                "x": 1020,
+                "y": 300
+            },
+            "data": {
+                "tableId": "13",
+                "name": "followeds"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 1020,
+                "y": 300
             },
             "dragging": false
         },
         {
             "id": "34",
-            "type": "textUpdater",
+            "type": "entity",
             "position": {
                 "x": 285,
-                "y": 720
+                "y": 480
             },
             "data": {
-                "tableId": "30",
-                "name": "imageable"
+                "tableId": "16",
+                "name": "postable"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
                 "x": 285,
-                "y": 720
+                "y": 480
             },
             "dragging": false
         },
         {
             "id": "35",
-            "type": "textUpdater",
+            "type": "entity",
             "position": {
-                "x": -30,
-                "y": 855
+                "x": 660,
+                "y": 480
             },
             "data": {
-                "tableId": "29",
-                "name": "photographs"
+                "tableId": "17",
+                "name": "imageable"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": -30,
-                "y": 855
+                "x": 660,
+                "y": 480
             },
             "dragging": false
         },
         {
             "id": "36",
-            "type": "textUpdater",
+            "type": "entity",
             "position": {
-                "x": -60,
-                "y": 570
+                "x": 630,
+                "y": 675
             },
             "data": {
-                "tableId": "26",
-                "name": "postable"
+                "tableId": "18",
+                "name": "photographs"
             },
             "width": 138,
-            "height": 45,
-            "selected": false,
+            "height": 47,
+            "selected": true,
+            "dragging": false,
             "positionAbsolute": {
-                "x": -60,
-                "y": 570
-            },
-            "dragging": false
+                "x": 630,
+                "y": 675
+            }
         },
         {
-            "id": "40",
-            "type": "textUpdater",
+            "id": "37",
+            "type": "entity",
             "position": {
-                "x": 255,
+                "x": 855,
                 "y": 480
             },
             "data": {
-                "tableId": "28",
+                "tableId": "19",
                 "name": "imageable"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": 255,
+                "x": 855,
                 "y": 480
             },
             "dragging": false
         },
         {
-            "id": "42",
-            "type": "textUpdater",
+            "id": "38",
+            "type": "entity",
             "position": {
-                "x": -300,
+                "x": 480,
                 "y": 480
             },
             "data": {
-                "tableId": "27",
+                "tableId": "15",
                 "name": "postable"
             },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": -300,
+                "x": 480,
                 "y": 480
+            },
+            "dragging": false
+        },
+        {
+            "id": "45",
+            "type": "entity",
+            "position": {
+                "x": 1095,
+                "y": 480
+            },
+            "data": {
+                "tableId": "10",
+                "name": "suppliers"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 1095,
+                "y": 480
+            },
+            "dragging": false
+        },
+        {
+            "id": "46",
+            "type": "entity",
+            "position": {
+                "x": 1095,
+                "y": 600
+            },
+            "data": {
+                "tableId": "11",
+                "name": "accounts"
+            },
+            "width": 138,
+            "height": 47,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 1095,
+                "y": 600
             },
             "dragging": false
         },
         {
             "id": "47",
-            "type": "textUpdater",
+            "type": "entity",
             "position": {
-                "x": 885,
-                "y": 360
+                "x": 1095,
+                "y": 720
             },
             "data": {
-                "tableId": "25",
-                "name": "famous_person"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 885,
-                "y": 360
-            },
-            "dragging": false
-        },
-        {
-            "id": "48",
-            "type": "textUpdater",
-            "position": {
-                "x": 615,
-                "y": 510
-            },
-            "data": {
-                "tableId": "24",
-                "name": "following"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 615,
-                "y": 510
-            },
-            "dragging": false
-        },
-        {
-            "id": "49",
-            "type": "textUpdater",
-            "position": {
-                "x": 660,
-                "y": 360
-            },
-            "data": {
-                "tableId": "25",
-                "name": "fan"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 660,
-                "y": 360
-            },
-            "dragging": false
-        },
-        {
-            "id": "54",
-            "type": "textUpdater",
-            "position": {
-                "x": 705,
-                "y": 645
-            },
-            "data": {
-                "tableId": "18",
-                "name": "suppliers"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 705,
-                "y": 645
-            },
-            "dragging": false
-        },
-        {
-            "id": "55",
-            "type": "textUpdater",
-            "position": {
-                "x": 510,
-                "y": 855
-            },
-            "data": {
-                "tableId": "19",
-                "name": "accounts"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 510,
-                "y": 855
-            },
-            "dragging": false
-        },
-        {
-            "id": "56",
-            "type": "textUpdater",
-            "position": {
-                "x": 615,
-                "y": 930
-            },
-            "data": {
-                "tableId": "20",
+                "tableId": "12",
                 "name": "account_history"
             },
-            "width": 139,
-            "height": 45
-        },
-        {
-            "id": "68",
-            "type": "textUpdater",
-            "position": {
-                "x": 285,
-                "y": 390
-            },
-            "data": {
-                "tableId": "25",
-                "name": "clients"
-            },
             "width": 138,
-            "height": 45,
+            "height": 47,
             "selected": false,
             "positionAbsolute": {
-                "x": 285,
-                "y": 390
-            },
-            "dragging": false
-        },
-        {
-            "id": "84",
-            "type": "textUpdater",
-            "position": {
-                "x": 870,
-                "y": 525
-            },
-            "data": {
-                "tableId": "24",
-                "name": "followed"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false
-        },
-        {
-            "id": "92",
-            "type": "textUpdater",
-            "position": {
-                "x": 240,
-                "y": 180
-            },
-            "data": {
-                "tableId": "25",
-                "name": "manager"
-            },
-            "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 240,
-                "y": 180
+                "x": 1095,
+                "y": 720
             },
             "dragging": false
         }
     ],
     "edges": [
         {
-            "id": "37",
+            "id": "23",
+            "source": "20",
+            "target": "21",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "24",
+            "source": "21",
+            "target": "22",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "29",
+            "source": "26",
+            "target": "27",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "30",
+            "source": "25",
+            "target": "28",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "31",
+            "source": "26",
+            "target": "25",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "27"
+            }
+        },
+        {
+            "id": "33",
+            "source": "25",
+            "target": "26",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "28"
+            }
+        },
+        {
+            "id": "39",
+            "source": "34",
+            "target": "36",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "40",
+            "source": "38",
+            "target": "36",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "41",
+            "source": "35",
+            "target": "36",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "42",
+            "source": "37",
+            "target": "36",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        },
+        {
+            "id": "43",
             "source": "34",
             "target": "35",
-            "sourceHandle": "bottom",
+            "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "36"
+            }
         },
         {
-            "id": "57",
-            "source": "54",
-            "target": "55",
-            "sourceHandle": "bottom",
+            "id": "44",
+            "source": "38",
+            "target": "37",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "animated": true,
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "36"
+            }
+        },
+        {
+            "id": "48",
+            "source": "45",
+            "target": "46",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
-            }
+            "type": "hasOne"
         },
         {
-            "id": "58",
-            "source": "55",
-            "target": "56",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "label": "has one",
-            "labelStyle": {
-                "fill": "red",
-                "fontWeight": 700
-            },
-            "type": "hasOne",
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "62",
-            "source": "36",
-            "target": "35",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "66",
-            "source": "49",
-            "target": "48",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "69",
-            "source": "32",
-            "target": "68",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "71",
-            "source": "40",
-            "target": "35",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "72",
-            "source": "42",
-            "target": "35",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "75",
-            "source": "36",
-            "target": "34",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "35"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "76",
-            "source": "42",
-            "target": "40",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "35"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "77",
-            "source": "54",
-            "target": "56",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "55"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            }
-        },
-        {
-            "id": "78",
-            "source": "49",
+            "id": "49",
+            "source": "46",
             "target": "47",
-            "sourceHandle": "bottom",
+            "sourceHandle": "bottom1",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "animated": true,
-            "label": "through",
-            "type": "through",
-            "data": {
-                "throughNodeId": "48"
-            },
-            "markerEnd": {
-                "type": "arrow"
-            },
-            "selected": false
+            "label": "has one",
+            "type": "hasOne"
         },
         {
-            "id": "87",
-            "source": "47",
-            "target": "49",
-            "sourceHandle": "bottom",
+            "id": "50",
+            "source": "45",
+            "target": "47",
+            "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "animated": true,
             "label": "through",
             "type": "through",
             "data": {
-                "throughNodeId": "84"
-            },
-            "markerEnd": {
-                "type": "arrow"
+                "throughNodeId": "46"
             }
-        },
-        {
-            "id": "88",
-            "source": "47",
-            "target": "84",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
-        },
-        {
-            "id": "93",
-            "source": "92",
-            "target": "32",
-            "sourceHandle": "bottom",
-            "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
-            "type": "hasMany",
-            "label": "has many"
         }
     ],
     "tables": {
-        "18": {
+        "10": {
             "name": "suppliers",
             "attributes": {}
         },
-        "19": {
+        "11": {
             "name": "accounts",
             "attributes": {}
         },
-        "20": {
+        "12": {
             "name": "account_history",
             "attributes": {
-                "22": {
+                "51": {
                     "name": "credit_rating",
                     "type": "integer"
                 },
-                "23": {
+                "52": {
                     "name": "access_time",
                     "type": "datetime"
                 }
             }
         },
-        "24": {
+        "13": {
             "name": "relation",
             "attributes": {}
         },
-        "25": {
+        "14": {
             "name": "user",
             "attributes": {}
         },
-        "26": {
+        "15": {
             "name": "postcard",
             "attributes": {}
         },
-        "27": {
+        "16": {
             "name": "letter",
             "attributes": {}
         },
-        "28": {
+        "17": {
             "name": "product",
             "attributes": {}
         },
-        "29": {
+        "18": {
             "name": "picture",
             "attributes": {}
         },
-        "30": {
+        "19": {
             "name": "employee",
             "attributes": {}
         }
     },
+    "connectionStartId": "45",
     "isConnectContinue": false,
-    "isMouseOnNode": true,
-    "mouseOnNodeId": "89",
-    "selectedNodeIdForThrough": null
+    "isMouseOnNode": false,
+    "isMouseOnEdge": false,
+    "mouseOnNodeId": null,
+    "mouseOnEdgeId": null,
+    "selectedNodeIdForThrough": null,
+    "showTextOnEdges": false
 }

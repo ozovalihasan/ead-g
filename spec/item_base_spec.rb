@@ -27,7 +27,7 @@ describe ItemBase do
 
   describe '.find' do
     it 'returns found item by using id' do
-      expect(ItemBase.find('18').name).to eq('supplier')
+      expect(ItemBase.find('18').name).to eq('picture')
     end
   end
 end

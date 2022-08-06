@@ -5,43 +5,31 @@
     "nodes": [
         {
             "id": "3",
-            "type": "textUpdater",
+            "type": "entity",
             "position": {
-                "x": 645,
-                "y": 60
+                "x": -480,
+                "y": 360
             },
             "data": {
                 "tableId": "1",
                 "name": "entity1"
             },
             "width": 138,
-            "height": 45,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 645,
-                "y": 60
-            },
-            "dragging": false
+            "height": 47
         },
         {
             "id": "4",
-            "type": "textUpdater",
+            "type": "entity",
             "position": {
-                "x": 705,
-                "y": 135
+                "x": -300,
+                "y": 525
             },
             "data": {
                 "tableId": "2",
                 "name": "entity2"
             },
             "width": 138,
-            "height": 45,
-            "selected": true,
-            "positionAbsolute": {
-                "x": 705,
-                "y": 135
-            },
-            "dragging": false
+            "height": 47
         }
     ],
     "edges": [
@@ -49,11 +37,8 @@
             "id": "5",
             "source": "3",
             "target": "4",
-            "sourceHandle": "bottom",
+            "sourceHandle": "bottom2",
             "targetHandle": "top",
-            "style": {
-                "stroke": "green"
-            },
             "type": "hasMany",
             "label": "has many"
         }
@@ -68,7 +53,12 @@
             "attributes": {}
         }
     },
+    "connectionStartId": "3",
     "isConnectContinue": false,
     "isMouseOnNode": false,
-    "mouseOnNodeId": null
+    "isMouseOnEdge": false,
+    "mouseOnNodeId": null,
+    "mouseOnEdgeId": null,
+    "selectedNodeIdForThrough": null,
+    "showTextOnEdges": false
 }

@@ -54,6 +54,46 @@ describe Association do
     end
   end
 
+  describe '.check_middle_items_include' do
+    it "sets all middle items of any 'through' association if the through item of the association"\
+      " is the given clone item" do
+
+      item3 = ItemClone.find_by_name("entity3")
+      item8 = ItemClone.find_by_name("entity8")
+      
+      Association.check_middle_items_include(@item4)
+      expect(item3.children_has_one_through.map(&:id)).not_to include(@item4.id)
+      expect(@item4.parents_has_one_through.map(&:id)).not_to include(item3.id)
+
+      Association.check_middle_items_include(@item2)
+      expect(item3.children_has_one_through.map(&:id)).to include(@item4.id)
+      expect(@item4.parents_has_one_through.map(&:id)).to include(item3.id)
+      expect(item3.children_has_one_through).to include(item8)
+      expect(item8.parents_has_one_through).to include(item3)
+      
+    end
+  end
+
+  describe '#set_middle_item' do
+    it "sets the middle item of a 'through' association " do
+
+      item3 = ItemClone.find_by_name("entity3")
+      item8 = ItemClone.find_by_name("entity8")
+      
+      association = item3.associations.find do |association| 
+        (association.through_item == @item2) && (association.second_item == @item4)
+      end
+
+      association.set_middle_item
+
+      expect(item3.children_has_one_through).to include(@item4)
+      expect(@item4.parents_has_one_through).to include(item3)
+
+      expect(item3.children_has_one_through).to include(item8)
+      expect(item8.parents_has_one_through).to include(item3)
+    end
+  end
+  
   describe '.set_middle_items' do
     it "sets all middle items of any 'through' association " do
       Association.set_middle_items
@@ -76,9 +116,13 @@ describe Association do
 
       expect(item3.children_has_many_through).to include(item5)
       expect(item5.parents_has_many_through).to include(item3)
+      
+      expect(item3.children_has_one_through).to include(@item4)
+      expect(@item4.parents_has_one_through).to include(item3)
 
       expect(item3.children_has_one_through).to include(item8)
       expect(item8.parents_has_one_through).to include(item3)
+
     end
   end
 

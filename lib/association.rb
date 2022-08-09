@@ -34,40 +34,77 @@ class Association
       @name = ":through"
     end
   end
+
+  def self.check_middle_items_include(clone_item)
+    associations = Association.all.select {|association| association.through_item == clone_item }
+    associations.each do |association| 
+      unless ((association.middle_items_has_many.include? clone_item ) || (association.middle_items_has_one.include? clone_item ))
+        association.set_middle_item
+      end
+    end
+  end
+
+  def set_middle_item
+    source = first_item
+    target = second_item
+    
+    if (
+      (
+        source.parents_has_many + 
+        source.parents_has_many_through + 
+        source.parents_has_one + 
+        source.parents_has_one_through + 
+        source.children_has_many + 
+        source.children_has_many_through + 
+        source.children_has_one + 
+        source.children_has_one_through
+      ).include?(through_item) &&
+      (
+        target.parents_has_many + 
+        target.parents_has_many_through + 
+        target.parents_has_one + 
+        target.parents_has_one_through + 
+        target.children_has_many + 
+        target.children_has_many_through + 
+        target.children_has_one + 
+        target.children_has_one_through 
+      ).include?(through_item)
+    )
+      if (
+        (
+          source.children_has_many.include?(through_item) || 
+          source.children_has_many_through.include?(through_item)
+        ) || (
+          target.parents_has_many.include?(through_item) ||
+          target.parents_has_many_through.include?(through_item)
+        )
+      )
+
+        unless middle_items_has_many.include? through_item
+          middle_items_has_many << through_item
+          source.children_has_many_through << target
+          target.parents_has_many_through << source
+          Association.check_middle_items_include(target)
+        end
+      else
+        unless middle_items_has_one.include? through_item
+          middle_items_has_one << through_item
+          source.children_has_one_through << target
+          target.parents_has_one_through << source
+          Association.check_middle_items_include(target)
+        end
+      end
+    
+    end  
+    
+  end
   
   def self.set_middle_items
     associations = all.select(&:through?)
-    need_one_more_loop = true
 
-    while need_one_more_loop
-      need_one_more_loop = false
-      associations.each do |association|
-
-        source = association.first_item
-        target = association.second_item
-        through_item = association.through_item
-        
-        if (
-          (source.children_has_many.include? through_item) || (target.parents_has_many.include? through_item) ||
-          (source.children_has_many_through.include? through_item) || (target.parents_has_many_through.include? through_item)
-        )
-          unless association.middle_items_has_many.include? through_item
-            need_one_more_loop = true
-            association.middle_items_has_many << through_item
-            source.children_has_many_through << target
-            target.parents_has_many_through << source
-          end
-        else
-          unless association.middle_items_has_one.include? through_item
-            need_one_more_loop = true
-            association.middle_items_has_one << through_item
-            source.children_has_one_through << target
-            target.parents_has_one_through << source
-          end
-        end
-      end
+    associations.each do |association|
+      association.set_middle_item
     end
-
   end
 
   def has_many?

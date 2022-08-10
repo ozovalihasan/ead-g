@@ -50,25 +50,32 @@ class Association
     
     if (
       (
-        source.parents_has_many + 
-        source.parents_has_many_through + 
-        source.parents_has_one + 
-        source.parents_has_one_through + 
-        source.children_has_many + 
-        source.children_has_many_through + 
-        source.children_has_one + 
-        source.children_has_one_through
-      ).include?(through_item) &&
+        (
+          source.parents_has_many + 
+          source.parents_has_many_through + 
+          source.parents_has_one + 
+          source.parents_has_one_through + 
+          source.children_has_many + 
+          source.children_has_many_through + 
+          source.children_has_one + 
+          source.children_has_one_through 
+        ).include?(through_item) 
+      ) &&
       (
-        target.parents_has_many + 
-        target.parents_has_many_through + 
-        target.parents_has_one + 
-        target.parents_has_one_through + 
-        target.children_has_many + 
-        target.children_has_many_through + 
-        target.children_has_one + 
-        target.children_has_one_through 
-      ).include?(through_item)
+        (
+          target.parents_has_many + 
+          target.parents_has_many_through + 
+          target.parents_has_one + 
+          target.parents_has_one_through + 
+          target.children_has_many + 
+          target.children_has_many_through + 
+          target.children_has_one + 
+          target.children_has_one_through 
+        ).include?(through_item) || (
+          through_item.parents_has_many.map(&:clone_parent).include?(target.clone_parent)  || 
+          through_item.parents_has_one.map(&:clone_parent).include?(target.clone_parent)
+        )
+      )
     )
       if (
         (

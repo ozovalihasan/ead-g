@@ -29,7 +29,7 @@ class ProjectFile
     open_close(name, type) do |file, tempfile|
       file.each do |line|
         if line.match(keywords)
-          line.gsub!("\n", ' ')
+          line.gsub!(/ *\n/, '')
           line_content.each do |key, value|
             if line.include? key
               line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")

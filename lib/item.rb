@@ -79,6 +79,7 @@ class Item < ItemBase
       
       (item_clone.parents_has_many + item_clone.parents_has_one).each do |parent|
         next if item_clone.one_polymorphic_names?(parent)
+        parent.clone_parent.create_model
         add_references(command, parent)  
       end
       

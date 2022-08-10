@@ -32,7 +32,7 @@ class ProjectFile
           line.gsub!(/ *\n/, '')
           line_content.each do |key, value|
             if line.include? key
-              line.gsub!(/#{key}: .*([, ])/, "#{key}: #{value}#{Regexp.last_match(1)}")
+              line.gsub!(/#{key}: [^( ,)]*/, "#{key}: #{value}#{Regexp.last_match(1)}")
             else
               line << ", #{key}: #{value}"
             end

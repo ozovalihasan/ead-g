@@ -122,11 +122,15 @@ class ItemClone < ItemBase
 
   def update_end_model_migration_files(start_item, association)
     polymorphic_end = one_polymorphic_names?(start_item)
+    
+    return if polymorphic_end
 
     end_model_line = {}
     end_migration_line = {}
     
     if association.has_any?
+      end_model_line['belongs_to'] = ":#{start_item.name}"
+      
       if reals_same?(start_item)
         end_model_line['optional'] = 'true'
         end_migration_line['null'] = 'true'
@@ -138,10 +142,12 @@ class ItemClone < ItemBase
       end
     end
 
-    ProjectFile.update_line(real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
+    # ProjectFile.update_line(real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
+    ProjectFile.add_belong_line(self.clone_parent.name, end_model_line)
 
-    migration_name = real_item.name
-    ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_item.name}/, end_migration_line)
+    migration_name = "Add#{start_item.name.camelize}RefTo#{clone_parent.name.camelize}".underscore
+
+    ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.name.pluralize}/, end_migration_line)
   end
 
   def update_start_model_file(end_item, association)

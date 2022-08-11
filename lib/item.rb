@@ -23,10 +23,13 @@ class Item < ItemBase
     name.camelize
   end
 
-  def add_references(command, item)
-    return if command.include? " #{item.name}:references"
+  def add_references(clone_item)
+    # return if command.include? " #{clone_item.name}:references"
 
-    command << " #{item.name}:references"
+    command = "bundle exec rails generate migration Add#{clone_item.name.camelize}RefTo#{name.camelize}  #{clone_item.name}:references"
+
+    system(command)
+
   end
 
   def add_polymorphic_reference(command, poly_name)
@@ -74,16 +77,19 @@ class Item < ItemBase
 
     check_polymorphic(command)
 
+    system(command)
+  end
+
+  def add_reference_migration 
+
     clones.each do |item_clone|
-      # add_references(command, item_clone.through_child) if item_clone.parent_has_many? && item_clone.through_association
       
       (item_clone.parents_has_many + item_clone.parents_has_one).each do |parent|
         next if item_clone.one_polymorphic_names?(parent)
-        parent.clone_parent.create_model
-        add_references(command, parent)  
+        add_references(parent)  
       end
       
     end
-    system(command)
+
   end
 end

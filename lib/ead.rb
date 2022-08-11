@@ -68,6 +68,10 @@ class EAD
       item.create_model
     end
 
+    Item.all.each do |item|
+      item.add_reference_migration
+    end
+
     # ItemClone.all.each do |item_clone|
     #   item_clone.add_associations
     # end

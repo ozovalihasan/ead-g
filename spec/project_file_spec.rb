@@ -56,4 +56,30 @@ describe ProjectFile do
       expect(tempfile).to eq("class Mock\n  has_many mocks, mock: content\nend\n")
     end
   end
+
+  describe '.add_belong_line' do
+    it 'adds a line with line content and "belongs_to" to tempfile after the line having "class" keyword' do
+      file = [
+        "class Mock\n",
+        "  has_many mocks, mock: content\n",
+        "end\n"
+      ]
+      tempfile = ''
+      allow(ProjectFile).to receive(:open_close) do |name, type, &block|
+        block.call(file, tempfile)
+        expect('mock_name').to include name
+        expect(['model']).to include type
+      end
+
+      mock_line_content = { 'belongs_to' => 'mock2', 'mock2' => 'content2' }
+      ProjectFile.add_belong_line('mock_name', mock_line_content)
+
+      expect(tempfile).to eq(
+        "class Mock\n"\
+        "  belongs_to mock2, mock2: content2\n"\
+        "  has_many mocks, mock: content\n"\
+        "end\n"
+      )
+    end
+  end
 end

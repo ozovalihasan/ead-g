@@ -24,17 +24,7 @@ class EAD
     end
 
     return file
-    
-    # items = JSON.parse(file)['items']
-    # ead_id = '9'
-    # ead_block = Block.new(ead_id, items)
-    # Block.all.each do |block|
-    #   next unless block.cloneable
-
-    #   block.clone_blocks.map! do |id|
-    #     Block.find(id.to_s)
-    #   end
-    # end
+ 
   end
 
   def create_items(file)
@@ -72,10 +62,6 @@ class EAD
       item.add_reference_migration
     end
 
-    # ItemClone.all.each do |item_clone|
-    #   item_clone.add_associations
-    # end
-
     Association.set_middle_items
     
     Association.all.each do |association|
@@ -84,8 +70,6 @@ class EAD
   end
 
   def check_latest_version
-    # response = RestClient::Request.new(:method => :get, :url => 'https://api.github.com/repos/ozovalihasan/ead/tags')
-    # response = JSON.parse response
     response = JSON.parse RestClient.get 'https://api.github.com/repos/ozovalihasan/ead/tags'
     
     unless response.first['name'] == "v0.3.1"

@@ -27,74 +27,15 @@ class ItemClone < ItemBase
     @children_has_one_through = []
     @children_has_many_through = []
     @children_through = []
-    # block.sub_blocks.each do |sub_block|
-    #   add_to_associations(sub_block)
-    # end
   end
 
   def model_name
     clone_parent.name.camelize
   end
 
-  # def grand
-  #   parent.parent
-  # end
-
-  # def grand_association
-  #   parent.parent_association
-  # end
-
-  # def grand_has_many?
-  #   grand_association&.has_many?
-  # end
-
-  # def grand_has_one?
-  #   grand_association&.has_one?
-  # end
-
-  # def grand_real_self_real?
-  #   reals_same? grand
-  # end
-
   def reals_same?(item)
     real_item == item.real_item
   end
-
-  # def parent_through?
-  #   parent_association&.through?
-  # end
-
-  # def parent_has_many?
-  #   parent_association&.has_many?
-  # end
-
-  # def parent_has_one?
-  #   parent_association&.has_one?
-  # end
-
-  # def parent_has_any?
-  #   parent_has_one? || parent_has_many?
-  # end
-
-  # def parent_through_has_one?
-  #   parent_through? && grand_has_one?
-  # end
-
-  # def parent_through_has_many?
-  #   parent_through? && grand_has_many?
-  # end
-
-  # def through_association
-  #   associations.find(&:through?)
-  # end
-
-  # def through_child
-  #   through_association&.second_items&.first
-  # end
-
-  # def through?(item)
-  #   item.present?
-  # end
 
   def self.find_by_name(name)
     all.find {|item_clone| item_clone.name == name}
@@ -111,14 +52,6 @@ class ItemClone < ItemBase
   def real_item
     clone_parent
   end
-
-  # def grand_many_through_reals_same?(item)
-  #   parent_through_has_many? && (grand == item) && reals_same?(item)
-  # end
-
-  # def parent_has_many_reals_same_through_child?(item)
-  #   item.parent_through_has_many? && (through_child == item) && item.reals_same?(parent)
-  # end
 
   def update_end_model_migration_files(start_item, association)
     polymorphic_end = one_polymorphic_names?(start_item)
@@ -142,7 +75,6 @@ class ItemClone < ItemBase
       end
     end
 
-    # ProjectFile.update_line(real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
     unless end_model_line.empty?
       ProjectFile.add_belong_line(self.clone_parent.name, end_model_line)
     end
@@ -214,27 +146,4 @@ class ItemClone < ItemBase
     update_start_model_file(end_item, association)
   end
 
-  # def parent_through_add_associations
-  #   if parent_through_has_many?
-  #     update_model(parent, grand_association)
-  #     update_model(grand, grand_association, parent)
-
-  #   elsif parent_through_has_one?
-  #     parent.update_model(self, grand_association)
-  #   end
-
-  #   grand.update_model(self, grand_association, parent)
-  # end
-
-  # def add_associations
-  #   parent_through_add_associations if parent_through?
-
-  #   associations.each do |association|
-  #     next unless association.has_any?
-
-  #     association.second_items.each do |second_item|
-  #       update_model(second_item, association)
-  #     end
-  #   end
-  # end
 end

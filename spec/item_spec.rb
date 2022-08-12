@@ -99,4 +99,22 @@ describe Item do
       @relation.create_model
     end
   end
+
+  describe '#add_reference_migration' do
+    it 'creates necessary commands and run them to create models in Rails project ' do
+      allow(File).to receive(:exist?).and_return(false)
+      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+        expect([
+                 'bundle exec rails generate model AccountHistory credit_rating:integer access_time:datetime',
+                 'bundle exec rails generate model Relation'
+               ]).to include call_with
+      end
+
+      @picture.check_polymorphic('')
+      @picture.add_reference_migration
+
+      @account_history.create_model
+      @relation.create_model
+    end
+  end
 end

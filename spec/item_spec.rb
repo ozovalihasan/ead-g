@@ -86,11 +86,11 @@ describe Item do
       allow(File).to receive(:exist?).and_return(false)
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
         expect([
-                 'bundle exec rails generate model Picture postable:references{polymorphic} '\
-                                                            'imageable:references{polymorphic}',
-                 'bundle exec rails generate model AccountHistory credit_rating:integer '\
-                                                'access_time:datetime account:references',
-                 'bundle exec rails generate model Relation famous_person:references fan:references'
+                 'bundle exec rails generate model Picture' \
+                   ' postable:references{polymorphic} imageable:references{polymorphic}',
+                 'bundle exec rails generate model AccountHistory' \
+                   ' credit_rating:integer access_time:datetime',
+                 'bundle exec rails generate model Relation'
                ]).to include call_with
       end
 

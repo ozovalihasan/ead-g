@@ -143,11 +143,15 @@ class ItemClone < ItemBase
     end
 
     # ProjectFile.update_line(real_item.name, 'model', /belongs_to :#{start_item.name}/, end_model_line)
-    ProjectFile.add_belong_line(self.clone_parent.name, end_model_line)
+    unless end_model_line.empty?
+      ProjectFile.add_belong_line(self.clone_parent.name, end_model_line)
+    end
 
-    migration_name = "Add#{start_item.name.camelize}RefTo#{clone_parent.name.camelize}".underscore
+    unless end_migration_line.empty?
+      migration_name = "Add#{start_item.name.camelize}RefTo#{clone_parent.name.camelize}".underscore
 
-    ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.name.pluralize}/, end_migration_line)
+      ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.name.pluralize}/, end_migration_line)
+    end
   end
 
   def update_start_model_file(end_item, association)

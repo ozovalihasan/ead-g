@@ -201,22 +201,26 @@ describe ItemClone do
 
   describe '#update_end_model_migration_files' do
     it 'updates model and migration files of an item' do
+      allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
+        expect(%w[relation]).to include name
+        expect([
+          {"belongs_to" => ":famous_person", "class_name" => "\"User\""},
+        ]).to include line_content
+      end
       allow(ProjectFile).to receive(:update_line) do |name, type, keywords, line_content|
-        expect(%w[user user user user]).to include name
-        expect(%w[model migration model migration]).to include type
-        expect([/belongs_to :followed/,
-                /t.references :followed/,
-                /belongs_to :famous_person/,
-                /t.references :famous_person/]).to include keywords
-        expect([{ 'class_name' => '"Relation"' },
-                { 'foreign_key' => '{ to_table: :relations }' },
-                { 'optional' => 'true', 'class_name' => '"User"' },
-                { 'null' => 'true', 'foreign_key' => '{ to_table: :users }' }]).to include line_content
+        expect(%w[add_famous_person_ref_to_relation]).to include name
+        expect(%w[reference_migration]).to include type
+        expect([
+          /add_reference :relations/,
+        ]).to include keywords
+        expect([
+          {"foreign_key"=>"{ to_table: :users }"},
+        ]).to include line_content
       end
 
       famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
-      @fan.update_end_model_migration_files(@followed, @followed.parent_associations[0])
-      @fan.update_end_model_migration_files(famous_person, @fan.associations.find {|association| association.name === 'has_many'})
+      @followed.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === 'has_many'})
+      @fan.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === ':through'})
     end
   end
 

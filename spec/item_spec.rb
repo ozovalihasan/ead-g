@@ -40,9 +40,15 @@ describe Item do
 
   describe '#add_references' do
     it 'adds references to command' do
+      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+        expect([
+                 "bundle exec rails generate migration AddAccountRefToAccountHistory account:references"
+               ]).to include call_with
+      end
+      
       command = ''
-      @account_history.add_references(command, @account_history.clones.first.parent_associations.first.first_item)
-      expect(command).to eq(' account:references')
+      account = ItemClone.all.select { |item| item.name == 'account' }[0]
+      @account_history.add_references(account)
     end
   end
 

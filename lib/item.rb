@@ -26,7 +26,7 @@ class Item < ItemBase
   def add_references(clone_item)
     # return if command.include? " #{clone_item.name}:references"
 
-    command = "bundle exec rails generate migration Add#{clone_item.name.camelize}RefTo#{name.camelize}  #{clone_item.name}:references"
+    command = "bundle exec rails generate migration Add#{clone_item.name.camelize}RefTo#{name.camelize} #{clone_item.name}:references"
 
     system(command)
 

@@ -1,6 +1,6 @@
 require 'json'
-require 'item'
-require 'item_clone'
+require 'table'
+require 'entity'
 require 'rest-client'
 
 class EAD
@@ -27,18 +27,18 @@ class EAD
  
   end
 
-  def create_items(file)
+  def create_objects(file)
     @nodes = JSON.parse(file)['nodes']
     @edges = JSON.parse(file)['edges']
     @tables = JSON.parse(file)['tables']
 
     
     @tables = @tables.map do |(id)|
-      Item.new(id, @tables)
+      Table.new(id, @tables)
     end
 
     @nodes.map! do |node|
-      ItemClone.new(node)
+      Entity.new(node)
     end
 
     @edges.map! do |edge|
@@ -47,25 +47,25 @@ class EAD
 
   end
 
-  def check_implement_items(file)
-    create_items(file)
+  def check_implement_objects(file)
+    create_objects(file)
 
-    ItemClone.all.each do |item_clone|
-      item_clone.clone_parent.clones << item_clone
+    Entity.all.each do |entity|
+      entity.clone_parent.entities << entity
     end
 
-    Item.all.each do |item|
-      item.create_model
+    Table.all.each do |table|
+      table.create_model
     end
 
-    Item.all.each do |item|
-      item.add_reference_migration
+    Table.all.each do |table|
+      table.add_reference_migration
     end
 
-    Association.set_middle_items
+    Association.set_middle_entities
     
     Association.all.each do |association|
-      association.first_item.update_model(association.second_item, association)
+      association.first_entity.update_model(association.second_entity, association)
     end
   end
 
@@ -94,6 +94,6 @@ class EAD
   def start(user_arguments)
     check_latest_version
     file = import_JSON(user_arguments)
-    check_implement_items(file)
+    check_implement_objects(file)
   end
 end

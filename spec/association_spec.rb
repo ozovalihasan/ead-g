@@ -1,5 +1,5 @@
 require 'association'
-require 'item_clone'
+require 'entity'
 require 'ead'
 
 describe Association do
@@ -14,11 +14,11 @@ describe Association do
 
     
     @tables = @tables.map do |(id)|
-      Item.new(id, @tables)
+      Table.new(id, @tables)
     end
 
     @nodes.map! do |node|
-      ItemClone.new(node)
+      Entity.new(node)
     end
 
     @edges.map! do |edge|
@@ -26,102 +26,102 @@ describe Association do
     end
     
     
-    @item1 =  ItemClone.find_by_name("entity1")
-    @association1 = @item1.associations.first
-    @item2 = ItemClone.find_by_name("entity2")
-    @association2 = @item2.associations.first
-    @item3 = ItemClone.find_by_name("entity3")
-    @association3 = @item2.associations.last
-    @item4 = ItemClone.find_by_name("entity4")
+    @entity1 =  Entity.find_by_name("entity1")
+    @association1 = @entity1.associations.first
+    @entity2 = Entity.find_by_name("entity2")
+    @association2 = @entity2.associations.first
+    @entity3 = Entity.find_by_name("entity3")
+    @association3 = @entity2.associations.last
+    @entity4 = Entity.find_by_name("entity4")
   end
 
   describe '#initialize' do
     it 'is created correctly' do
-      expect(@association1.first_item.class).to eq(ItemClone)
+      expect(@association1.first_entity.class).to eq(Entity)
       expect(@association1.name).to eq('has_many')
-      expect(@association1.middle_items_has_many).to eq([])
-      expect(@association1.middle_items_has_one).to eq([])
+      expect(@association1.middle_entities_has_many).to eq([])
+      expect(@association1.middle_entities_has_one).to eq([])
       
-      expect(@item2.associations.first).to eq(@association2)
-      expect(@item2.parent_associations.any? @association1).to eq(true)
+      expect(@entity2.associations.first).to eq(@association2)
+      expect(@entity2.parent_associations.any? @association1).to eq(true)
       
-      expect(@item2.parents_has_many.any? @item1).to eq(true)
-      expect(@item1.children_has_many.any? @item2).to eq(true)
-      expect(@item3.parents_has_one.any? @item2).to eq(true)
-      expect(@item2.children_has_one.any? @item3).to eq(true)
-      expect(@item4.parents_through.any? @item3).to eq(true)
-      expect(@item3.children_through.any? @item4).to eq(true)
+      expect(@entity2.parents_has_many.any? @entity1).to eq(true)
+      expect(@entity1.children_has_many.any? @entity2).to eq(true)
+      expect(@entity3.parents_has_one.any? @entity2).to eq(true)
+      expect(@entity2.children_has_one.any? @entity3).to eq(true)
+      expect(@entity4.parents_through.any? @entity3).to eq(true)
+      expect(@entity3.children_through.any? @entity4).to eq(true)
     end
   end
 
-  describe '.check_middle_items_include' do
-    it "sets all middle items of any 'through' association if the through item of the association"\
-      " is the given clone item" do
+  describe '.check_middle_entities_include' do
+    it "sets all middle entities of any 'through' association if the through entity of the association"\
+      " is the given entity" do
 
-      item3 = ItemClone.find_by_name("entity3")
-      item8 = ItemClone.find_by_name("entity8")
+      entity3 = Entity.find_by_name("entity3")
+      entity8 = Entity.find_by_name("entity8")
       
-      Association.check_middle_items_include(@item4)
-      expect(item3.children_has_one_through.map(&:id)).not_to include(@item4.id)
-      expect(@item4.parents_has_one_through.map(&:id)).not_to include(item3.id)
+      Association.check_middle_entities_include(@entity4)
+      expect(entity3.children_has_one_through.map(&:id)).not_to include(@entity4.id)
+      expect(@entity4.parents_has_one_through.map(&:id)).not_to include(entity3.id)
 
-      Association.check_middle_items_include(@item2)
-      expect(item3.children_has_one_through.map(&:id)).to include(@item4.id)
-      expect(@item4.parents_has_one_through.map(&:id)).to include(item3.id)
-      expect(item3.children_has_one_through).to include(item8)
-      expect(item8.parents_has_one_through).to include(item3)
+      Association.check_middle_entities_include(@entity2)
+      expect(entity3.children_has_one_through.map(&:id)).to include(@entity4.id)
+      expect(@entity4.parents_has_one_through.map(&:id)).to include(entity3.id)
+      expect(entity3.children_has_one_through).to include(entity8)
+      expect(entity8.parents_has_one_through).to include(entity3)
       
     end
   end
 
-  describe '#set_middle_item' do
-    it "sets the middle item of a 'through' association " do
+  describe '#set_middle_entity' do
+    it "sets the middle entity of a 'through' association " do
 
-      item3 = ItemClone.find_by_name("entity3")
-      item8 = ItemClone.find_by_name("entity8")
+      entity3 = Entity.find_by_name("entity3")
+      entity8 = Entity.find_by_name("entity8")
       
-      association = item3.associations.find do |association| 
-        (association.through_item == @item2) && (association.second_item == @item4)
+      association = entity3.associations.find do |association| 
+        (association.through_entity == @entity2) && (association.second_entity == @entity4)
       end
 
-      association.set_middle_item
+      association.set_middle_entity
 
-      expect(item3.children_has_one_through).to include(@item4)
-      expect(@item4.parents_has_one_through).to include(item3)
+      expect(entity3.children_has_one_through).to include(@entity4)
+      expect(@entity4.parents_has_one_through).to include(entity3)
 
-      expect(item3.children_has_one_through).to include(item8)
-      expect(item8.parents_has_one_through).to include(item3)
+      expect(entity3.children_has_one_through).to include(entity8)
+      expect(entity8.parents_has_one_through).to include(entity3)
     end
   end
   
-  describe '.set_middle_items' do
-    it "sets all middle items of any 'through' association " do
-      Association.set_middle_items
+  describe '.set_middle_entities' do
+    it "sets all middle entities of any 'through' association " do
+      Association.set_middle_entities
 
-      item3 = ItemClone.find_by_name("entity3")
-      item5 = ItemClone.find_by_name("entity5")
-      item6 = ItemClone.find_by_name("entity6")
-      item7 = ItemClone.find_by_name("entity7")
-      item8 = ItemClone.find_by_name("entity8")
-      association = item7.associations.find(&:through?)
-      expect(association.middle_items_has_one).to include(item5)
-      expect(item7.children_has_one_through).to include(item6)
-      expect(item6.parents_has_one_through).to include(item7)
+      entity3 = Entity.find_by_name("entity3")
+      entity5 = Entity.find_by_name("entity5")
+      entity6 = Entity.find_by_name("entity6")
+      entity7 = Entity.find_by_name("entity7")
+      entity8 = Entity.find_by_name("entity8")
+      association = entity7.associations.find(&:through?)
+      expect(association.middle_entities_has_one).to include(entity5)
+      expect(entity7.children_has_one_through).to include(entity6)
+      expect(entity6.parents_has_one_through).to include(entity7)
       
-      association2 = @item2.associations.find(&:through?)
-      expect(association2.middle_items_has_many).to include(item7)
+      association2 = @entity2.associations.find(&:through?)
+      expect(association2.middle_entities_has_many).to include(entity7)
 
-      expect(item3.children_has_many_through).to include(item7)
-      expect(item7.parents_has_many_through).to include(item3)
+      expect(entity3.children_has_many_through).to include(entity7)
+      expect(entity7.parents_has_many_through).to include(entity3)
 
-      expect(item3.children_has_many_through).to include(item5)
-      expect(item5.parents_has_many_through).to include(item3)
+      expect(entity3.children_has_many_through).to include(entity5)
+      expect(entity5.parents_has_many_through).to include(entity3)
       
-      expect(item3.children_has_one_through).to include(@item4)
-      expect(@item4.parents_has_one_through).to include(item3)
+      expect(entity3.children_has_one_through).to include(@entity4)
+      expect(@entity4.parents_has_one_through).to include(entity3)
 
-      expect(item3.children_has_one_through).to include(item8)
-      expect(item8.parents_has_one_through).to include(item3)
+      expect(entity3.children_has_one_through).to include(entity8)
+      expect(entity8.parents_has_one_through).to include(entity3)
 
     end
   end

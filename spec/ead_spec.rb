@@ -23,19 +23,19 @@ describe EAD do
     end
   end
 
-  describe '#create_items' do
-    it 'creates all necessary instances of Item and ItemClone' do
+  describe '#create_objects' do
+    it 'creates all necessary instances of Table and Entity' do
       allow(File).to receive(:read).and_return(@file)
       file = @ead.import_JSON([])
-      @ead.create_items(file)
-      expect(Item.all.size).to eq(2)
-      expect(ItemClone.all.size).to eq(2)
+      @ead.create_objects(file)
+      expect(Table.all.size).to eq(2)
+      expect(Entity.all.size).to eq(2)
     end
   end
 
-  describe '.check_implement_items' do
+  describe '.check_implement_objects' do
     it 'creates all necessary instances of classes and create models and associations' do
-      require 'item'
+      require 'table'
       allow(File).to receive(:read).and_return(@file)
       mock_file = ''
       allow(File).to receive(:open).and_return(mock_file)
@@ -47,14 +47,14 @@ describe EAD do
       allow(FileUtils).to receive(:mv)
 
       call_create_model = 0
-      allow_any_instance_of(Item).to receive(:create_model) { |_arg| call_create_model += 1 }
+      allow_any_instance_of(Table).to receive(:create_model) { |_arg| call_create_model += 1 }
       call_update_model = 0
-      allow_any_instance_of(ItemClone).to receive(:update_model) { |_arg| call_update_model += 1 }
+      allow_any_instance_of(Entity).to receive(:update_model) { |_arg| call_update_model += 1 }
 
       file = @ead.import_JSON([])
-      @ead.check_implement_items(file)
+      @ead.check_implement_objects(file)
 
-      expect(Item.all.size).to eq(2)
+      expect(Table.all.size).to eq(2)
       expect(Association.all.size).to eq(1)
       expect(call_create_model).to eq(2)
       expect(call_update_model).to eq(1)
@@ -104,13 +104,13 @@ describe EAD do
       call_import_JSON = 0
       allow_any_instance_of(EAD).to receive(:import_JSON) { |_arg| call_import_JSON += 1 }
 
-      call_check_implement_items = 0
-      allow_any_instance_of(EAD).to receive(:check_implement_items) { |_arg| call_check_implement_items += 1 }
+      call_check_implement_objects = 0
+      allow_any_instance_of(EAD).to receive(:check_implement_objects) { |_arg| call_check_implement_objects += 1 }
 
       @ead.start([])
 
       expect(call_import_JSON).to eq(1)
-      expect(call_check_implement_items).to eq(1)
+      expect(call_check_implement_objects).to eq(1)
     end
   end
 end

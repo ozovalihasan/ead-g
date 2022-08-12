@@ -1,20 +1,20 @@
-require 'item_base'
+require 'table_entity_base'
 require 'attribute'
 require 'association'
 require 'active_support/core_ext/string'
 
-class Item < ItemBase
+class Table < TableEntityBase
   
-  attr_accessor :name, :id, :twin_name, :attributes, :clones, :polymorphic, :polymorphic_names
+  attr_accessor :name, :id, :twin_name, :attributes, :entities, :polymorphic, :polymorphic_names
 
-  def initialize(item_id, tables)
-    @id = item_id
-    @name = tables[item_id]["name"].split(' || ')[0].underscore.singularize
-    @clones = []
+  def initialize(table_id, tables)
+    @id = table_id
+    @name = tables[table_id]["name"].split(' || ')[0].underscore.singularize
+    @entities = []
     @polymorphic = false
     @polymorphic_names = []
     @attributes = []
-    tables[item_id]["attributes"].each do |(attribute_id, attribute)|
+    tables[table_id]["attributes"].each do |(attribute_id, attribute)|
       @attributes << Attribute.new(attribute)
     end
   end
@@ -23,8 +23,8 @@ class Item < ItemBase
     name.camelize
   end
 
-  def add_references(clone_item)
-    command = "bundle exec rails generate migration Add#{clone_item.name.camelize}RefTo#{name.camelize} #{clone_item.name}:references"
+  def add_references(entity)
+    command = "bundle exec rails generate migration Add#{entity.name.camelize}RefTo#{name.camelize} #{entity.name}:references"
 
     system(command)
   end
@@ -34,12 +34,12 @@ class Item < ItemBase
   end
 
   def update_polymorphic_names
-    return if clones.size.zero?
+    return if entities.size.zero?
 
     belong_parents = []
-    clones.each do |item_clone|
-      item_clone.parent_associations.each do |association|
-        belong_parents << association.first_item
+    entities.each do |entity|
+      entity.parent_associations.each do |association|
+        belong_parents << association.first_entity
       end
     end
 
@@ -50,8 +50,8 @@ class Item < ItemBase
     end.uniq
 
     @polymorphic_names = filtered_parent_names.find_all do |parent_name|
-      belong_parents.find_all do |item|
-        item.name == parent_name
+      belong_parents.find_all do |entity|
+        entity.name == parent_name
       end.map(&:clone_parent).map(&:name).uniq.size > 1
     end
   end
@@ -79,10 +79,10 @@ class Item < ItemBase
 
   def add_reference_migration 
 
-    clones.each do |item_clone|
+    entities.each do |entity|
       
-      (item_clone.parents_has_many + item_clone.parents_has_one).each do |parent|
-        next if item_clone.one_polymorphic_names?(parent)
+      (entity.parents_has_many + entity.parents_has_one).each do |parent|
+        next if entity.one_polymorphic_names?(parent)
         add_references(parent)  
       end
       

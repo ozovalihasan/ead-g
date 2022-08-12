@@ -1,30 +1,30 @@
-require 'item'
-require 'item_clone'
+require 'table'
+require 'entity'
 require 'active_support/core_ext/string'
 require 'ead'
 
-describe Item do
+describe Table do
   before do
     ObjectSpace.garbage_collect
     @ead = EAD.new
     file = @ead.import_JSON(['./spec/sample_EAD.json'])
     
-    @ead.create_items(file)
+    @ead.create_objects(file)
 
-    ItemClone.all.each do |item_clone|
-      item_clone.clone_parent.clones << item_clone
+    Entity.all.each do |entity|
+      entity.clone_parent.entities << entity
     end
 
-    @account_history = Item.all.select { |item| item.name == 'account_history' }[0]
-    @relation = Item.all.select { |item| item.name == 'relation' }[0]
-    @picture = Item.all.select { |item| item.name == 'picture' }[0]
+    @account_history = Table.all.select { |table| table.name == 'account_history' }[0]
+    @relation = Table.all.select { |table| table.name == 'relation' }[0]
+    @picture = Table.all.select { |table| table.name == 'picture' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of the class correctly' do
       expect(@account_history.id).to eq('12')
       expect(@account_history.name).to eq('account_history')
-      expect(@account_history.clones.size).to eq(1)
+      expect(@account_history.entities.size).to eq(1)
       expect(@account_history.polymorphic).to eq(false)
       expect(@account_history.polymorphic_names).to eq([])
       expect(@account_history.attributes[0].name).to eq('credit_rating')
@@ -47,7 +47,7 @@ describe Item do
       end
       
       command = ''
-      account = ItemClone.find_by_name('account')
+      account = Entity.find_by_name('account')
       @account_history.add_references(account)
     end
   end

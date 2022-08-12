@@ -1,10 +1,10 @@
-require 'item'
+require 'table'
 require 'attribute'
 
 describe Attribute do
   before do
     ObjectSpace.garbage_collect
-    items = {
+    ead_file = {
       "tables" => {
         "15" => {
             "name"=> "entity1",
@@ -22,7 +22,7 @@ describe Attribute do
       }
     }
 
-    @item = Item.new("15", items["tables"])
+    @table = Table.new("15", ead_file["tables"])
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end
 

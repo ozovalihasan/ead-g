@@ -1,4 +1,4 @@
-class ItemBase
+class TableEntityBase
 
 
   def self.all
@@ -6,6 +6,6 @@ class ItemBase
   end
 
   def self.find(id)
-    all.find { |item| item.id == id }
+    all.find { |base| base.id == id }
   end
 end

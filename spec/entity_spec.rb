@@ -1,24 +1,24 @@
-require 'item'
-require 'item_clone'
+require 'table'
+require 'entity'
 require 'active_support/core_ext/string'
 require 'ead'
 
-describe ItemClone do
+describe Entity do
   before do
     ObjectSpace.garbage_collect
     @ead = EAD.new
     file = @ead.import_JSON(['./spec/sample_EAD.json'])
     
-    @ead.create_items(file)
+    @ead.create_objects(file)
 
-    ItemClone.all.each do |item_clone|
-      item_clone.clone_parent.clones << item_clone
+    Entity.all.each do |entity|
+      entity.clone_parent.entities << entity
     end
     
-    @account_history = ItemClone.find_by_name('account_history')
-    @followed = ItemClone.find_by_name('followed')
-    @fan = ItemClone.find_by_name('fan')
-    @photograph = ItemClone.find_by_name('photograph')
+    @account_history = Entity.find_by_name('account_history')
+    @followed = Entity.find_by_name('followed')
+    @fan = Entity.find_by_name('fan')
+    @photograph = Entity.find_by_name('photograph')
   end
 
   describe '#initialize' do
@@ -37,23 +37,23 @@ describe ItemClone do
     end
   end
 
-  describe '#reals_same?' do
-    it 'returns boolean showing whether the real items of any item and self are same' do
-      famous_person = ItemClone.find_by_name('famous_person')
-      expect(@fan.reals_same?(@account_history)).to eq(false)
-      expect(@fan.reals_same?(famous_person)).to eq(true)
+  describe '#tables_same?' do
+    it 'returns boolean showing whether the tables of any entity and self are same' do
+      famous_person = Entity.find_by_name('famous_person')
+      expect(@fan.tables_same?(@account_history)).to eq(false)
+      expect(@fan.tables_same?(famous_person)).to eq(true)
     end
   end
 
   describe '.find_by_name' do
-    it 'returns the first clone item if its name is the searched name ' do
-      expect(ItemClone.find_by_name("account_history").name).to eq("account_history")
+    it 'returns the first entity if its name is the searched name ' do
+      expect(Entity.find_by_name("account_history").name).to eq("account_history")
     end
   end
 
   describe '#clone_name_different?' do
-    it 'returns boolean showing whether the clone and its real item names are different' do
-      supplier = ItemClone.find_by_name('supplier')
+    it 'returns boolean showing whether the clone and its table names are different' do
+      supplier = Entity.find_by_name('supplier')
 
       expect(supplier.clone_name_different?).to eq(false)
       expect(@fan.clone_name_different?).to eq(true)
@@ -61,23 +61,23 @@ describe ItemClone do
   end
 
   describe '#one_polymorphic_names?' do
-    it 'returns boolean showing whether an item name is one of polymorphic names of self' do
-      photograph = ItemClone.find_by_name('photograph')
-      postable = ItemClone.find_by_name('postable')
+    it 'returns boolean showing whether a entity name is one of polymorphic names of self' do
+      photograph = Entity.find_by_name('photograph')
+      postable = Entity.find_by_name('postable')
       photograph.clone_parent.check_polymorphic('')
 
       expect(photograph.one_polymorphic_names?(postable)).to eq(true)
     end
   end
 
-  describe '#real_item' do
-    it 'returns the real of clone' do
-      expect(@fan.real_item.name).to eq('user')
+  describe '#table' do
+    it 'returns the table of the entity' do
+      expect(@fan.table.name).to eq('user')
     end
   end
 
   describe '#update_end_model_migration_files' do
-    it 'updates model and migration files of an item' do
+    it 'updates model and migration files of a table' do
       allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
         expect(%w[relation]).to include name
         expect([
@@ -95,15 +95,15 @@ describe ItemClone do
         ]).to include line_content
       end
 
-      famous_person = ItemClone.find_by_name('famous_person')
+      famous_person = Entity.find_by_name('famous_person')
       @followed.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === 'has_many'})
       @fan.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === ':through'})
     end
   end
 
   describe '#update_start_model_file' do
-    it 'updates the model file of an item' do
-      Association.set_middle_items
+    it 'updates the model file of an table' do
+      Association.set_middle_entities
       
       allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
         
@@ -113,8 +113,8 @@ describe ItemClone do
                 { 'has_many' => ':famous_people', 'through' => ':followings' }]).to include line_content
       end
 
-      famous_person = ItemClone.find_by_name('famous_person')
-      following = ItemClone.find_by_name('following')
+      famous_person = Entity.find_by_name('famous_person')
+      following = Entity.find_by_name('following')
       @fan.update_start_model_file(following, @fan.associations.find(&:has_many?  ))
       @fan.update_start_model_file(famous_person, @fan.associations.find(&:through?))
 
@@ -126,9 +126,9 @@ describe ItemClone do
                   'source_type' => '"Employee" ' }]).to include line_content
       end
 
-      imageable_employee = ItemClone.all.select { |item| item.name == 'imageable' && item.real_item.name == 'employee' }[0]
-      postable_post_card = ItemClone.all.select { |item| item.name == 'postable' && item.real_item.name == 'postcard' }[0]
-      photograph = ItemClone.find_by_name('photograph')
+      imageable_employee = Entity.all.select { |entity| entity.name == 'imageable' && entity.table.name == 'employee' }[0]
+      postable_post_card = Entity.all.select { |entity| entity.name == 'postable' && entity.table.name == 'postcard' }[0]
+      photograph = Entity.find_by_name('photograph')
 
       photograph.clone_parent.check_polymorphic('')
 
@@ -140,17 +140,17 @@ describe ItemClone do
   describe '#update_model' do
     it 'calls update_end_model_migration_files and update_start_model_file methods' do
       call_update_end_model_migration_files = 0
-      allow_any_instance_of(ItemClone).to receive(:update_end_model_migration_files) do
+      allow_any_instance_of(Entity).to receive(:update_end_model_migration_files) do
         call_update_end_model_migration_files += 1
       end
       
       call_update_start_model_file = 0
-      allow_any_instance_of(ItemClone).to receive(:update_start_model_file) do
+      allow_any_instance_of(Entity).to receive(:update_start_model_file) do
         call_update_start_model_file += 1 
       end 
 
 
-      following = ItemClone.find_by_name('following')
+      following = Entity.find_by_name('following')
       @fan.update_model(following, @fan.associations.find(&:has_many?))
       expect(call_update_end_model_migration_files).to eq(1)
       expect(call_update_start_model_file).to eq(1)

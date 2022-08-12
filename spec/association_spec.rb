@@ -26,7 +26,7 @@ describe Association do
     end
     
     
-    @item1 =  ItemClone.all.select { |item| item.name == 'entity1' }[0]
+    @item1 =  ItemClone.find_by_name("entity1")
     @association1 = @item1.associations.first
     @item2 = ItemClone.find_by_name("entity2")
     @association2 = @item2.associations.first

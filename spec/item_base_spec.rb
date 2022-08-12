@@ -14,9 +14,9 @@ describe ItemBase do
       item_clone.clone_parent.clones << item_clone
     end
 
-    @account_history = ItemClone.all.select { |item| item.name == 'account_history' }[0]
-    @followed = ItemClone.all.select { |item| item.name == 'followed' }[0]
-    @fan = ItemClone.all.select { |item| item.name == 'fan' }[0]
+    @account_history = ItemClone.find_by_name('account_history')
+    @followed = ItemClone.find_by_name('followed')
+    @fan = ItemClone.find_by_name('fan')
   end
 
   describe '.all' do

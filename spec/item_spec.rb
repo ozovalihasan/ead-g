@@ -10,7 +10,7 @@ describe Item do
     file = @ead.import_JSON(['./spec/sample_EAD.json'])
     
     @ead.create_items(file)
-    
+
     ItemClone.all.each do |item_clone|
       item_clone.clone_parent.clones << item_clone
     end
@@ -47,7 +47,7 @@ describe Item do
       end
       
       command = ''
-      account = ItemClone.all.select { |item| item.name == 'account' }[0]
+      account = ItemClone.find_by_name('account')
       @account_history.add_references(account)
     end
   end

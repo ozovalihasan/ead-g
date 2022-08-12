@@ -14,11 +14,11 @@ describe ItemClone do
     ItemClone.all.each do |item_clone|
       item_clone.clone_parent.clones << item_clone
     end
-
-    @account_history = ItemClone.all.select { |item| item.name == 'account_history' }[0]
-    @followed = ItemClone.all.select { |item| item.name == 'followed' }[0]
-    @fan = ItemClone.all.select { |item| item.name == 'fan' }[0]
-    @photograph = ItemClone.all.select { |item| item.name == 'photograph' }[0]
+    
+    @account_history = ItemClone.find_by_name('account_history')
+    @followed = ItemClone.find_by_name('followed')
+    @fan = ItemClone.find_by_name('fan')
+    @photograph = ItemClone.find_by_name('photograph')
   end
 
   describe '#initialize' do
@@ -39,7 +39,7 @@ describe ItemClone do
 
   describe '#reals_same?' do
     it 'returns boolean showing whether the real items of any item and self are same' do
-      famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
+      famous_person = ItemClone.find_by_name('famous_person')
       expect(@fan.reals_same?(@account_history)).to eq(false)
       expect(@fan.reals_same?(famous_person)).to eq(true)
     end
@@ -53,7 +53,7 @@ describe ItemClone do
 
   describe '#clone_name_different?' do
     it 'returns boolean showing whether the clone and its real item names are different' do
-      supplier = ItemClone.all.select { |item| item.name == 'supplier' }[0]
+      supplier = ItemClone.find_by_name('supplier')
 
       expect(supplier.clone_name_different?).to eq(false)
       expect(@fan.clone_name_different?).to eq(true)
@@ -62,8 +62,8 @@ describe ItemClone do
 
   describe '#one_polymorphic_names?' do
     it 'returns boolean showing whether an item name is one of polymorphic names of self' do
-      photograph = ItemClone.all.select { |item| item.name == 'photograph' }[0]
-      postable = ItemClone.all.select { |item| item.name == 'postable' }[0]
+      photograph = ItemClone.find_by_name('photograph')
+      postable = ItemClone.find_by_name('postable')
       photograph.clone_parent.check_polymorphic('')
 
       expect(photograph.one_polymorphic_names?(postable)).to eq(true)
@@ -95,7 +95,7 @@ describe ItemClone do
         ]).to include line_content
       end
 
-      famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
+      famous_person = ItemClone.find_by_name('famous_person')
       @followed.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === 'has_many'})
       @fan.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === ':through'})
     end
@@ -113,8 +113,8 @@ describe ItemClone do
                 { 'has_many' => ':famous_people', 'through' => ':followings' }]).to include line_content
       end
 
-      famous_person = ItemClone.all.select { |item| item.name == 'famous_person' }[0]
-      following = ItemClone.all.select { |item| item.name == 'following' }[0]
+      famous_person = ItemClone.find_by_name('famous_person')
+      following = ItemClone.find_by_name('following')
       @fan.update_start_model_file(following, @fan.associations.find(&:has_many?  ))
       @fan.update_start_model_file(famous_person, @fan.associations.find(&:through?))
 
@@ -128,7 +128,7 @@ describe ItemClone do
 
       imageable_employee = ItemClone.all.select { |item| item.name == 'imageable' && item.real_item.name == 'employee' }[0]
       postable_post_card = ItemClone.all.select { |item| item.name == 'postable' && item.real_item.name == 'postcard' }[0]
-      photograph = ItemClone.all.select { |item| item.name == 'photograph' }[0]
+      photograph = ItemClone.find_by_name('photograph')
 
       photograph.clone_parent.check_polymorphic('')
 
@@ -150,7 +150,7 @@ describe ItemClone do
       end 
 
 
-      following = ItemClone.all.select { |item| item.name == 'following' }[0]
+      following = ItemClone.find_by_name('following')
       @fan.update_model(following, @fan.associations.find(&:has_many?))
       expect(call_update_end_model_migration_files).to eq(1)
       expect(call_update_start_model_file).to eq(1)

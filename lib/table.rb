@@ -4,17 +4,16 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Table < TableEntityBase
-  
   attr_accessor :name, :id, :twin_name, :attributes, :entities, :polymorphic, :polymorphic_names
 
   def initialize(table_id, tables)
     @id = table_id
-    @name = tables[table_id]["name"].split(' || ')[0].underscore.singularize
+    @name = tables[table_id]['name'].split(' || ')[0].underscore.singularize
     @entities = []
     @polymorphic = false
     @polymorphic_names = []
     @attributes = []
-    tables[table_id]["attributes"].each do |(attribute_id, attribute)|
+    tables[table_id]['attributes'].each do |(_attribute_id, attribute)|
       @attributes << Attribute.new(attribute)
     end
   end
@@ -77,16 +76,13 @@ class Table < TableEntityBase
     system(command)
   end
 
-  def add_reference_migration 
-
+  def add_reference_migration
     entities.each do |entity|
-      
       (entity.parents_has_many + entity.parents_has_one).each do |parent|
         next if entity.one_polymorphic_names?(parent)
-        add_references(parent)  
-      end
-      
-    end
 
+        add_references(parent)
+      end
+    end
   end
 end

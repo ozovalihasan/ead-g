@@ -11,8 +11,8 @@ class EAD
       puts "\n\n----------------"
       puts "\e[31m#{
         'Versions of your EAD file and the gem are not compatible.'\
-        ' So, you may have some unexpected results.'\
-        'To run your EAD file correctly, please run'
+          ' So, you may have some unexpected results.'\
+          'To run your EAD file correctly, please run'
       }\e[0m"
 
       puts "\e[31m#{
@@ -20,11 +20,10 @@ class EAD
       }\e[0m"
       puts "----------------\n\n"
 
-      raise StandardError.new(msg="Incompatible version")
+      raise StandardError, msg = 'Incompatible version'
     end
 
-    return file
- 
+    file
   end
 
   def create_objects(file)
@@ -32,7 +31,6 @@ class EAD
     @edges = JSON.parse(file)['edges']
     @tables = JSON.parse(file)['tables']
 
-    
     @tables = @tables.map do |(id)|
       Table.new(id, @tables)
     end
@@ -44,7 +42,6 @@ class EAD
     @edges.map! do |edge|
       Association.new(edge)
     end
-
   end
 
   def check_implement_objects(file)
@@ -54,16 +51,12 @@ class EAD
       entity.clone_parent.entities << entity
     end
 
-    Table.all.each do |table|
-      table.create_model
-    end
-
-    Table.all.each do |table|
-      table.add_reference_migration
-    end
+    Table.all.each(&:create_model)
+    
+    Table.all.each(&:add_reference_migration)
 
     Association.set_middle_entities
-    
+
     Association.all.each do |association|
       association.first_entity.update_model(association.second_entity, association)
     end
@@ -71,21 +64,21 @@ class EAD
 
   def check_latest_version
     response = JSON.parse RestClient.get 'https://api.github.com/repos/ozovalihasan/ead/tags'
-    
-    unless response.first['name'] == "v0.3.1"
+
+    unless response.first['name'] == 'v0.3.1'
       puts "\n\n----------------"
       puts "\n\e[33m#{
         'A new version of this gem has been released.'\
-        ' Please check it. https://github.com/ozovalihasan/ead-g/releases'
+          ' Please check it. https://github.com/ozovalihasan/ead-g/releases'
       }\e[0m"
 
       puts "\n----------------\n\n"
     end
-  rescue
+  rescue StandardError
     puts "\n\n----------------"
     puts "\n\e[31m#{
       'If you want to check the latest version of this gem,'\
-      ' you need to have a stable internet connection.'
+        ' you need to have a stable internet connection.'
     }\e[0m"
 
     puts "\n----------------\n\n"

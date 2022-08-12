@@ -8,13 +8,13 @@ describe Entity do
     ObjectSpace.garbage_collect
     @ead = EAD.new
     file = @ead.import_JSON(['./spec/sample_EAD.json'])
-    
+
     @ead.create_objects(file)
 
     Entity.all.each do |entity|
       entity.clone_parent.entities << entity
     end
-    
+
     @account_history = Entity.find_by_name('account_history')
     @followed = Entity.find_by_name('followed')
     @fan = Entity.find_by_name('fan')
@@ -47,7 +47,7 @@ describe Entity do
 
   describe '.find_by_name' do
     it 'returns the first entity if its name is the searched name ' do
-      expect(Entity.find_by_name("account_history").name).to eq("account_history")
+      expect(Entity.find_by_name('account_history').name).to eq('account_history')
     end
   end
 
@@ -81,32 +81,35 @@ describe Entity do
       allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
         expect(%w[relation]).to include name
         expect([
-          {"belongs_to" => ":famous_person", "class_name" => "\"User\""},
-        ]).to include line_content
+                 { 'belongs_to' => ':famous_person', 'class_name' => '"User"' }
+               ]).to include line_content
       end
       allow(ProjectFile).to receive(:update_line) do |name, type, keywords, line_content|
         expect(%w[add_famous_person_ref_to_relation]).to include name
         expect(%w[reference_migration]).to include type
         expect([
-          /add_reference :relations/,
-        ]).to include keywords
+                 /add_reference :relations/
+               ]).to include keywords
         expect([
-          {"foreign_key"=>"{ to_table: :users }"},
-        ]).to include line_content
+                 { 'foreign_key' => '{ to_table: :users }' }
+               ]).to include line_content
       end
 
       famous_person = Entity.find_by_name('famous_person')
-      @followed.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === 'has_many'})
-      @fan.update_end_model_migration_files(famous_person, famous_person.associations.find {|association| association.name === ':through'})
+      @followed.update_end_model_migration_files(famous_person, famous_person.associations.find do |association|
+                                                                  association.name === 'has_many'
+                                                                end)
+      @fan.update_end_model_migration_files(famous_person, famous_person.associations.find do |association|
+                                                             association.name === ':through'
+                                                           end)
     end
   end
 
   describe '#update_start_model_file' do
     it 'updates the model file of an table' do
       Association.set_middle_entities
-      
+
       allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
-        
         expect(%w[user user]).to include name
         expect(%w[followings famous_people]).to include end_model
         expect([{ 'has_many' => ':followings', 'class_name' => '"Relation"', 'foreign_key' => '"fan_id"' },
@@ -115,7 +118,7 @@ describe Entity do
 
       famous_person = Entity.find_by_name('famous_person')
       following = Entity.find_by_name('following')
-      @fan.update_start_model_file(following, @fan.associations.find(&:has_many?  ))
+      @fan.update_start_model_file(following, @fan.associations.find(&:has_many?))
       @fan.update_start_model_file(famous_person, @fan.associations.find(&:through?))
 
       allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
@@ -126,8 +129,12 @@ describe Entity do
                   'source_type' => '"Employee" ' }]).to include line_content
       end
 
-      imageable_employee = Entity.all.select { |entity| entity.name == 'imageable' && entity.table.name == 'employee' }[0]
-      postable_post_card = Entity.all.select { |entity| entity.name == 'postable' && entity.table.name == 'postcard' }[0]
+      imageable_employee = Entity.all.select do |entity|
+                             entity.name == 'imageable' && entity.table.name == 'employee'
+                           end [0]
+      postable_post_card = Entity.all.select do |entity|
+                             entity.name == 'postable' && entity.table.name == 'postcard'
+                           end [0]
       photograph = Entity.find_by_name('photograph')
 
       photograph.clone_parent.check_polymorphic('')
@@ -143,12 +150,11 @@ describe Entity do
       allow_any_instance_of(Entity).to receive(:update_end_model_migration_files) do
         call_update_end_model_migration_files += 1
       end
-      
+
       call_update_start_model_file = 0
       allow_any_instance_of(Entity).to receive(:update_start_model_file) do
-        call_update_start_model_file += 1 
-      end 
-
+        call_update_start_model_file += 1
+      end
 
       following = Entity.find_by_name('following')
       @fan.update_model(following, @fan.associations.find(&:has_many?))
@@ -156,5 +162,4 @@ describe Entity do
       expect(call_update_start_model_file).to eq(1)
     end
   end
-
 end

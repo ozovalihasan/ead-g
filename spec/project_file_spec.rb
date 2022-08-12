@@ -75,9 +75,9 @@ describe ProjectFile do
       ProjectFile.add_belong_line('mock_name', mock_line_content)
 
       expect(tempfile).to eq(
-        "class Mock\n"\
-        "  belongs_to mock2, mock2: content2\n"\
-        "  has_many mocks, mock: content\n"\
+        "class Mock\n" \
+        "  belongs_to mock2, mock2: content2\n" \
+        "  has_many mocks, mock: content\n" \
         "end\n"
       )
     end

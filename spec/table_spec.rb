@@ -8,7 +8,7 @@ describe Table do
     ObjectSpace.garbage_collect
     @ead = EAD.new
     file = @ead.import_JSON(['./spec/sample_EAD.json'])
-    
+
     @ead.create_objects(file)
 
     Entity.all.each do |entity|
@@ -42,10 +42,10 @@ describe Table do
     it 'adds references to command' do
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
         expect([
-                 "bundle exec rails generate migration AddAccountRefToAccountHistory account:references"
+                 'bundle exec rails generate migration AddAccountRefToAccountHistory account:references'
                ]).to include call_with
       end
-      
+
       command = ''
       account = Entity.find_by_name('account')
       @account_history.add_references(account)
@@ -87,9 +87,9 @@ describe Table do
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
         expect([
                  'bundle exec rails generate model Picture' \
-                   ' postable:references{polymorphic} imageable:references{polymorphic}',
+                 ' postable:references{polymorphic} imageable:references{polymorphic}',
                  'bundle exec rails generate model AccountHistory' \
-                   ' credit_rating:integer access_time:datetime',
+                 ' credit_rating:integer access_time:datetime',
                  'bundle exec rails generate model Relation'
                ]).to include call_with
       end

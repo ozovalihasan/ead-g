@@ -75,20 +75,20 @@ class ProjectFile
       line_found = false
       file.each do |line|
         tempfile << line
-        if (line.include?('class')) && !line_found
-          line_found = true
-          line_association = ''
-          line_content.each do |key, value|
-            line_association << if %w[belongs_to].include?(key)
-                                  "  #{key} #{value}"
-                                else
-                                  ", #{key}: #{value}"
-                                end
-          end
+        next unless line.include?('class') && !line_found
 
-          line_association << "\n"
-          tempfile << line_association
+        line_found = true
+        line_association = ''
+        line_content.each do |key, value|
+          line_association << if %w[belongs_to].include?(key)
+                                "  #{key} #{value}"
+                              else
+                                ", #{key}: #{value}"
+                              end
         end
+
+        line_association << "\n"
+        tempfile << line_association
       end
     end
   end

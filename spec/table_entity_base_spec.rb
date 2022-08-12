@@ -7,7 +7,7 @@ describe TableEntityBase do
     ObjectSpace.garbage_collect
     @ead = EAD.new
     file = @ead.import_JSON(['./spec/sample_EAD.json'])
-    
+
     @ead.create_objects(file)
 
     Entity.all.each do |entity|

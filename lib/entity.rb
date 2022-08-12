@@ -3,16 +3,16 @@ require 'association'
 require 'project_file'
 
 class Entity < TableEntityBase
-  attr_accessor(:name, :id, :twin_name, :clone_parent, :parent, :parent_association, :associations, :parent_associations, 
-  :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
-  :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
+  attr_accessor(:name, :id, :twin_name, :clone_parent, :parent, :parent_association, :associations, :parent_associations,
+                :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
+                :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
 
   def initialize(node)
-    @id = node["id"]
-    @name = node["data"]["name"].split(' || ')[0].underscore.singularize
-    @twin_name = node["data"]["name"].split(' || ')[1]&.underscore&.singularize
-    @clone_parent = Table.find(node["data"]["tableId"])
-    
+    @id = node['id']
+    @name = node['data']['name'].split(' || ')[0].underscore.singularize
+    @twin_name = node['data']['name'].split(' || ')[1]&.underscore&.singularize
+    @clone_parent = Table.find(node['data']['tableId'])
+
     @parent_associations = []
     @associations = []
 
@@ -38,7 +38,7 @@ class Entity < TableEntityBase
   end
 
   def self.find_by_name(name)
-    all.find {|entity| entity.name == name}
+    all.find { |entity| entity.name == name }
   end
 
   def clone_name_different?
@@ -55,15 +55,15 @@ class Entity < TableEntityBase
 
   def update_end_model_migration_files(start_entity, association)
     polymorphic_end = one_polymorphic_names?(start_entity)
-    
+
     return if polymorphic_end
 
     end_model_line = {}
     end_migration_line = {}
-    
+
     if association.has_any?
       end_model_line['belongs_to'] = ":#{start_entity.name}"
-      
+
       if tables_same?(start_entity)
         end_model_line['optional'] = 'true'
         end_migration_line['null'] = 'true'
@@ -75,14 +75,13 @@ class Entity < TableEntityBase
       end
     end
 
-    unless end_model_line.empty?
-      ProjectFile.add_belong_line(self.clone_parent.name, end_model_line)
-    end
+    ProjectFile.add_belong_line(clone_parent.name, end_model_line) unless end_model_line.empty?
 
     unless end_migration_line.empty?
       migration_name = "Add#{start_entity.name.camelize}RefTo#{clone_parent.name.camelize}".underscore
 
-      ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.name.pluralize}/, end_migration_line)
+      ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.name.pluralize}/,
+                              end_migration_line)
     end
   end
 
@@ -94,30 +93,28 @@ class Entity < TableEntityBase
 
     intermediate_model = intermediate_entity.name if intermediate_entity
 
-    if association.has_many? || (self.children_has_many_through.include? end_entity)
+    if association.has_many? || (children_has_many_through.include? end_entity)
       end_model = end_model.pluralize
       intermediate_model = intermediate_model.pluralize if intermediate_model
     end
 
     line_content = {}
 
-    if association.has_many? || (self.children_has_many_through.include? end_entity)
-      line_content["has_many"] = if intermediate_entity&.one_polymorphic_names?(end_entity) && (association.has_many? || (self.children_has_many_through.include? end_entity))
-        ":#{end_entity.table.name.pluralize}"
-      else
-        ":#{end_model}"
-      end
+    if association.has_many? || (children_has_many_through.include? end_entity)
+      line_content['has_many'] = if intermediate_entity&.one_polymorphic_names?(end_entity) && (association.has_many? || (children_has_many_through.include? end_entity))
+                                   ":#{end_entity.table.name.pluralize}"
+                                 else
+                                   ":#{end_model}"
+                                 end
     end
 
-    if association.has_one? || (self.children_has_one_through.include? end_entity)
-      line_content["has_one"] = if intermediate_entity&.one_polymorphic_names?(end_entity) && (association.has_one? || (self.children_has_one_through.include? end_entity))
-        ":#{end_entity.table.name}"
-      else
-        ":#{end_model}"
-      end
+    if association.has_one? || (children_has_one_through.include? end_entity)
+      line_content['has_one'] = if intermediate_entity&.one_polymorphic_names?(end_entity) && (association.has_one? || (children_has_one_through.include? end_entity))
+                                  ":#{end_entity.table.name}"
+                                else
+                                  ":#{end_model}"
+                                end
     end
-    
-    
 
     if intermediate_entity
       line_content['through'] = ":#{intermediate_model}"
@@ -139,11 +136,8 @@ class Entity < TableEntityBase
   end
 
   def update_model(end_entity, association)
-    if association.has_any?
-      end_entity.update_end_model_migration_files(self, association)
-    end
-    
+    end_entity.update_end_model_migration_files(self, association) if association.has_any?
+
     update_start_model_file(end_entity, association)
   end
-
 end

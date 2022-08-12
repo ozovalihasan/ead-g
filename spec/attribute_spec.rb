@@ -5,24 +5,24 @@ describe Attribute do
   before do
     ObjectSpace.garbage_collect
     ead_file = {
-      "tables" => {
-        "15" => {
-            "name"=> "entity1",
-            "attributes"=> {
-                "16"=> {
-                    "name"=> "attribute1",
-                    "type"=> "string"
-                },
-                "17"=> {
-                    "name"=> "attribute2",
-                    "type"=> "string"
-                }
+      'tables' => {
+        '15' => {
+          'name' => 'entity1',
+          'attributes' => {
+            '16' => {
+              'name' => 'attribute1',
+              'type' => 'string'
+            },
+            '17' => {
+              'name' => 'attribute2',
+              'type' => 'string'
             }
+          }
         }
       }
     }
 
-    @table = Table.new("15", ead_file["tables"])
+    @table = Table.new('15', ead_file['tables'])
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end
 

@@ -66,6 +66,9 @@ class Entity < TableEntityBase
 
       if tables_same?(start_entity)
         end_model_line['optional'] = 'true'
+        end_migration_line['null'] = 'true'
+      else
+        end_migration_line['null'] = 'false'
       end
 
       if !polymorphic_end && start_entity.clone_name_different?

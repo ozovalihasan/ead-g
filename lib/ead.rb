@@ -52,7 +52,7 @@ class EAD
     end
 
     Table.all.each(&:create_model)
-    
+
     Table.all.each(&:add_reference_migration)
 
     Association.set_middle_entities

@@ -39,10 +39,10 @@ describe EAD do
 
       allow_any_instance_of(Object).to receive(:system) do |_, call_with|
         expect([
-          "bundle exec rails generate migration AddEntity1RefToEntity2 entity1:references"
-        ]).to include call_with
+                 'bundle exec rails generate migration AddEntity1RefToEntity2 entity1:references'
+               ]).to include call_with
       end
-      
+
       allow(File).to receive(:read).and_return(@file)
       mock_file = ''
       allow(File).to receive(:open).and_return(mock_file)

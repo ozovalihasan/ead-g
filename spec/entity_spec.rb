@@ -91,10 +91,10 @@ describe Entity do
                  /add_reference :relations/
                ]).to include keywords
         expect([
-                { 
-                  'foreign_key' => '{ to_table: :users }',
-                  'null' => 'false'
-                }
+                 {
+                   'foreign_key' => '{ to_table: :users }',
+                   'null' => 'false'
+                 }
                ]).to include line_content
       end
 

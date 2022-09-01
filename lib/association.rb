@@ -1,10 +1,11 @@
 require 'table'
 
 class Association
-  attr_accessor :first_entity, :second_entity, :name, :middle_entities_has_one, :middle_entities_has_many, 
-:through_entity
+  attr_accessor :first_entity, :second_entity, :name, :middle_entities_has_one, :middle_entities_has_many,
+                :through_entity
 
-  def initialize(edge) # first_entity, association_block)
+  # first_entity, association_block)
+  def initialize(edge)
     @first_entity = Entity.find(edge['source'])
     @second_entity = Entity.find(edge['target'])
     @through_entity = nil
@@ -49,9 +50,7 @@ class Association
     source = first_entity
     target = second_entity
 
-    if 
-      
-      (
+    if (
         source.parents_has_many +
         source.parents_has_many_through +
         source.parents_has_one +
@@ -61,31 +60,29 @@ class Association
         source.children_has_one +
         source.children_has_one_through
       ).include?(through_entity) &&
-      (
-        (
-          target.parents_has_many +
-          target.parents_has_many_through +
-          target.parents_has_one +
-          target.parents_has_one_through +
-          target.children_has_many +
-          target.children_has_many_through +
-          target.children_has_one +
-          target.children_has_one_through
-        ).include?(through_entity) || (
-          through_entity.parents_has_many.map(&:clone_parent).include?(target.clone_parent) ||
-          through_entity.parents_has_one.map(&:clone_parent).include?(target.clone_parent)
-        )
-      )
-    
-      if 
-        (
+       (
+         (
+           target.parents_has_many +
+           target.parents_has_many_through +
+           target.parents_has_one +
+           target.parents_has_one_through +
+           target.children_has_many +
+           target.children_has_many_through +
+           target.children_has_one +
+           target.children_has_one_through
+         ).include?(through_entity) || (
+           through_entity.parents_has_many.map(&:clone_parent).include?(target.clone_parent) ||
+           through_entity.parents_has_one.map(&:clone_parent).include?(target.clone_parent)
+         )
+       )
+
+      if (
           source.children_has_many.include?(through_entity) ||
           source.children_has_many_through.include?(through_entity)
         ) || (
           target.parents_has_many.include?(through_entity) ||
           target.parents_has_many_through.include?(through_entity)
         )
-      
 
         unless middle_entities_has_many.include? through_entity
           middle_entities_has_many << through_entity
@@ -103,7 +100,6 @@ class Association
       end
 
     end
-
   end
 
   def self.set_middle_entities

@@ -17,17 +17,18 @@ class Association
     @second_entity.parent_associations << self
 
     @name = nil
-    if edge['type'] === 'hasMany'
+    case edge['type']
+    when 'hasMany'
       @first_entity.children_has_many << @second_entity
       @second_entity.parents_has_many << @first_entity
 
       @name = 'has_many'
-    elsif edge['type'] === 'hasOne'
+    when 'hasOne'
       @first_entity.children_has_one << @second_entity
       @second_entity.parents_has_one << @first_entity
 
       @name = 'has_one'
-    elsif edge['type'] === 'through'
+    when 'through'
       @first_entity.children_through << @second_entity
       @second_entity.parents_through << @first_entity
 

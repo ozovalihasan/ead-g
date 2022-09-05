@@ -100,10 +100,10 @@ describe Entity do
 
       famous_person = Entity.find_by_name('famous_person')
       @followed.update_end_model_migration_files(famous_person, famous_person.associations.find do |association|
-                                                                  association.name === 'has_many'
+                                                                  association.name == 'has_many'
                                                                 end)
       @fan.update_end_model_migration_files(famous_person, famous_person.associations.find do |association|
-                                                             association.name === ':through'
+                                                             association.name == ':through'
                                                            end)
     end
   end

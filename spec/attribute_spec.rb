@@ -1,55 +1,28 @@
-require 'block'
-require 'item'
+require 'table'
 require 'attribute'
 
 describe Attribute do
   before do
     ObjectSpace.garbage_collect
-    items = {
-      '12' => {
-        'content' => 'entity1',
-        'subItemIds' => [
-          14,
-          13
-        ],
-        'order' => 'vertical',
-        'subdirection' => 'column',
-        'factory' => false,
-        'entity' => true,
-        'expand' => true,
-        'isDropDisabled' => false,
-        'category' => 'entity',
-        'cloneable' => true,
-        'cloneChildren' => []
-      },
-      '13' => {
-        'content' => 'attribute2',
-        'subItemIds' => [],
-        'attribute' => true,
-        'order' => 'vertical',
-        'subdirection' => 'column',
-        'isDropDisabled' => false,
-        'factory' => false,
-        'type' => 'text',
-        'expand' => true,
-        'category' => 'attribute'
-      },
-      '14' => {
-        'content' => 'attribute1',
-        'subItemIds' => [],
-        'attribute' => true,
-        'order' => 'vertical',
-        'subdirection' => 'column',
-        'isDropDisabled' => false,
-        'factory' => false,
-        'type' => 'string',
-        'expand' => true,
-        'category' => 'attribute'
+    ead_file = {
+      'tables' => {
+        '15' => {
+          'name' => 'entity1',
+          'attributes' => {
+            '16' => {
+              'name' => 'attribute1',
+              'type' => 'string'
+            },
+            '17' => {
+              'name' => 'attribute2',
+              'type' => 'string'
+            }
+          }
+        }
       }
     }
 
-    @block = Block.new('12', items)
-    @item = Item.new(@block)
+    @table = Table.new('15', ead_file['tables'])
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end
 

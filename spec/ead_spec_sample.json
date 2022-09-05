@@ -1,0 +1,64 @@
+{
+    "version": "0.4.0",
+    "idCounter": 6,
+    "associationType": "has_many",
+    "nodes": [
+        {
+            "id": "3",
+            "type": "entity",
+            "position": {
+                "x": -480,
+                "y": 360
+            },
+            "data": {
+                "tableId": "1",
+                "name": "entity1"
+            },
+            "width": 138,
+            "height": 47
+        },
+        {
+            "id": "4",
+            "type": "entity",
+            "position": {
+                "x": -300,
+                "y": 525
+            },
+            "data": {
+                "tableId": "2",
+                "name": "entity2"
+            },
+            "width": 138,
+            "height": 47
+        }
+    ],
+    "edges": [
+        {
+            "id": "5",
+            "source": "3",
+            "target": "4",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many"
+        }
+    ],
+    "tables": {
+        "1": {
+            "name": "entity1",
+            "attributes": {}
+        },
+        "2": {
+            "name": "entity2",
+            "attributes": {}
+        }
+    },
+    "connectionStartId": "3",
+    "isConnectContinue": false,
+    "isMouseOnNode": false,
+    "isMouseOnEdge": false,
+    "mouseOnNodeId": null,
+    "mouseOnEdgeId": null,
+    "selectedNodeIdForThrough": null,
+    "showTextOnEdges": false
+}

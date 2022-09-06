@@ -219,7 +219,6 @@
             "target": "12",
             "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "animated": true,
             "label": "through",
             "type": "through",
             "data": {
@@ -232,7 +231,6 @@
             "target": "14",
             "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "animated": true,
             "label": "through",
             "type": "through",
             "data": {
@@ -245,7 +243,6 @@
             "target": "15",
             "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "animated": true,
             "label": "through",
             "type": "through",
             "data": {
@@ -258,7 +255,6 @@
             "target": "14",
             "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "animated": true,
             "label": "through",
             "type": "through",
             "data": {
@@ -271,7 +267,6 @@
             "target": "22",
             "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "animated": true,
             "label": "through",
             "type": "through",
             "data": {
@@ -293,7 +288,6 @@
             "target": "13",
             "sourceHandle": "bottom3",
             "targetHandle": "top",
-            "animated": true,
             "label": "through",
             "type": "through",
             "data": {

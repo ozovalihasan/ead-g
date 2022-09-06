@@ -74,7 +74,6 @@ describe EAD do
         response = RestClient::Response.new [{ name: '' }].to_json
 
         allow(RestClient::Request).to receive(:execute).and_return(response)
-
         expect { @ead.check_latest_version }.to output(
           "\n\n----------------" \
           "\n\n" \
@@ -108,6 +107,10 @@ describe EAD do
 
   describe '.start' do
     it 'starts all process' do
+      response = RestClient::Response.new [{ name: 'v0.4.1' }].to_json
+
+      allow(RestClient::Request).to receive(:execute).and_return(response)
+
       call_import_JSON = 0
       allow_any_instance_of(EAD).to receive(:import_JSON) { |_arg| call_import_JSON += 1 }
 

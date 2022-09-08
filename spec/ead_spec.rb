@@ -107,7 +107,7 @@ describe EAD do
 
   describe '.start' do
     it 'starts all process' do
-      response = RestClient::Response.new [{ name: 'v0.4.2' }].to_json
+      response = RestClient::Response.new [{ name: 'v0.4.3' }].to_json
 
       allow(RestClient::Request).to receive(:execute).and_return(response)
 

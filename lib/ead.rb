@@ -7,7 +7,7 @@ class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
 
-    unless ['0.4.0', '0.4.1', '0.4.2'].include? JSON.parse(file)['version']
+    unless ['0.4.0', '0.4.1', '0.4.2', '0.4.2', '0.4.3'].include? JSON.parse(file)['version']
       puts "\n\n----------------"
       puts "\e[31m#{
         'Versions of your EAD file and the gem are not compatible.'\
@@ -65,7 +65,7 @@ class EAD
   def check_latest_version
     response = JSON.parse RestClient.get 'https://api.github.com/repos/ozovalihasan/ead/tags'
 
-    unless response.first['name'] == 'v0.4.2'
+    unless response.first['name'] == 'v0.4.3'
       puts "\n\n----------------"
       puts "\n\e[33m#{
         'A new version of this gem has been released.'\

@@ -58,28 +58,22 @@ describe ProjectFile do
   end
 
   describe '.add_belong_line' do
-    it 'adds a line with line content and "belongs_to" to tempfile after the line having "class" keyword' do
-      file = [
-        "class Mock\n",
-        "  has_many mocks, mock: content\n",
-        "end\n"
-      ]
-      tempfile = ''
-      allow(ProjectFile).to receive(:open_close) do |name, type, &block|
-        block.call(file, tempfile)
-        expect('mock_name').to include name
-        expect(['model']).to include type
+    it 'invokes CustomThor#add_belong_line ' do
+      
+      class MockCustomThor
       end
 
+      allow(CustomThor).to receive(:new).and_return(MockCustomThor.new)
+      allow_any_instance_of(MockCustomThor).to receive(:invoke) do |_, method_name, _, third|
+        expect(method_name).to eq :add_belong_line
+        expect(third).to eq(
+          {line_content: {"belongs_to"=>"mock2", "mock2"=>"content2"}, name: "mock"} 
+        ) 
+      end
+      
       mock_line_content = { 'belongs_to' => 'mock2', 'mock2' => 'content2' }
-      ProjectFile.add_belong_line('mock_name', mock_line_content)
+      ProjectFile.add_belong_line('mock', mock_line_content)
 
-      expect(tempfile).to eq(
-        "class Mock\n" \
-        "  belongs_to mock2, mock2: content2\n" \
-        "  has_many mocks, mock: content\n" \
-        "end\n"
-      )
     end
   end
 end

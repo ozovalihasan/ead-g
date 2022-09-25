@@ -1,4 +1,6 @@
 require 'fileutils'
+require_relative 'custom_thor'
+
 
 class ProjectFile
   def self.open_close(name, type, &block)
@@ -71,25 +73,9 @@ class ProjectFile
   end
 
   def self.add_belong_line(name, line_content)
-    open_close(name, 'model') do |file, tempfile|
-      line_found = false
-      file.each do |line|
-        tempfile << line
-        next unless line.include?('class') && !line_found
-
-        line_found = true
-        line_association = ''
-        line_content.each do |key, value|
-          line_association << if %w[belongs_to].include?(key)
-                                "  #{key} #{value}"
-                              else
-                                ", #{key}: #{value}"
-                              end
-        end
-
-        line_association << "\n"
-        tempfile << line_association
-      end
-    end
+    CustomThor.new.invoke(:add_belong_line, [], { name: name, line_content: line_content})
   end
+  
+  
 end
+

@@ -68,6 +68,26 @@ describe ProjectFile do
     end
   end
 
+  describe '.update_line' do
+    it 'adds a line with line content to tempfile' do
+      file = ["def change\n","  add_reference :mock_names, :mock_names_second, null: false\n", "end\n"]
+      tempfile = ''
+      allow(ProjectFile).to receive(:open_close) do |name, type, &block|
+        block.call(file, tempfile)
+        expect('mock_name').to include name
+        expect(['reference_migration']).to include type
+      end
+
+      mock_line_content = { 'null' => 'true', "foreign_key" =>  "{ to_table: :mock_table_name }" }
+      ProjectFile.update_line('mock_name', 'reference_migration', /add_reference :mock_names/, mock_line_content)
+
+      expect(tempfile).to eq(
+        "def change\n"\
+        "  add_reference :mock_names, :mock_names_second, null: true, foreign_key: { to_table: :mock_table_name }\n"\
+        "end\n"
+      )
+    end
+  end
 
   describe '.add_line' do
     it 'adds a line with line content to tempfile' do

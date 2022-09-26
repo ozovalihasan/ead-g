@@ -2,41 +2,32 @@ require 'ead'
 require 'project_file'
 
 describe ProjectFile do
+
+  class MockCustomThor
+  end
+
   describe '.update_line' do
-    it 'opens, updates and closes a file' do
-      allow(Dir).to receive(:glob) do |name|
-        expect(['./db/migrate/*_mock_names.rb']).to include name
-      end.and_return(['mock_found_file'])
-
-      allow(File).to receive(:open).and_return('mock tempfile')
-      allow(File).to receive(:new).and_return('mock file')
-      allow_any_instance_of(String).to receive(:close)
-      allow(FileUtils).to receive(:mv) do |deleted_file, changed_file|
-        expect(['./db/migrate/migration_update.rb', './app/models/model_update.rb']).to include deleted_file
-        expect(['./app/models/mock_name.rb', 'mock_found_file']).to include changed_file
+    it 'invokes CustomThor#update_line ' do
+      
+      allow(CustomThor).to receive(:new).and_return(MockCustomThor.new)
+      allow_any_instance_of(MockCustomThor).to receive(:invoke) do |_, method_name, _, third|
+        expect(method_name).to eq :update_line
+        expect(third).to eq(
+          {
+            keywords: "mock keyword",
+            line_content: {"foreign_key"=>"{ to_table: :users }", "null"=>"true"},
+            name: "mock_name",
+            type: "reference_migration"
+          }
+        ) 
       end
 
-      result = ''
-      ProjectFile.open_close('mock_name', 'model') do |temp, tempfile|
-        result << temp
-        result << ' '
-        result << tempfile
-      end
+      name = "mock_name"
+      line_content = { 'null' => "true", "foreign_key" => "{ to_table: :users }" }
+      keywords = "mock keyword"
+      type = "reference_migration"
+      ProjectFile.update_line(name, type, keywords, line_content)
 
-      expect(result).to eq(
-        'mock file mock tempfile'
-      )
-
-      result2 = ''
-      ProjectFile.open_close('mock_name', 'migration') do |temp, tempfile|
-        result2 << tempfile
-        result2 << ' '
-        result2 << temp
-      end
-
-      expect(result2).to eq(
-        'mock tempfile mock file'
-      )
     end
   end
 
@@ -60,9 +51,6 @@ describe ProjectFile do
   describe '.add_belong_line' do
     it 'invokes CustomThor#add_belong_line ' do
       
-      class MockCustomThor
-      end
-
       allow(CustomThor).to receive(:new).and_return(MockCustomThor.new)
       allow_any_instance_of(MockCustomThor).to receive(:invoke) do |_, method_name, _, third|
         expect(method_name).to eq :add_belong_line

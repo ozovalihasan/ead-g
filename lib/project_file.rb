@@ -30,23 +30,7 @@ class ProjectFile
   end
 
   def self.update_line(name, type, keywords, line_content)
-    open_close(name, type) do |file, tempfile|
-      file.each do |line|
-        if line.match(keywords)
-          line.gsub!(/ *\n/, '')
-          line_content.each do |key, value|
-            if line.include? key
-              line.gsub!(/#{key}: [^(\s,)]*/, "#{key}: #{value}")
-            else
-              line << ", #{key}: #{value}"
-            end
-          end
-          line << "\n"
-
-        end
-        tempfile << line
-      end
-    end
+    CustomThor.new.invoke(:update_line, [], { name: name, keywords: keywords, line_content: line_content, type: type})
   end
 
   def self.add_line(name, end_model, line_content)

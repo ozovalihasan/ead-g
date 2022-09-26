@@ -1,6 +1,4 @@
 require 'fileutils'
-require_relative 'custom_thor'
-
 
 class ProjectFile
   def self.open_close(name, type, &block)
@@ -30,7 +28,23 @@ class ProjectFile
   end
 
   def self.update_line(name, type, keywords, line_content)
-    CustomThor.new.invoke(:update_line, [], { name: name, keywords: keywords, line_content: line_content, type: type})
+    open_close(name, type) do |file, tempfile|
+      file.each do |line|
+        if line.match(keywords)
+          line.gsub!(/ *\n/, '')
+          line_content.each do |key, value|
+            if line.include? key
+              line.gsub!(/#{key}: [^(\s,)]*/, "#{key}: #{value}")
+            else
+              line << ", #{key}: #{value}"
+            end
+          end
+          line << "\n"
+
+        end
+        tempfile << line
+      end
+    end
   end
 
   def self.add_line(name, end_model, line_content)
@@ -57,9 +71,25 @@ class ProjectFile
   end
 
   def self.add_belong_line(name, line_content)
-    CustomThor.new.invoke(:add_belong_line, [], { name: name, line_content: line_content})
-  end
-  
-  
-end
+    open_close(name, 'model') do |file, tempfile|
+      line_found = false
+      file.each do |line|
+        tempfile << line
+        next unless line.include?('class') && !line_found
 
+        line_found = true
+        line_association = ''
+        line_content.each do |key, value|
+          line_association << if %w[belongs_to].include?(key)
+                                "  #{key} #{value}"
+                              else
+                                ", #{key}: #{value}"
+                              end
+        end
+
+        line_association << "\n"
+        tempfile << line_association
+      end
+    end
+  end
+end

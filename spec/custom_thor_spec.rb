@@ -7,7 +7,8 @@ describe CustomThor do
         
         expect(file_name).to eq("./db/migrate/*_mock_name.rb") 
         expect(regexp).to eq(/^.*mock keyword.*$/) 
-        expect(block.call("add_reference :mock, :second_mock, null: false")).to eq(
+        result = block.call("add_reference :mock, :second_mock, null: false")
+        expect(result).to eq(
           "add_reference :mock, :second_mock, null: true, foreign_key: { to_table: :users }"
         ) 
       end

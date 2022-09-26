@@ -2,43 +2,72 @@ require 'ead'
 require 'project_file'
 
 describe ProjectFile do
-  describe '.update_line' do
-    it 'opens, updates and closes a file' do
-      allow(Dir).to receive(:glob) do |name|
-        expect(['./db/migrate/*_mock_names.rb']).to include name
-      end.and_return(['mock_found_file'])
+  describe '.open_close' do
+    describe 'opens, updates and closes a file' do
+      before(:each) do
+        allow(Dir).to receive(:glob) do |name|
+          expect([
+            "./db/migrate/*_mock_names.rb",
+            "./db/migrate/*_mock_name.rb"
+          ]).to include name
+        end.and_return(['mock_found_file'])
 
-      allow(File).to receive(:open).and_return('mock tempfile')
-      allow(File).to receive(:new).and_return('mock file')
-      allow_any_instance_of(String).to receive(:close)
-      allow(FileUtils).to receive(:mv) do |deleted_file, changed_file|
-        expect(['./db/migrate/migration_update.rb', './app/models/model_update.rb']).to include deleted_file
-        expect(['./app/models/mock_name.rb', 'mock_found_file']).to include changed_file
+        allow(File).to receive(:open).and_return('mock tempfile')
+        allow(File).to receive(:new).and_return('mock file')
+        allow_any_instance_of(String).to receive(:close)
+        allow(FileUtils).to receive(:mv) do |deleted_file, changed_file|
+          expect([
+            './db/migrate/migration_update.rb', 
+            './app/models/model_update.rb',
+            './db/migrate/reference_migration_update.rb'
+          ]).to include deleted_file
+          expect(['./app/models/mock_name.rb', 'mock_found_file']).to include changed_file
+        end
       end
 
-      result = ''
-      ProjectFile.open_close('mock_name', 'model') do |temp, tempfile|
-        result << temp
-        result << ' '
-        result << tempfile
+      it 'works on a model file' do 
+  
+        result = ''
+        ProjectFile.open_close('mock_name', 'model') do |temp, tempfile|
+          result << temp
+          result << ' '
+          result << tempfile
+        end
+
+        expect(result).to eq(
+          'mock file mock tempfile'
+        )
+
+      end
+      
+      it 'works on a migration file' do 
+        result2 = ''
+        ProjectFile.open_close('mock_name', 'migration') do |temp, tempfile|
+          result2 << tempfile
+          result2 << ' '
+          result2 << temp
+        end
+
+        expect(result2).to eq(
+          'mock tempfile mock file'
+        )
       end
 
-      expect(result).to eq(
-        'mock file mock tempfile'
-      )
+      it 'works on a reference migration file' do
+        result3 = ''
+        ProjectFile.open_close('mock_name', 'reference_migration') do |temp, tempfile|
+          result3 << tempfile
+          result3 << ' '
+          result3 << temp
+        end
 
-      result2 = ''
-      ProjectFile.open_close('mock_name', 'migration') do |temp, tempfile|
-        result2 << tempfile
-        result2 << ' '
-        result2 << temp
+        expect(result3).to eq(
+          'mock tempfile mock file'
+        )
       end
-
-      expect(result2).to eq(
-        'mock tempfile mock file'
-      )
     end
   end
+
 
   describe '.add_line' do
     it 'adds a line with line content to tempfile' do

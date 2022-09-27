@@ -27,19 +27,31 @@ class EAD
   end
 
   def create_objects(file)
-    @nodes = JSON.parse(file)['nodes']
-    @edges = JSON.parse(file)['edges']
-    @tables = JSON.parse(file)['tables']
+  
+    parsed_nodes = JSON.parse(file)['nodes']
+    parsed_edges = JSON.parse(file)['edges']
+    parsed_tables = JSON.parse(file)['tables']
 
-    @tables = @tables.map do |(id)|
-      Table.new(id, @tables)
+    @tables = parsed_tables.map do |(id)|
+      Table.new(id, parsed_tables[id])
     end
 
-    @nodes.map! do |node|
+    @tables.map do |table|
+      superclass_id = parsed_tables[table.id]["superclassId"] || ""
+
+      unless superclass_id == ""
+        super_class = Table.find superclass_id
+        table.superclass = super_class
+        super_class.subclasses << table
+      end
+
+    end
+    
+    @nodes = parsed_nodes.map do |node|
       Entity.new(node)
     end
 
-    @edges.map! do |edge|
+    @edges = parsed_edges.map do |edge|
       Association.new(edge)
     end
   end

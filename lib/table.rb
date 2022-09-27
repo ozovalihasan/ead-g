@@ -4,26 +4,40 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Table < TableEntityBase
-  attr_accessor :name, :id, :twin_name, :attributes, :entities, :polymorphic, :polymorphic_names
+  attr_accessor :name, :id, :twin_name, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses
 
-  def initialize(table_id, tables)
+  def initialize(table_id, table)
     @id = table_id
-    @name = tables[table_id]['name'].split(' || ')[0].underscore.singularize
+    @name = table['name'].underscore.singularize
     @entities = []
     @polymorphic = false
     @polymorphic_names = []
     @attributes = []
-    tables[table_id]['attributes'].each do |(_attribute_id, attribute)|
+    table['attributes'].each do |(_attribute_id, attribute)|
       @attributes << Attribute.new(attribute)
     end
+    @superclass = nil
+    @subclasses = []
   end
 
   def model_name
     name.camelize
   end
 
+  def root_class
+    nil unless @superclass 
+    
+    root = self
+    
+    while root.superclass
+      root = root.superclass
+    end
+
+    root
+  end
+
   def add_references(entity)
-    command = "bundle exec rails generate migration Add#{entity.name.camelize}RefTo#{name.camelize} #{entity.name}:references"
+    command = "bundle exec rails generate migration Add#{entity.name.camelize}RefTo#{root_class.name.camelize} #{entity.name}:references"
 
     system(command)
   end
@@ -67,9 +81,17 @@ class Table < TableEntityBase
   def create_model
     return if File.exist?("./app/models/#{name}.rb")
 
-    command = 'bundle exec rails generate model '
-    command << model_name
-    attributes.each { |attribute| attribute.add_to(command) }
+    command = "bundle exec rails generate model #{model_name}"
+
+    if subclasses
+      command << " type"
+    end
+
+    if superclass
+      command << " --parent=#{superclass.name.classify}"
+    else
+      attributes.each { |attribute| attribute.add_to(command) }
+    end
 
     check_polymorphic(command)
 

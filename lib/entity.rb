@@ -45,6 +45,10 @@ class Entity < TableEntityBase
     clone_parent.name != name
   end
 
+  def root_class_name_different?
+    clone_parent.root_class.name != name
+  end
+
   def one_polymorphic_names?(entity)
     table.polymorphic && table.polymorphic_names.include?(entity.name)
   end
@@ -71,18 +75,33 @@ class Entity < TableEntityBase
         end_migration_line['null'] = 'false'
       end
 
-      if !polymorphic_end && start_entity.clone_name_different?
-        end_model_line['class_name'] = "\"#{start_entity.clone_parent.name.camelize}\""
-        end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.clone_parent.name.pluralize} }"
+      if table.root_class == start_entity.table.root_class
+        end_migration_line['null'] = 'true'
       end
+
+      if !polymorphic_end
+        if start_entity.clone_name_different?
+          end_model_line['class_name'] = "\"#{start_entity.clone_parent.name.camelize}\""
+        end
+
+        if start_entity.root_class_name_different?
+          end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.clone_parent.root_class.name.pluralize} }"
+        end
+
+        if start_entity.table.superclass
+          end_migration_line['column'] = ":#{start_entity.name}_id"
+        end
+        
+      end
+      
     end
 
     ProjectFile.add_belong_line(clone_parent.name, end_model_line) unless end_model_line.empty?
 
     unless end_migration_line.empty?
-      migration_name = "Add#{start_entity.name.camelize}RefTo#{clone_parent.name.camelize}".underscore
+      migration_name = "Add#{start_entity.name.camelize}RefTo#{clone_parent.root_class.name.camelize}".underscore
 
-      ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.name.pluralize}/,
+      ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.root_class.name.pluralize}/,
                               end_migration_line)
     end
   end

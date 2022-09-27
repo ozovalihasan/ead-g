@@ -77,7 +77,7 @@ class EAD
   def check_latest_version
     response = JSON.parse RestClient.get 'https://api.github.com/repos/ozovalihasan/ead/tags'
 
-    unless response.first['name'] == 'v0.4.4'
+    unless response.first['name'] == 'v0.4.5'
       puts "\n\n----------------"
       puts "\n\e[33m#{
         'A new version of this gem has been released.'\

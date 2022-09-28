@@ -36,8 +36,10 @@ class Table < TableEntityBase
     root
   end
 
-  def add_references(entity)
-    command = "bundle exec rails generate migration Add#{entity.name.camelize}RefTo#{root_class.name.camelize} #{entity.name}:references"
+  def generate_reference_migration(name, polymorphic = false)
+    command = "bundle exec rails generate migration Add#{name.camelize}RefTo#{root_class.name.camelize} #{name}:references"
+
+    command << "{polymorphic}" if polymorphic
 
     system(command)
   end
@@ -105,7 +107,7 @@ class Table < TableEntityBase
       (entity.parents_has_many + entity.parents_has_one).each do |parent|
         next if entity.one_polymorphic_names?(parent)
 
-        add_references(parent)
+        generate_reference_migration(parent.name)
       end
     end
   end

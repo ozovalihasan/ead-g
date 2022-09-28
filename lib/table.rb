@@ -44,6 +44,14 @@ class Table < TableEntityBase
     system(command)
   end
 
+  def add_polymorphic_reference_migration_for_sti
+    if superclass && polymorphic
+      polymorphic_names.each do |name|
+        generate_reference_migration(name, true)  
+      end
+    end
+  end
+
   def add_polymorphic_reference(command, poly_name)
     command << " #{poly_name}:references{polymorphic}"
   end

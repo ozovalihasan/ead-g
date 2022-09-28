@@ -65,6 +65,8 @@ class EAD
 
     Table.all.each(&:create_model)
 
+    Table.all.each(&:add_polymorphic_reference_migration_for_sti)
+    
     Table.all.each(&:add_reference_migration)
 
     Association.set_middle_entities

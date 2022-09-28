@@ -83,18 +83,20 @@ class Table < TableEntityBase
 
     command = "bundle exec rails generate model #{model_name}"
 
-    if subclasses
+    if subclasses && (root_class == self)
       command << " type"
     end
 
-    if superclass
-      command << " --parent=#{superclass.name.classify}"
-    else
+    unless superclass
       attributes.each { |attribute| attribute.add_to(command) }
     end
 
     check_polymorphic(command)
 
+    if superclass
+      command << " --parent=#{superclass.name.classify}"
+    end
+    
     system(command)
   end
 

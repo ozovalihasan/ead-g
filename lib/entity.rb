@@ -33,8 +33,8 @@ class Entity < TableEntityBase
     clone_parent.name.camelize
   end
 
-  def tables_same?(entity)
-    table == entity.table
+  def root_class_same?(entity)
+    table.root_class == entity.table.root_class
   end
 
   def self.find_by_name(name)
@@ -68,15 +68,11 @@ class Entity < TableEntityBase
     if association.has_any?
       end_model_line['belongs_to'] = ":#{start_entity.name}"
 
-      if tables_same?(start_entity)
+      if root_class_same?(start_entity)
         end_model_line['optional'] = 'true'
         end_migration_line['null'] = 'true'
       else
         end_migration_line['null'] = 'false'
-      end
-
-      if table.root_class == start_entity.table.root_class
-        end_migration_line['null'] = 'true'
       end
 
       if !polymorphic_end

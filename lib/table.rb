@@ -36,6 +36,10 @@ class Table < TableEntityBase
     root
   end
 
+  def root_class?
+    not superclass
+  end
+
   def generate_reference_migration(name, polymorphic = false)
     command = "bundle exec rails generate migration Add#{name.camelize}RefTo#{root_class.name.camelize} #{name}:references"
 
@@ -106,7 +110,7 @@ class Table < TableEntityBase
     if superclass
       command << " --parent=#{superclass.name.classify}"
     end
-    
+
     system(command)
   end
 

@@ -72,6 +72,10 @@ class Entity < TableEntityBase
       end_migration_line['null'] = 'false'
     end
 
+    unless table.root_class?
+      end_migration_line['null'] = 'true'
+    end
+    
     polymorphic_end = one_polymorphic_names?(start_entity)
 
     unless polymorphic_end

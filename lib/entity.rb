@@ -100,10 +100,20 @@ class Entity < TableEntityBase
     end
 
     unless end_migration_line.empty?
-      migration_name = "Add#{start_entity.name.camelize}RefTo#{clone_parent.root_class.name.camelize}".underscore
+      if table.root_class? && polymorphic_end
+        migration_name = "Create#{table.name.camelize.pluralize}".underscore
 
-      ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.root_class.name.pluralize}/,
-                              end_migration_line)
+        ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_entity.name}/,
+                                end_migration_line)
+        
+      else
+      
+        migration_name = "Add#{start_entity.name.camelize}RefTo#{clone_parent.root_class.name.camelize}".underscore
+
+        ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.root_class.name.pluralize}/,
+                                end_migration_line)
+      end
+      
     end
   end
 

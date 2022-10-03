@@ -21,8 +21,8 @@ class Table < TableEntityBase
   end
 
   def self.update_superclasses(parsed_tables)
-    Table.all.map do |table|
-      superclass_id = parsed_tables[table.id]["superclassId"] || ""
+    all.each do |table|
+      superclass_id = parsed_tables[table.id]["superclassId"]
 
       unless superclass_id == ""
         super_class = Table.find superclass_id

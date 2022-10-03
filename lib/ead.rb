@@ -32,8 +32,8 @@ class EAD
     parsed_edges = JSON.parse(file)['edges']
     parsed_tables = JSON.parse(file)['tables']
 
-    @tables = parsed_tables.map do |(id)|
-      Table.new(id, parsed_tables[id])
+    @tables = parsed_tables.map do |id, parsed_table|
+      Table.new(id, parsed_table)
     end
 
     Table.update_superclasses(parsed_tables)

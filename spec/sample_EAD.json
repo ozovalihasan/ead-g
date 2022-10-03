@@ -1,7 +1,7 @@
 {
     "version": "0.4.5",
-    "idCounter": 53,
-    "associationType": "through",
+    "idCounter": 75,
+    "associationType": "has_many",
     "nodes": [
         {
             "id": "20",
@@ -14,8 +14,8 @@
                 "tableId": "14",
                 "name": "manager"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 495,
@@ -34,8 +34,8 @@
                 "tableId": "14",
                 "name": "subordinates"
             },
-            "width": 138,
-            "height": 47
+            "width": 146,
+            "height": 65
         },
         {
             "id": "22",
@@ -48,8 +48,8 @@
                 "tableId": "14",
                 "name": "clients"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 495,
@@ -68,8 +68,8 @@
                 "tableId": "14",
                 "name": "famous_person"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 1020,
@@ -88,8 +88,8 @@
                 "tableId": "14",
                 "name": "fan"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
@@ -108,8 +108,8 @@
                 "tableId": "13",
                 "name": "followings"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
@@ -128,8 +128,8 @@
                 "tableId": "13",
                 "name": "followeds"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 1020,
@@ -148,8 +148,8 @@
                 "tableId": "16",
                 "name": "postable"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 285,
@@ -168,8 +168,8 @@
                 "tableId": "17",
                 "name": "imageable"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 660,
@@ -188,9 +188,9 @@
                 "tableId": "18",
                 "name": "photographs"
             },
-            "width": 138,
-            "height": 47,
-            "selected": true,
+            "width": 146,
+            "height": 65,
+            "selected": false,
             "dragging": false,
             "positionAbsolute": {
                 "x": 630,
@@ -208,8 +208,8 @@
                 "tableId": "19",
                 "name": "imageable"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 855,
@@ -228,8 +228,8 @@
                 "tableId": "15",
                 "name": "postable"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 480,
@@ -248,8 +248,8 @@
                 "tableId": "10",
                 "name": "suppliers"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 1095,
@@ -268,8 +268,8 @@
                 "tableId": "11",
                 "name": "accounts"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 1095,
@@ -288,14 +288,104 @@
                 "tableId": "12",
                 "name": "account_history"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": 1095,
                 "y": 720
             },
             "dragging": false
+        },
+        {
+            "id": "56",
+            "type": "entity",
+            "position": {
+                "x": -90,
+                "y": 195
+            },
+            "data": {
+                "tableId": "53",
+                "name": "supervisor"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": -90,
+                "y": 195
+            },
+            "dragging": false
+        },
+        {
+            "id": "57",
+            "type": "entity",
+            "position": {
+                "x": 90,
+                "y": 195
+            },
+            "data": {
+                "tableId": "54",
+                "name": "supervisor"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": 90,
+                "y": 195
+            },
+            "dragging": false
+        },
+        {
+            "id": "63",
+            "type": "entity",
+            "position": {
+                "x": 0,
+                "y": 360
+            },
+            "data": {
+                "tableId": "62",
+                "name": "supervisee"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": 0,
+                "y": 360
+            },
+            "dragging": false
+        },
+        {
+            "id": "71",
+            "type": "entity",
+            "position": {
+                "x": 60,
+                "y": 555
+            },
+            "data": {
+                "tableId": "70",
+                "name": "Teacher"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65
+        },
+        {
+            "id": "72",
+            "type": "entity",
+            "position": {
+                "x": 60,
+                "y": 720
+            },
+            "data": {
+                "tableId": "55",
+                "name": "student"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65
         }
     ],
     "edges": [
@@ -448,16 +538,45 @@
             "data": {
                 "throughNodeId": "46"
             }
+        },
+        {
+            "id": "64",
+            "source": "56",
+            "target": "63",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "65",
+            "source": "57",
+            "target": "63",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "73",
+            "source": "71",
+            "target": "72",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
         }
     ],
     "tables": {
         "10": {
             "name": "suppliers",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "11": {
             "name": "accounts",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "12": {
             "name": "account_history",
@@ -470,38 +589,77 @@
                     "name": "access_time",
                     "type": "datetime"
                 }
-            }
+            },
+            "superclassId": ""
         },
         "13": {
             "name": "relation",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "14": {
             "name": "user",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "15": {
             "name": "postcard",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "16": {
             "name": "letter",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "17": {
             "name": "product",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "18": {
             "name": "picture",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "19": {
             "name": "employee",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
+        },
+        "53": {
+            "name": "professor",
+            "attributes": {},
+            "superclassId": "74"
+        },
+        "54": {
+            "name": "assistant_professor",
+            "attributes": {},
+            "superclassId": "74"
+        },
+        "55": {
+            "name": "student",
+            "attributes": {},
+            "superclassId": "14"
+        },
+        "62": {
+            "name": "graduate_student",
+            "attributes": {},
+            "superclassId": "55"
+        },
+        "70": {
+            "name": "Teacher",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "74": {
+            "name": "university_staff",
+            "attributes": {},
+            "superclassId": "70"
         }
     },
     "connectionStartId": "45",
+    "connectionStartNodeId": "71",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

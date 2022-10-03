@@ -27,10 +27,12 @@ class EAD
   end
 
   def create_objects(file)
+
+    parsed_file = JSON.parse(file)
   
-    parsed_nodes = JSON.parse(file)['nodes']
-    parsed_edges = JSON.parse(file)['edges']
-    parsed_tables = JSON.parse(file)['tables']
+    parsed_nodes = parsed_file['nodes']
+    parsed_edges = parsed_file['edges']
+    parsed_tables = parsed_file['tables']
 
     @tables = parsed_tables.map do |id, parsed_table|
       Table.new(id, parsed_table)

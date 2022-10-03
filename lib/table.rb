@@ -20,6 +20,19 @@ class Table < TableEntityBase
     @subclasses = []
   end
 
+  def self.update_superclasses(parsed_tables)
+    Table.all.map do |table|
+      superclass_id = parsed_tables[table.id]["superclassId"] || ""
+
+      unless superclass_id == ""
+        super_class = Table.find superclass_id
+        table.superclass = super_class
+        super_class.subclasses << table
+      end
+
+    end
+  end
+
   def model_name
     name.camelize
   end

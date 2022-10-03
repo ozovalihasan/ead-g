@@ -36,16 +36,7 @@ class EAD
       Table.new(id, parsed_tables[id])
     end
 
-    @tables.map do |table|
-      superclass_id = parsed_tables[table.id]["superclassId"] || ""
-
-      unless superclass_id == ""
-        super_class = Table.find superclass_id
-        table.superclass = super_class
-        super_class.subclasses << table
-      end
-
-    end
+    Table.update_superclasses(parsed_tables)
     
     @nodes = parsed_nodes.map do |node|
       Entity.new(node)

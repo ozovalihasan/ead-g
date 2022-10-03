@@ -6,11 +6,11 @@ describe Association do
   before(:all) do
     ObjectSpace.garbage_collect
     
-    file = JSON.parse(File.read("#{__dir__}/association_spec_sample.json"))
+    parsed_file = JSON.parse(File.read("#{__dir__}/association_spec_sample.json"))
     
-    parsed_nodes = file['nodes']
-    parsed_edges = file['edges']
-    parsed_tables = file['tables']
+    parsed_tables = parsed_file['tables']
+    parsed_nodes = parsed_file['nodes']
+    parsed_edges = parsed_file['edges']
 
     @tables = parsed_tables.map do |(id)|
       Table.new(id, parsed_tables[id])

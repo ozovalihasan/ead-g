@@ -5,23 +5,23 @@ require 'active_support/core_ext/string'
 describe TableEntityBase do
   before do
     ObjectSpace.garbage_collect
-    @ead = EAD.new
-    file = @ead.import_JSON(['./spec/sample_EAD.json'])
+    file = File.read("#{__dir__}/sample_EAD.json")
 
-    @ead.create_objects(file)
+    parsed_tables = JSON.parse(file)['tables']
+    parsed_nodes = JSON.parse(file)['nodes']
 
-    Entity.all.each do |entity|
-      entity.clone_parent.entities << entity
+    @tables = parsed_tables.map do |(id)|
+      Table.new(id, parsed_tables[id])
     end
 
-    @account_history = Entity.find_by_name('account_history')
-    @followed = Entity.find_by_name('followed')
-    @fan = Entity.find_by_name('fan')
+    @nodes = parsed_nodes.map do |node|
+      Entity.new(node)
+    end
   end
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(TableEntityBase.all.size).to eq(25)
+      expect(TableEntityBase.all.size).to eq(36)
     end
   end
 

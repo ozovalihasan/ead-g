@@ -48,6 +48,8 @@ class Association
   end
 
   def set_middle_entity
+    return unless through?
+    
     source = first_entity
     target = second_entity
 
@@ -103,11 +105,6 @@ class Association
     end
   end
 
-  def self.set_middle_entities
-    associations = all.select(&:through?)
-
-    associations.each(&:set_middle_entity)
-  end
 
   def update_model_from_entity
     first_entity.update_model(second_entity, self)

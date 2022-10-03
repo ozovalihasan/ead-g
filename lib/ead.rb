@@ -47,9 +47,7 @@ class EAD
     end
   end
 
-  def check_implement_objects(file)
-    create_objects(file)
-
+  def check_implement_objects
     Table.all.each(&:create_model)
 
     Table.all.each(&:add_polymorphic_reference_migration_for_sti)
@@ -86,6 +84,7 @@ class EAD
   def start(user_arguments)
     check_latest_version
     file = import_JSON(user_arguments)
-    check_implement_objects(file)
+    create_objects(file)
+    check_implement_objects
   end
 end

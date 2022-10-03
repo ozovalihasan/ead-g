@@ -56,7 +56,7 @@ class EAD
     
     Table.all.each(&:add_reference_migration)
 
-    Association.all.each(&:set_middle_entities)
+    Association.all.each(&:set_middle_entity)
 
     Association.all.each(&:update_model_from_entity)
   end

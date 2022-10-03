@@ -62,9 +62,7 @@ class EAD
 
     Association.set_middle_entities
 
-    Association.all.each do |association|
-      association.first_entity.update_model(association.second_entity, association)
-    end
+    Association.all.each(&:update_model_from_entity)
   end
 
   def check_latest_version

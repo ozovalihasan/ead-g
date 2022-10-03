@@ -109,6 +109,10 @@ class Association
     associations.each(&:set_middle_entity)
   end
 
+  def update_model_from_entity
+    first_entity.update_model(second_entity, self)
+  end
+
   def has_many?
     name == 'has_many'
   end

@@ -12,6 +12,7 @@ class Entity < TableEntityBase
     @name = node['data']['name'].split(' || ')[0].underscore.singularize
     @twin_name = node['data']['name'].split(' || ')[1]&.underscore&.singularize
     @clone_parent = Table.find(node['data']['tableId'])
+    @clone_parent.entities << self 
 
     @parent_associations = []
     @associations = []

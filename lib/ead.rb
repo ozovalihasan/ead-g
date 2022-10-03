@@ -50,10 +50,6 @@ class EAD
   def check_implement_objects(file)
     create_objects(file)
 
-    Entity.all.each do |entity|
-      entity.clone_parent.entities << entity
-    end
-
     Table.all.each(&:create_model)
 
     Table.all.each(&:add_polymorphic_reference_migration_for_sti)

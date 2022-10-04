@@ -30,9 +30,9 @@ class EAD
 
     parsed_file = JSON.parse(file)
   
+    parsed_tables = parsed_file['tables']
     parsed_nodes = parsed_file['nodes']
     parsed_edges = parsed_file['edges']
-    parsed_tables = parsed_file['tables']
 
     @tables = parsed_tables.map do |id, parsed_table|
       Table.new(id, parsed_table)

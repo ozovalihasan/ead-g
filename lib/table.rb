@@ -4,7 +4,7 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Table < TableEntityBase
-  attr_accessor :name, :id, :twin_name, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses
+  attr_accessor :name, :id, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses
 
   def initialize(table_id, table)
     @id = table_id

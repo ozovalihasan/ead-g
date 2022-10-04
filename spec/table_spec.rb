@@ -4,6 +4,10 @@ require 'active_support/core_ext/string'
 require 'ead'
 
 describe Table do
+  before :each do
+    ObjectSpace.garbage_collect
+  end
+
   describe "class methods" do 
     let! (:parsed_limited_file) do
       
@@ -16,9 +20,7 @@ describe Table do
       }
     end 
 
-    before do
-      ObjectSpace.garbage_collect
-    end
+    
 
     describe '.initialize' do
       it 'creates an instance of the class correctly' do
@@ -59,7 +61,7 @@ describe Table do
   end
 
   describe "instance methods" do
-    before do
+    before :all do
       ObjectSpace.garbage_collect
 
       parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))

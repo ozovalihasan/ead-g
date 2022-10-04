@@ -30,16 +30,16 @@ class Entity < TableEntityBase
     @children_through = []
   end
 
+  def self.find_by_name(name)
+    all.find { |entity| entity.name == name }
+  end
+
   def model_name
     clone_parent.name.camelize
   end
 
   def root_class_same?(entity)
     table.root_class == entity.table.root_class
-  end
-
-  def self.find_by_name(name)
-    all.find { |entity| entity.name == name }
   end
 
   def clone_name_different?

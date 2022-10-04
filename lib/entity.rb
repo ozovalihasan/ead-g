@@ -3,14 +3,13 @@ require 'association'
 require 'project_file'
 
 class Entity < TableEntityBase
-  attr_accessor(:name, :id, :twin_name, :clone_parent, :parent, :parent_association, :associations, :parent_associations,
+  attr_accessor(:name, :id, :clone_parent, :parent, :parent_association, :associations, :parent_associations,
                 :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
                 :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
 
   def initialize(node)
     @id = node['id']
-    @name = node['data']['name'].split(' || ')[0].underscore.singularize
-    @twin_name = node['data']['name'].split(' || ')[1]&.underscore&.singularize
+    @name = node['data']['name'].underscore.singularize
     @clone_parent = Table.find(node['data']['tableId'])
     @clone_parent.entities << self 
 

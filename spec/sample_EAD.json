@@ -1,6 +1,6 @@
 {
     "version": "0.4.5",
-    "idCounter": 75,
+    "idCounter": 77,
     "associationType": "has_many",
     "nodes": [
         {
@@ -649,7 +649,16 @@
         },
         "70": {
             "name": "Teacher",
-            "attributes": {},
+            "attributes": {
+                "75": {
+                    "name": "full_name",
+                    "type": "string"
+                },
+                "76": {
+                    "name": "branch",
+                    "type": "string"
+                }
+            },
             "superclassId": ""
         },
         "74": {
@@ -658,7 +667,6 @@
             "superclassId": "70"
         }
     },
-    "connectionStartId": "45",
     "connectionStartNodeId": "71",
     "isConnectContinue": false,
     "isMouseOnNode": false,
@@ -666,5 +674,6 @@
     "mouseOnNodeId": null,
     "mouseOnEdgeId": null,
     "selectedNodeIdForThrough": null,
+    "connectionStartId": "45",
     "showTextOnEdges": false
 }

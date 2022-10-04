@@ -85,6 +85,8 @@ describe Table do
       @relation = Table.all.find { |table| table.name == 'relation' }
       @picture = Table.all.find { |table| table.name == 'picture' }
       @professor = Table.all.find { |table| table.name == 'professor' }
+      @student = Table.all.find { |table| table.name == 'student' }
+      @graduate_student = Table.all.find{|table| table.name == 'graduate_student' }
     end
 
     
@@ -148,8 +150,7 @@ describe Table do
           end
           
           command = ''
-          graduate_student = Table.all.find{|table| table.name == 'graduate_student' }
-          graduate_student.generate_reference_migration("supervisor", true)
+          @graduate_student.generate_reference_migration("supervisor", true)
         end
       end
 
@@ -182,6 +183,12 @@ describe Table do
       it 'updates polymorphic names used to create polymorphic associations' do
         @picture.update_polymorphic_names
         expect(@picture.polymorphic_names).to eq(%w[postable imageable])
+
+        @student.update_polymorphic_names
+        expect(@student.polymorphic_names).to eq(%w[teachable])
+
+        @graduate_student.update_polymorphic_names
+        expect(@graduate_student.polymorphic_names).to eq(%w[supervisor])
       end
     end
 

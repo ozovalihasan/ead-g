@@ -1,6 +1,6 @@
 {
     "version": "0.4.5",
-    "idCounter": 77,
+    "idCounter": 96,
     "associationType": "has_many",
     "nodes": [
         {
@@ -301,8 +301,8 @@
             "id": "56",
             "type": "entity",
             "position": {
-                "x": -90,
-                "y": 195
+                "x": -180,
+                "y": 210
             },
             "data": {
                 "tableId": "53",
@@ -312,8 +312,8 @@
             "width": 146,
             "height": 65,
             "positionAbsolute": {
-                "x": -90,
-                "y": 195
+                "x": -180,
+                "y": 210
             },
             "dragging": false
         },
@@ -321,8 +321,8 @@
             "id": "57",
             "type": "entity",
             "position": {
-                "x": 90,
-                "y": 195
+                "x": 15,
+                "y": 210
             },
             "data": {
                 "tableId": "54",
@@ -332,8 +332,8 @@
             "width": 146,
             "height": 65,
             "positionAbsolute": {
-                "x": 90,
-                "y": 195
+                "x": 15,
+                "y": 210
             },
             "dragging": false
         },
@@ -341,8 +341,8 @@
             "id": "63",
             "type": "entity",
             "position": {
-                "x": 0,
-                "y": 360
+                "x": -45,
+                "y": 390
             },
             "data": {
                 "tableId": "62",
@@ -352,32 +352,77 @@
             "width": 146,
             "height": 65,
             "positionAbsolute": {
-                "x": 0,
-                "y": 360
+                "x": -45,
+                "y": 390
             },
             "dragging": false
         },
         {
-            "id": "71",
+            "id": "77",
             "type": "entity",
             "position": {
-                "x": 60,
+                "x": -165,
                 "y": 555
             },
             "data": {
-                "tableId": "70",
-                "name": "Teacher"
+                "tableId": "53",
+                "name": "teachable"
             },
             "selected": false,
             "width": 146,
-            "height": 65
+            "height": 65,
+            "positionAbsolute": {
+                "x": -165,
+                "y": 555
+            },
+            "dragging": false
         },
         {
-            "id": "72",
+            "id": "78",
             "type": "entity",
             "position": {
-                "x": 60,
-                "y": 720
+                "x": -165,
+                "y": 735
+            },
+            "data": {
+                "tableId": "55",
+                "name": "doctoral_student"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": -165,
+                "y": 735
+            },
+            "dragging": false
+        },
+        {
+            "id": "85",
+            "type": "entity",
+            "position": {
+                "x": 225,
+                "y": 210
+            },
+            "data": {
+                "tableId": "70",
+                "name": "supervisor"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": 225,
+                "y": 210
+            },
+            "dragging": false
+        },
+        {
+            "id": "87",
+            "type": "entity",
+            "position": {
+                "x": 15,
+                "y": 735
             },
             "data": {
                 "tableId": "55",
@@ -385,7 +430,102 @@
             },
             "selected": false,
             "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": 15,
+                "y": 735
+            },
+            "dragging": false
+        },
+        {
+            "id": "88",
+            "type": "entity",
+            "position": {
+                "x": 15,
+                "y": 555
+            },
+            "data": {
+                "tableId": "70",
+                "name": "teachable"
+            },
+            "selected": false,
+            "width": 146,
             "height": 65
+        },
+        {
+            "id": "90",
+            "type": "entity",
+            "position": {
+                "x": -570,
+                "y": 510
+            },
+            "data": {
+                "tableId": "54",
+                "name": "assistant_professor"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": -570,
+                "y": 510
+            },
+            "dragging": false
+        },
+        {
+            "id": "91",
+            "type": "entity",
+            "position": {
+                "x": -570,
+                "y": 675
+            },
+            "data": {
+                "tableId": "55",
+                "name": "project_students"
+            },
+            "selected": true,
+            "width": 146,
+            "height": 65
+        },
+        {
+            "id": "93",
+            "type": "entity",
+            "position": {
+                "x": -390,
+                "y": 510
+            },
+            "data": {
+                "tableId": "54",
+                "name": "assistant_professor"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": -390,
+                "y": 510
+            },
+            "dragging": false
+        },
+        {
+            "id": "94",
+            "type": "entity",
+            "position": {
+                "x": -390,
+                "y": 675
+            },
+            "data": {
+                "tableId": "55",
+                "name": "undergraduate_students"
+            },
+            "selected": false,
+            "width": 146,
+            "height": 65,
+            "positionAbsolute": {
+                "x": -390,
+                "y": 675
+            },
+            "dragging": false
         }
     ],
     "edges": [
@@ -558,9 +698,45 @@
             "type": "hasMany"
         },
         {
-            "id": "73",
-            "source": "71",
-            "target": "72",
+            "id": "79",
+            "source": "77",
+            "target": "78",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "86",
+            "source": "85",
+            "target": "63",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "89",
+            "source": "88",
+            "target": "87",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "92",
+            "source": "90",
+            "target": "91",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "95",
+            "source": "93",
+            "target": "94",
             "sourceHandle": "bottom2",
             "targetHandle": "top",
             "label": "has many",
@@ -667,7 +843,7 @@
             "superclassId": "70"
         }
     },
-    "connectionStartNodeId": "71",
+    "connectionStartNodeId": "93",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

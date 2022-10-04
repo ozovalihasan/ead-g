@@ -87,7 +87,7 @@ class Entity < TableEntityBase
         end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.clone_parent.root_class.name.pluralize} }"
       end
 
-      if start_entity.table.superclass
+      if start_entity.table.superclass && start_entity.root_class_name_different?
         end_migration_line['column'] = ":#{start_entity.name}_id"
       end
       

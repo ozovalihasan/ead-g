@@ -89,7 +89,7 @@ class Table < TableEntityBase
       belong_parent_names.count(parent_name) > 1
     end.uniq
 
-    @polymorphic_names = filtered_parent_names.find_all do |parent_name|
+    self.polymorphic_names = filtered_parent_names.find_all do |parent_name|
       belong_parents.find_all do |entity|
         entity.name == parent_name
       end.map(&:clone_parent).map(&:name).uniq.size > 1
@@ -98,11 +98,11 @@ class Table < TableEntityBase
 
   def check_polymorphic(command)
     update_polymorphic_names
-    @polymorphic_names.each do |poly_name|
+    polymorphic_names.each do |poly_name|
       add_polymorphic_reference(command, poly_name)
     end
 
-    @polymorphic = true if @polymorphic_names.size.positive?
+    self.polymorphic = true if polymorphic_names.size.positive?
   end
 
   def create_model

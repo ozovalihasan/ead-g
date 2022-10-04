@@ -34,7 +34,7 @@ class ProjectFile
           line.gsub!(/ *\n/, '')
           line_content.each do |key, value|
             if line.include? key
-              line.gsub!(/#{key}: [^(\s,)]*/, "#{key}: #{value}")
+              line.gsub!(/#{key}: [^(,)]*/, "#{key}: #{value}")
             else
               line << ", #{key}: #{value}"
             end

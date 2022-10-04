@@ -110,7 +110,7 @@ class Table < TableEntityBase
 
     command = "bundle exec rails generate model #{model_name}"
 
-    if subclasses && (root_class == self)
+    if (subclasses.any?) && (root_class?)
       command << " type"
     end
 

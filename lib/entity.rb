@@ -58,6 +58,7 @@ class Entity < TableEntityBase
   end
 
   def update_end_model_migration_files(start_entity, association)
+    
     return unless association.has_any?
 
     end_model_line = {}
@@ -92,6 +93,12 @@ class Entity < TableEntityBase
       end
       
     end
+
+    update_project_files(start_entity, end_model_line, end_migration_line)
+  end
+
+  def update_project_files(start_entity, end_model_line, end_migration_line)
+    polymorphic_end = one_polymorphic_names?(start_entity)
 
     if polymorphic_end
       ProjectFile.update_line(table.name, 'model', /belongs_to :#{start_entity.name}/, end_model_line)

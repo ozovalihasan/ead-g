@@ -122,6 +122,70 @@ describe Entity do
 
     describe '#update_end_model_migration_files' do
       it 'updates model and migration files of a table' do
+        allow_any_instance_of(Entity).to receive(:update_project_files) do |_,start_entity, end_model_line, end_migration_line|
+          
+          expect([
+                  [
+                    "famous_person", 
+                    {"belongs_to" => ":famous_person", "class_name" => "\"User\""}, 
+                    {"foreign_key" => "{ to_table: :users }", "null" => "false"}
+                  ],
+                  [
+                    "supervisor", 
+                    {"belongs_to" => ":supervisor", "class_name" => "\"Teacher\""}, 
+                    {"foreign_key" => "{ to_table: :teachers }", "null" => "true"}
+                  ],
+                  [
+                    "assistant_professor", 
+                    {"belongs_to" => ":assistant_professor"}, 
+                    {"column" => ":assistant_professor_id", "foreign_key" => "{ to_table: :teachers }", "null" => "true"}
+                  ],
+                  [
+                    "client", 
+                    {"belongs_to" => ":client", "class_name" => "\"User\"", "optional" => "true"}, 
+                    {"foreign_key" => "{ to_table: :users }", "null" => "true"}
+                  ]
+                ]).to include( [ start_entity.name, end_model_line, end_migration_line ] )
+        end
+        
+        famous_person = Entity.find_by_name('famous_person')
+        association = famous_person.associations.find do |association|
+          association.name == 'has_many'
+        end
+        @followed.update_end_model_migration_files( famous_person, association )
+
+        supervisor = Entity.find_by_name('supervisor')
+        supervisee = Entity.find_by_name('supervisee')
+        association = supervisor.associations.find do |association|
+          association.name == 'has_many'
+        end                                                                  
+        supervisee.update_end_model_migration_files( supervisor, association )
+
+        assistant_professor = Entity.find_by_name('assistant_professor')
+        project_student = Entity.find_by_name('project_student')
+        association = assistant_professor.associations.find do |association|
+          association.name == 'has_many'
+        end                                                                  
+        project_student.update_end_model_migration_files( assistant_professor, association )
+        
+        client = Entity.find_by_name('client')
+        subordinate = Entity.find_by_name('subordinate')
+        association = subordinate.associations.find do |association|
+          association.name == 'has_many'
+        end                                                                  
+        subordinate.update_end_model_migration_files( client, association )
+
+        association = famous_person.associations.find do |association|
+          association.name == ':through'
+        end                                                                  
+        expect(
+          @fan.update_end_model_migration_files( famous_person, association )
+        ).to eq nil
+      end
+    end
+    
+    describe '#update_project_files' do
+      it 'updates model and migration files of a table' do
         allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
           expect(%w[relation]).to include name
           expect([
@@ -144,7 +208,6 @@ describe Entity do
         end
 
         famous_person = Entity.find_by_name('famous_person')
-
         association = famous_person.associations.find do |association|
           association.name == 'has_many'
         end
@@ -157,7 +220,7 @@ describe Entity do
         association = famous_person.associations.find do |association|
           association.name == ':through'
         end                                                                  
-                                                                
+
         @fan.update_end_model_migration_files( famous_person, association )
       end
     end

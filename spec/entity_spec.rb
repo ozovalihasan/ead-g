@@ -93,10 +93,10 @@ describe Entity do
       end
     end
 
-    describe '#clone_name_different?' do
+    describe '#table_name_different?' do
       it 'returns boolean showing whether the clone and its table names are different' do
-        expect(@supplier.clone_name_different?).to eq(false)
-        expect(@fan.clone_name_different?).to eq(true)
+        expect(@supplier.table_name_different?).to eq(false)
+        expect(@fan.table_name_different?).to eq(true)
       end
     end
 

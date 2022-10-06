@@ -41,7 +41,7 @@ class Entity < TableEntityBase
     table.root_class == entity.table.root_class
   end
 
-  def clone_name_different?
+  def table_name_different?
     table.name != name
   end
 
@@ -76,7 +76,7 @@ class Entity < TableEntityBase
     polymorphic_end = one_polymorphic_names?(start_entity)
 
     unless polymorphic_end
-      if start_entity.clone_name_different?
+      if start_entity.table_name_different?
         end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\""
       end
 
@@ -177,11 +177,11 @@ class Entity < TableEntityBase
         line_content['source_type'] = "\"#{end_entity.table.name.camelize}\" "
       end
     elsif !intermediate_entity
-      line_content['class_name'] = "\"#{end_entity.table.name.camelize}\"" if end_entity.clone_name_different?
+      line_content['class_name'] = "\"#{end_entity.table.name.camelize}\"" if end_entity.table_name_different?
 
       if end_entity.one_polymorphic_names?(self)
         line_content['as'] = ":#{name}"
-      elsif clone_name_different?
+      elsif table_name_different?
         line_content['foreign_key'] = "\"#{name.singularize}_id\""
       end
     end

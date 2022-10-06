@@ -167,7 +167,7 @@ describe Table do
         end
         
         graduate_student = Table.all.find{|table| table.name == 'graduate_student' }
-        graduate_student.check_polymorphic("")
+        graduate_student.update_polymorphic_names
 
         graduate_student.add_polymorphic_reference_migration_for_sti
       end
@@ -185,12 +185,20 @@ describe Table do
       it 'updates polymorphic names used to create polymorphic associations' do
         @picture.update_polymorphic_names
         expect(@picture.polymorphic_names).to eq(%w[postable imageable])
+        expect(@picture.polymorphic).to eq(true)
 
         @student.update_polymorphic_names
         expect(@student.polymorphic_names).to eq(%w[teachable])
+        expect(@student.polymorphic).to eq(true)
 
         @graduate_student.update_polymorphic_names
         expect(@graduate_student.polymorphic_names).to eq(%w[supervisor])
+        expect(@graduate_student.polymorphic).to eq(true)
+
+        @account_history.update_polymorphic_names
+        expect(@account_history.polymorphic_names).to eq([])
+        expect(@account_history.polymorphic).to eq(false)
+
       end
     end
 
@@ -198,12 +206,10 @@ describe Table do
       it 'checks polymorphic associations and updates polymorphic instance variable and the command given as parameter' do
         command = ''
         @picture.check_polymorphic(command)
-        expect(@picture.polymorphic).to eq(true)
         expect(command).to eq(' postable:references{polymorphic} imageable:references{polymorphic}')
 
         command = ''
         @account_history.check_polymorphic(command)
-        expect(@account_history.polymorphic).to eq(false)
         expect(command).to eq('')
       end
     end

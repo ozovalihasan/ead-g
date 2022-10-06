@@ -98,30 +98,49 @@ class Entity < TableEntityBase
   end
 
   def update_project_files(start_entity, end_model_line, end_migration_line)
+    update_model_files(start_entity, end_model_line)
+    update_migration_files(start_entity, end_migration_line)
+  end
+  
+  def update_model_files(start_entity, end_model_line)
+    
+    return if end_model_line.empty?
+
     polymorphic_end = one_polymorphic_names?(start_entity)
 
     if polymorphic_end
       ProjectFile.update_line(table.name, 'model', /belongs_to :#{start_entity.name}/, end_model_line)
     else
-      ProjectFile.add_belong_line(clone_parent.name, end_model_line) unless end_model_line.empty?
+      ProjectFile.add_belong_line(clone_parent.name, end_model_line)
     end
+  end
 
-    unless end_migration_line.empty?
-      if table.root_class? && polymorphic_end
-        migration_name = "Create#{table.name.camelize.pluralize}".underscore
+  def update_migration_files(start_entity, end_migration_line)
 
-        ProjectFile.update_line(migration_name, 'migration', /t.references :#{start_entity.name}/,
-                                end_migration_line)
-        
-      else
-      
-        migration_name = "Add#{start_entity.name.camelize}RefTo#{clone_parent.root_class.name.camelize}".underscore
+    return if end_migration_line.empty?
+    polymorphic_end = one_polymorphic_names?(start_entity)
 
-        ProjectFile.update_line(migration_name, 'reference_migration', /add_reference :#{clone_parent.root_class.name.pluralize}/,
-                                end_migration_line)
-      end
-      
+    if table.root_class? && polymorphic_end
+      migration_name = "Create#{ table.name.camelize.pluralize }".underscore
+
+      ProjectFile.update_line(
+        migration_name, 
+        'migration', 
+        /t.references :#{start_entity.name}/,
+        end_migration_line
+      )
+
+    else
+      migration_name = "Add#{ start_entity.name.camelize }RefTo#{ clone_parent.root_class.name.camelize }".underscore
+
+      ProjectFile.update_line(
+        migration_name, 
+        'reference_migration', 
+        /add_reference :#{clone_parent.root_class.name.pluralize}/,
+        end_migration_line
+      )
     end
+      
   end
 
   def update_start_model_file(end_entity, association)

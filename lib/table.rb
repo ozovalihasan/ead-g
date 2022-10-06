@@ -94,6 +94,8 @@ class Table < TableEntityBase
         entity.name == parent_name
       end.map(&:clone_parent).map(&:name).uniq.size > 1
     end
+
+    self.polymorphic = true if polymorphic_names.size.positive?
   end
 
   def check_polymorphic(command)
@@ -101,8 +103,6 @@ class Table < TableEntityBase
     polymorphic_names.each do |poly_name|
       add_polymorphic_reference(command, poly_name)
     end
-
-    self.polymorphic = true if polymorphic_names.size.positive?
   end
 
   def create_model

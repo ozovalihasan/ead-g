@@ -58,6 +58,7 @@ describe Entity do
   context "instance methods" do  
     before :all do
       ObjectSpace.garbage_collect
+
       parsed_nodes = @parsed_file['nodes']
       parsed_edges = @parsed_file['edges']
 
@@ -68,6 +69,8 @@ describe Entity do
       @edges = parsed_edges.map do |edge|
         Association.new(edge)
       end
+
+      Table.all.each(&:update_polymorphic_names)
 
       @account_history = Entity.find_by_name('account_history')
       @followed = Entity.find_by_name('followed')
@@ -121,9 +124,8 @@ describe Entity do
     end
 
     describe '#update_end_model_migration_files' do
-      it 'updates model and migration files of a table' do
+      it 'prepare necessary attributes to update model and migration_files' do
         allow_any_instance_of(Entity).to receive(:update_project_files) do |_,start_entity, end_model_line, end_migration_line|
-          
           expect([
                   [
                     "famous_person", 
@@ -132,8 +134,8 @@ describe Entity do
                   ],
                   [
                     "supervisor", 
-                    {"belongs_to" => ":supervisor", "class_name" => "\"Teacher\""}, 
-                    {"foreign_key" => "{ to_table: :teachers }", "null" => "true"}
+                    {"belongs_to" => ":supervisor"}, 
+                    {"null" => "true"}
                   ],
                   [
                     "assistant_professor", 
@@ -186,42 +188,89 @@ describe Entity do
     
     describe '#update_project_files' do
       it 'updates model and migration files of a table' do
-        allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
-          expect(%w[relation]).to include name
-          expect([
-                  { 'belongs_to' => ':famous_person', 'class_name' => '"User"' }
-                ]).to include line_content
+        allow_any_instance_of(Entity).to receive(:update_model_files) do |_, start_entity, end_model_line|
+          expect([ "famous_person" ]).to include start_entity.name
+          expect([ { "mock_end_model_line_key" => "mock_end_model_line_value" } ]).to include end_model_line
         end
-        
-        allow(ProjectFile).to receive(:update_line) do |name, type, keywords, line_content|
-          expect(%w[add_famous_person_ref_to_relation]).to include name
-          expect(%w[reference_migration]).to include type
-          expect([
-                  /add_reference :relations/
-                ]).to include keywords
-          expect([
-                  {
-                    'foreign_key' => '{ to_table: :users }',
-                    'null' => 'false'
-                  }
-                ]).to include line_content
+
+        allow_any_instance_of(Entity).to receive(:update_migration_files) do |_, start_entity, end_migration_line|
+          expect([ "famous_person" ]).to include start_entity.name
+          expect([ { "mock_end_migration_line_key" => "mock_end_migration_line_value" }, ]).to include end_migration_line
         end
 
         famous_person = Entity.find_by_name('famous_person')
-        association = famous_person.associations.find do |association|
-          association.name == 'has_many'
+
+        @followed.update_project_files(
+          famous_person, 
+          { "mock_end_model_line_key" => "mock_end_model_line_value" },
+          { "mock_end_migration_line_key" => "mock_end_migration_line_value" },
+        )
+        
+      end
+    end
+
+    describe '#update_model_files' do
+      it 'updates model files' do
+        allow(ProjectFile).to receive(:add_belong_line) do | name, line_content|
+
+          expect([
+            ["account", {"mock_end_model_line_key" => "mock_end_model_line_value"}]
+
+          ]).to include [name, line_content]
+        end
+        
+        allow(ProjectFile).to receive(:update_line) do | name, type, keywords, line_content|
+          expect([
+            ["student", "model", /belongs_to :teachable/, {"mock_end_model_line_key" => "mock_end_model_line_value"}]
+          ]).to include [name, type, keywords, line_content]
+          
         end
 
-        @followed.update_end_model_migration_files(
-          famous_person, 
-          association  
-        )
+        end_model_line = { "mock_end_model_line_key" => "mock_end_model_line_value" }
 
-        association = famous_person.associations.find do |association|
-          association.name == ':through'
-        end                                                                  
+        teachable = Entity.find_by_name('teachable')
+        doctoral_student = Entity.find_by_name('doctoral_student')
+        doctoral_student.update_model_files( teachable, end_model_line )
 
-        @fan.update_end_model_migration_files( famous_person, association )
+        supplier = Entity.find_by_name('supplier')
+        account = Entity.find_by_name('account')
+        account.update_model_files( supplier, end_model_line )
+        
+      end
+    end
+
+    describe '#update_migration_files' do
+      it 'updates model files' do
+        
+        allow(ProjectFile).to receive(:update_line) do | name, type, keywords, line_content|
+          expect([
+            [
+              "create_pictures", 
+              "migration", 
+              /t.references :postable/, 
+              {"mock_end_migration_line_key" => "mock_end_migration_line_value"}
+            ],
+            [
+              "add_manager_ref_to_user", 
+              "reference_migration", 
+              /add_reference :users/, 
+              {"mock_end_migration_line_key" => "mock_end_migration_line_value"}
+            ]
+
+          ]).to include [name, type, keywords, line_content]
+        end
+
+        end_migration_line = { "mock_end_migration_line_key" => "mock_end_migration_line_value" }
+
+        postable_post_card = Entity.all.select do |entity|
+          entity.name == 'postable' && entity.table.name == 'postcard'
+        end [0]
+        @photograph.update_migration_files( postable_post_card, end_migration_line )
+
+        manager = Entity.find_by_name('manager')
+        subordinate = Entity.find_by_name('subordinate')
+        subordinate.update_migration_files( manager, end_migration_line )
+        
       end
     end
 

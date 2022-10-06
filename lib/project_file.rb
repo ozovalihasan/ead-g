@@ -3,12 +3,12 @@ require 'fileutils'
 class ProjectFile
   def self.open_close(name, type, &block)
     case type
-    when 'migration'
-      tempfile_name = './db/migrate/migration_update.rb'
-      file_name = Dir.glob("./db/migrate/*_#{name.pluralize}.rb").first
     when 'model'
       tempfile_name = './app/models/model_update.rb'
       file_name = "./app/models/#{name}.rb"
+    when 'migration'
+      tempfile_name = './db/migrate/migration_update.rb'
+      file_name = Dir.glob("./db/migrate/*_#{name}.rb").first
     when 'reference_migration'
       tempfile_name = './db/migrate/reference_migration_update.rb'
       file_name = Dir.glob("./db/migrate/*_#{name}.rb").first

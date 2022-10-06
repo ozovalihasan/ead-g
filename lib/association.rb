@@ -74,8 +74,8 @@ class Association
            target.children_has_one +
            target.children_has_one_through
          ).include?(through_entity) || (
-           through_entity.parents_has_many.map(&:clone_parent).include?(target.clone_parent) ||
-           through_entity.parents_has_one.map(&:clone_parent).include?(target.clone_parent)
+           through_entity.parents_has_many.map(&:table).include?(target.table) ||
+           through_entity.parents_has_one.map(&:table).include?(target.table)
          )
        )
 

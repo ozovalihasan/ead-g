@@ -23,8 +23,8 @@ describe Entity do
         
         expect(photograph.id).to eq('36')
         expect(photograph.name).to eq('photograph')
-        expect(photograph.clone_parent.name).to eq('picture')
-        expect(photograph.clone_parent.entities.size).to eq(1)
+        expect(photograph.table.name).to eq('picture')
+        expect(photograph.table.entities.size).to eq(1)
         expect(photograph.parent_associations).to be_empty()
         expect(photograph.associations).to be_empty()
         expect(photograph.parents_has_one).to be_empty()
@@ -111,15 +111,9 @@ describe Entity do
       it 'returns boolean showing whether a entity name is one of polymorphic names of self' do
         photograph = Entity.find_by_name('photograph')
         postable = Entity.find_by_name('postable')
-        photograph.clone_parent.check_polymorphic('')
+        photograph.table.check_polymorphic('')
 
         expect(photograph.one_polymorphic_names?(postable)).to eq(true)
-      end
-    end
-
-    describe '#table' do
-      it 'returns the table of the entity' do
-        expect(@fan.table.name).to eq('user')
       end
     end
 
@@ -306,7 +300,7 @@ describe Entity do
                             end [0]
         photograph = Entity.find_by_name('photograph')
 
-        photograph.clone_parent.check_polymorphic('')
+        photograph.table.check_polymorphic('')
 
         postable_post_card.update_start_model_file(photograph, postable_post_card.associations.find(&:has_many?))
         postable_post_card.update_start_model_file(imageable_employee, postable_post_card.associations.find(&:through?))

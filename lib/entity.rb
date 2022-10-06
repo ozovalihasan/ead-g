@@ -3,15 +3,15 @@ require 'association'
 require 'project_file'
 
 class Entity < TableEntityBase
-  attr_accessor(:name, :id, :clone_parent, :parent, :parent_association, :associations, :parent_associations,
+  attr_accessor(:name, :id, :table, :parent, :parent_association, :associations, :parent_associations,
                 :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
                 :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
 
   def initialize(node)
     @id = node['id']
     @name = node['data']['name'].underscore.singularize
-    @clone_parent = Table.find(node['data']['tableId'])
-    @clone_parent.entities << self 
+    @table = Table.find(node['data']['tableId'])
+    @table.entities << self 
 
     @parent_associations = []
     @associations = []
@@ -34,7 +34,7 @@ class Entity < TableEntityBase
   end
 
   def model_name
-    clone_parent.name.camelize
+    table.name.camelize
   end
 
   def root_class_same?(entity)
@@ -42,19 +42,15 @@ class Entity < TableEntityBase
   end
 
   def clone_name_different?
-    clone_parent.name != name
+    table.name != name
   end
 
   def root_class_name_different?
-    clone_parent.root_class.name != name
+    table.root_class.name != name
   end
 
   def one_polymorphic_names?(entity)
     table.polymorphic && table.polymorphic_names.include?(entity.name)
-  end
-
-  def table
-    clone_parent
   end
 
   def update_end_model_migration_files(start_entity, association)
@@ -81,11 +77,11 @@ class Entity < TableEntityBase
 
     unless polymorphic_end
       if start_entity.clone_name_different?
-        end_model_line['class_name'] = "\"#{start_entity.clone_parent.name.camelize}\""
+        end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\""
       end
 
       if start_entity.root_class_name_different?
-        end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.clone_parent.root_class.name.pluralize} }"
+        end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.table.root_class.name.pluralize} }"
       end
 
       if start_entity.table.superclass && start_entity.root_class_name_different?
@@ -111,7 +107,7 @@ class Entity < TableEntityBase
     if polymorphic_end
       ProjectFile.update_line(table.name, 'model', /belongs_to :#{start_entity.name}/, end_model_line)
     else
-      ProjectFile.add_belong_line(clone_parent.name, end_model_line)
+      ProjectFile.add_belong_line(table.name, end_model_line)
     end
   end
 
@@ -131,12 +127,12 @@ class Entity < TableEntityBase
       )
 
     else
-      migration_name = "Add#{ start_entity.name.camelize }RefTo#{ clone_parent.root_class.name.camelize }".underscore
+      migration_name = "Add#{ start_entity.name.camelize }RefTo#{ table.root_class.name.camelize }".underscore
 
       ProjectFile.update_line(
         migration_name, 
         'reference_migration', 
-        /add_reference :#{clone_parent.root_class.name.pluralize}/,
+        /add_reference :#{table.root_class.name.pluralize}/,
         end_migration_line
       )
     end

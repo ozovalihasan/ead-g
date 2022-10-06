@@ -92,7 +92,7 @@ class Table < TableEntityBase
     self.polymorphic_names = filtered_parent_names.find_all do |parent_name|
       belong_parents.find_all do |entity|
         entity.name == parent_name
-      end.map(&:clone_parent).map(&:name).uniq.size > 1
+      end.map(&:table).map(&:name).uniq.size > 1
     end
 
     self.polymorphic = true if polymorphic_names.size.positive?

@@ -22,6 +22,25 @@ describe EAD do
       file = @ead.import_JSON(['custom.json'])
       expect(file).to eq(@file)
     end
+    
+    it 'raises an error if the version of JSON file is not compatible' do
+      shown_texts = []
+      allow_any_instance_of(Object).to receive(:puts) do |_, str|
+        shown_texts << str
+        
+      end
+      incompatible_file = {version: "0.3.0"}.to_json
+      allow(File).to receive(:read).and_return(incompatible_file)
+      expect { @ead.import_JSON([]) }.to raise_error('Incompatible version')
+      expect([
+        "\n\n----------------", 
+        "\e[31m\ngem install ead -v 0.3.0\e[0m", 
+        "\e[31mVersions of your EAD file and the gem are not compatible. So, you may have"\
+        " some unexpected results.To run your EAD file correctly, please run\e[0m",
+        "----------------\n\n"
+      ]).to match_array shown_texts
+
+    end
   end
 
   describe '#create_objects' do

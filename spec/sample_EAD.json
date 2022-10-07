@@ -1,7 +1,7 @@
 {
     "version": "0.4.5",
-    "idCounter": 96,
-    "associationType": "has_many",
+    "idCounter": 118,
+    "associationType": "through",
     "nodes": [
         {
             "id": "20",
@@ -14,8 +14,8 @@
                 "tableId": "14",
                 "name": "manager"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 495,
@@ -34,8 +34,8 @@
                 "tableId": "14",
                 "name": "subordinates"
             },
-            "width": 146,
-            "height": 65
+            "width": 147,
+            "height": 66
         },
         {
             "id": "22",
@@ -48,8 +48,8 @@
                 "tableId": "14",
                 "name": "clients"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 495,
@@ -68,8 +68,8 @@
                 "tableId": "14",
                 "name": "famous_person"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 1020,
@@ -88,8 +88,8 @@
                 "tableId": "14",
                 "name": "fan"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
@@ -108,8 +108,8 @@
                 "tableId": "13",
                 "name": "followings"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
@@ -128,8 +128,8 @@
                 "tableId": "13",
                 "name": "followeds"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 1020,
@@ -148,8 +148,8 @@
                 "tableId": "16",
                 "name": "postable"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 285,
@@ -168,8 +168,8 @@
                 "tableId": "17",
                 "name": "imageable"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 660,
@@ -188,8 +188,8 @@
                 "tableId": "18",
                 "name": "photographs"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "dragging": false,
             "positionAbsolute": {
@@ -208,8 +208,8 @@
                 "tableId": "19",
                 "name": "imageable"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 855,
@@ -228,8 +228,8 @@
                 "tableId": "15",
                 "name": "postable"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 480,
@@ -248,8 +248,8 @@
                 "tableId": "10",
                 "name": "suppliers"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 1095,
@@ -268,8 +268,8 @@
                 "tableId": "11",
                 "name": "accounts"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 1095,
@@ -288,8 +288,8 @@
                 "tableId": "12",
                 "name": "account_history"
             },
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "selected": false,
             "positionAbsolute": {
                 "x": 1095,
@@ -301,19 +301,19 @@
             "id": "56",
             "type": "entity",
             "position": {
-                "x": -180,
-                "y": 210
+                "x": -210,
+                "y": 255
             },
             "data": {
                 "tableId": "53",
                 "name": "supervisor"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
-                "x": -180,
-                "y": 210
+                "x": -210,
+                "y": 255
             },
             "dragging": false
         },
@@ -321,19 +321,19 @@
             "id": "57",
             "type": "entity",
             "position": {
-                "x": 15,
-                "y": 210
+                "x": 120,
+                "y": 255
             },
             "data": {
                 "tableId": "54",
                 "name": "supervisor"
             },
-            "selected": false,
-            "width": 146,
-            "height": 65,
+            "selected": true,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
-                "x": 15,
-                "y": 210
+                "x": 120,
+                "y": 255
             },
             "dragging": false
         },
@@ -349,8 +349,8 @@
                 "name": "supervisee"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": -45,
                 "y": 390
@@ -369,8 +369,8 @@
                 "name": "teachable"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": -165,
                 "y": 555
@@ -389,8 +389,8 @@
                 "name": "doctoral_student"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": -165,
                 "y": 735
@@ -401,19 +401,19 @@
             "id": "85",
             "type": "entity",
             "position": {
-                "x": 225,
-                "y": 210
+                "x": -45,
+                "y": 255
             },
             "data": {
                 "tableId": "70",
                 "name": "supervisor"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
-                "x": 225,
-                "y": 210
+                "x": -45,
+                "y": 255
             },
             "dragging": false
         },
@@ -429,8 +429,8 @@
                 "name": "student"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": 15,
                 "y": 735
@@ -449,8 +449,8 @@
                 "name": "teachable"
             },
             "selected": false,
-            "width": 146,
-            "height": 65
+            "width": 147,
+            "height": 66
         },
         {
             "id": "90",
@@ -464,8 +464,8 @@
                 "name": "assistant_professor"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": -570,
                 "y": 510
@@ -483,9 +483,9 @@
                 "tableId": "55",
                 "name": "project_students"
             },
-            "selected": true,
-            "width": 146,
-            "height": 65
+            "selected": false,
+            "width": 147,
+            "height": 66
         },
         {
             "id": "93",
@@ -499,8 +499,8 @@
                 "name": "assistant_professor"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": -390,
                 "y": 510
@@ -519,11 +519,91 @@
                 "name": "undergraduate_students"
             },
             "selected": false,
-            "width": 146,
-            "height": 65,
+            "width": 147,
+            "height": 66,
             "positionAbsolute": {
                 "x": -390,
                 "y": 675
+            },
+            "dragging": false
+        },
+        {
+            "id": "98",
+            "type": "entity",
+            "position": {
+                "x": 540,
+                "y": 1005
+            },
+            "data": {
+                "tableId": "97",
+                "name": "Car"
+            },
+            "selected": false,
+            "width": 147,
+            "height": 66,
+            "positionAbsolute": {
+                "x": 540,
+                "y": 1005
+            },
+            "dragging": false
+        },
+        {
+            "id": "99",
+            "type": "entity",
+            "position": {
+                "x": 285,
+                "y": 795
+            },
+            "data": {
+                "tableId": "14",
+                "name": "drivable"
+            },
+            "selected": false,
+            "width": 147,
+            "height": 66,
+            "positionAbsolute": {
+                "x": 285,
+                "y": 795
+            },
+            "dragging": false
+        },
+        {
+            "id": "102",
+            "type": "entity",
+            "position": {
+                "x": 450,
+                "y": 795
+            },
+            "data": {
+                "tableId": "101",
+                "name": "drivable"
+            },
+            "selected": false,
+            "width": 147,
+            "height": 66,
+            "positionAbsolute": {
+                "x": 450,
+                "y": 795
+            },
+            "dragging": false
+        },
+        {
+            "id": "107",
+            "type": "entity",
+            "position": {
+                "x": 780,
+                "y": 795
+            },
+            "data": {
+                "tableId": "106",
+                "name": "Technician"
+            },
+            "selected": false,
+            "width": 147,
+            "height": 66,
+            "positionAbsolute": {
+                "x": 780,
+                "y": 795
             },
             "dragging": false
         }
@@ -713,7 +793,8 @@
             "sourceHandle": "bottom2",
             "targetHandle": "top",
             "label": "has many",
-            "type": "hasMany"
+            "type": "hasMany",
+            "selected": false
         },
         {
             "id": "89",
@@ -741,6 +822,46 @@
             "targetHandle": "top",
             "label": "has many",
             "type": "hasMany"
+        },
+        {
+            "id": "114",
+            "source": "102",
+            "target": "98",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany",
+            "selected": false
+        },
+        {
+            "id": "115",
+            "source": "99",
+            "target": "98",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "label": "has many",
+            "type": "hasMany"
+        },
+        {
+            "id": "116",
+            "source": "107",
+            "target": "98",
+            "sourceHandle": "bottom1",
+            "targetHandle": "top",
+            "label": "has one",
+            "type": "hasOne"
+        },
+        {
+            "id": "117",
+            "source": "107",
+            "target": "102",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "label": "through",
+            "type": "through",
+            "data": {
+                "throughNodeId": "98"
+            }
         }
     ],
     "tables": {
@@ -841,9 +962,29 @@
             "name": "university_staff",
             "attributes": {},
             "superclassId": "70"
+        },
+        "96": {
+            "name": "Vehicle",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "97": {
+            "name": "Car",
+            "attributes": {},
+            "superclassId": "96"
+        },
+        "101": {
+            "name": "Driver",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "106": {
+            "name": "Technician",
+            "attributes": {},
+            "superclassId": ""
         }
     },
-    "connectionStartNodeId": "93",
+    "connectionStartNodeId": "107",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

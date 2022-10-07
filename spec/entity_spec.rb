@@ -277,11 +277,15 @@ describe Entity do
         @fan.update_start_model_file(famous_person, @fan.associations.find(&:through?))
 
         allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
-          expect(%w[postcard postcard]).to include name
-          expect(%w[photographs imageables]).to include end_model
-          expect([{ 'has_many' => ':photographs', 'class_name' => '"Picture"', 'as' => ':postable' },
-                  { 'has_many' => ':employees', 'through' => ':photographs', 'source' => ':imageable',
-                    'source_type' => '"Employee" ' }]).to include line_content
+          expect([
+                   ['postcard', 'photographs',
+                    { 'as' => ':postable', 'class_name' => '"Picture"', 'has_many' => ':photographs' }],
+                   ['postcard', 'imageables',
+                    { 'has_many' => ':employees', 'source' => ':imageable', 'source_type' => '"Employee" ', 'through' => ':photographs' }],
+                   ['account', 'account_history', { 'has_one' => ':account_history' }],
+                   ['technician', 'drivable',
+                    { 'has_one' => ':driver', 'source' => ':drivable', 'source_type' => '"Driver" ', 'through' => ':car' }]
+                 ]).to include [name, end_model, line_content]
         end
 
         imageable_employee = Entity.all.select do |entity|
@@ -296,6 +300,15 @@ describe Entity do
 
         postable_post_card.update_start_model_file(photograph, postable_post_card.associations.find(&:has_many?))
         postable_post_card.update_start_model_file(imageable_employee, postable_post_card.associations.find(&:through?))
+
+        account = Entity.find_by_name('account')
+        account.update_start_model_file(@account_history, account.associations.find(&:has_one?))
+
+        technician = Entity.find_by_name('technician')
+        drivable_driver = Entity.all.select do |entity|
+          entity.name == 'drivable' && entity.table.name == 'driver'
+        end [0]
+        technician.update_start_model_file(drivable_driver, technician.associations.find(&:through?))
       end
     end
 

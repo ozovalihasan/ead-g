@@ -94,16 +94,20 @@ describe EAD do
       it 'checks the latest version of the gem and prints a warning about new release of the gem' do
         response = RestClient::Response.new [{ name: '' }].to_json
 
-        allow(RestClient::Request).to receive(:execute).and_return(response)
-        expect { @ead.check_latest_version }.to output(
-          "\n\n----------------" \
-          "\n\n" \
-          "\e[33m" \
-          'A new version of this gem has been released.' \
-          ' Please check it. https://github.com/ozovalihasan/ead-g/releases' \
-          "\e[0m" \
-          "\n\n----------------\n\n"
-        ).to_stdout
+        allow(RestClient).to receive(:get).and_return(response)
+        
+        shown_texts = []
+        allow_any_instance_of(Object).to receive(:puts) do |_, str|
+          shown_texts << str
+        end
+
+        @ead.check_latest_version
+        
+        expect([
+          "\n\n----------------", 
+          "\n\e[33mA new version of this gem has been released. Please check it. https://github.com/ozovalihasan/ead-g/releases\e[0m", 
+          "\n----------------\n\n"
+        ]).to match_array(shown_texts)
       end
     end
 
@@ -111,7 +115,7 @@ describe EAD do
       it 'prints a warning about unstable internet connection' do
         response = StandardError
 
-        allow(RestClient::Request).to receive(:execute).and_return(response)
+        allow(RestClient).to receive(:get).and_return(response)
 
         expect { @ead.check_latest_version }.to output(
           "\n\n----------------" \
@@ -150,6 +154,11 @@ describe EAD do
     end
 
     it 'completes all necessary actions completely' do
+      allow_any_instance_of(Object).to receive(:puts)
+
+      response = RestClient::Response.new [{ name: '' }].to_json
+      allow(RestClient).to receive(:get).and_return(response)
+      
       changes = []
       allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
         changes << {file_name: name, type: "model", line: line_content, action: "added" }

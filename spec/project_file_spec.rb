@@ -7,14 +7,30 @@ describe ProjectFile do
       before(:each) do
         allow(Dir).to receive(:glob) do |name|
           expect([
-            "./db/migrate/*_mock_names.rb",
             "./db/migrate/*_mock_name.rb"
           ]).to include name
         end.and_return(['mock_found_file'])
 
-        allow(File).to receive(:open).and_return('mock tempfile')
-        allow(File).to receive(:new).and_return('mock file')
-        allow_any_instance_of(String).to receive(:close)
+        allow(File).to receive(:open) do |file_name|
+          
+          expect([
+            "./app/models/model_update.rb",
+            "./db/migrate/migration_update.rb",
+            "./db/migrate/reference_migration_update.rb"
+          ]).to include file_name
+        
+          double('file', readline: "mock tempfile", close: "")
+        end
+
+        allow(File).to receive(:new) do |file_name|
+          expect([
+            "./app/models/mock_name.rb",
+            "mock_found_file"
+          ]).to include file_name
+          
+          double('file', readline: "mock file", close: "")
+        end
+
         allow(FileUtils).to receive(:mv) do |deleted_file, changed_file|
           expect([
             './db/migrate/migration_update.rb', 
@@ -29,9 +45,7 @@ describe ProjectFile do
   
         result = ''
         ProjectFile.open_close('mock_name', 'model') do |temp, tempfile|
-          result << temp
-          result << ' '
-          result << tempfile
+          result = (temp.readline + " " + tempfile.readline)
         end
 
         expect(result).to eq(
@@ -43,26 +57,22 @@ describe ProjectFile do
       it 'works on a migration file' do 
         result2 = ''
         ProjectFile.open_close('mock_name', 'migration') do |temp, tempfile|
-          result2 << tempfile
-          result2 << ' '
-          result2 << temp
+          result2 = (temp.readline + " " + tempfile.readline)
         end
 
         expect(result2).to eq(
-          'mock tempfile mock file'
+          'mock file mock tempfile'
         )
       end
 
       it 'works on a reference migration file' do
         result3 = ''
         ProjectFile.open_close('mock_name', 'reference_migration') do |temp, tempfile|
-          result3 << tempfile
-          result3 << ' '
-          result3 << temp
+          result3 = (temp.readline + " " + tempfile.readline)
         end
 
         expect(result3).to eq(
-          'mock tempfile mock file'
+          'mock file mock tempfile'
         )
       end
     end

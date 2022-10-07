@@ -7,57 +7,54 @@ describe ProjectFile do
       before(:each) do
         allow(Dir).to receive(:glob) do |name|
           expect([
-            "./db/migrate/*_mock_name.rb"
-          ]).to include name
+                   './db/migrate/*_mock_name.rb'
+                 ]).to include name
         end.and_return(['mock_found_file'])
 
         allow(File).to receive(:open) do |file_name|
-          
           expect([
-            "./app/models/model_update.rb",
-            "./db/migrate/migration_update.rb",
-            "./db/migrate/reference_migration_update.rb"
-          ]).to include file_name
-        
-          double('file', readline: "mock tempfile", close: "")
+                   './app/models/model_update.rb',
+                   './db/migrate/migration_update.rb',
+                   './db/migrate/reference_migration_update.rb'
+                 ]).to include file_name
+
+          double('file', readline: 'mock tempfile', close: '')
         end
 
         allow(File).to receive(:new) do |file_name|
           expect([
-            "./app/models/mock_name.rb",
-            "mock_found_file"
-          ]).to include file_name
-          
-          double('file', readline: "mock file", close: "")
+                   './app/models/mock_name.rb',
+                   'mock_found_file'
+                 ]).to include file_name
+
+          double('file', readline: 'mock file', close: '')
         end
 
         allow(FileUtils).to receive(:mv) do |deleted_file, changed_file|
           expect([
-            './db/migrate/migration_update.rb', 
-            './app/models/model_update.rb',
-            './db/migrate/reference_migration_update.rb'
-          ]).to include deleted_file
+                   './db/migrate/migration_update.rb',
+                   './app/models/model_update.rb',
+                   './db/migrate/reference_migration_update.rb'
+                 ]).to include deleted_file
           expect(['./app/models/mock_name.rb', 'mock_found_file']).to include changed_file
         end
       end
 
-      it 'works on a model file' do 
-  
+      it 'works on a model file' do
         result = ''
         ProjectFile.open_close('mock_name', 'model') do |temp, tempfile|
-          result = (temp.readline + " " + tempfile.readline)
+          result = "#{temp.readline} #{tempfile.readline}"
         end
 
         expect(result).to eq(
           'mock file mock tempfile'
         )
-
       end
-      
-      it 'works on a migration file' do 
+
+      it 'works on a migration file' do
         result2 = ''
         ProjectFile.open_close('mock_name', 'migration') do |temp, tempfile|
-          result2 = (temp.readline + " " + tempfile.readline)
+          result2 = "#{temp.readline} #{tempfile.readline}"
         end
 
         expect(result2).to eq(
@@ -68,7 +65,7 @@ describe ProjectFile do
       it 'works on a reference migration file' do
         result3 = ''
         ProjectFile.open_close('mock_name', 'reference_migration') do |temp, tempfile|
-          result3 = (temp.readline + " " + tempfile.readline)
+          result3 = "#{temp.readline} #{tempfile.readline}"
         end
 
         expect(result3).to eq(
@@ -80,7 +77,7 @@ describe ProjectFile do
 
   describe '.update_line' do
     it 'adds a line with line content to tempfile' do
-      file = ["def change\n","  add_reference :mock_names, :mock_names_second, null: false\n", "end\n"]
+      file = ["def change\n", "  add_reference :mock_names, :mock_names_second, null: false\n", "end\n"]
       tempfile = ''
       allow(ProjectFile).to receive(:open_close) do |name, type, &block|
         block.call(file, tempfile)
@@ -88,12 +85,12 @@ describe ProjectFile do
         expect(['reference_migration']).to include type
       end
 
-      mock_line_content = { 'null' => 'true', "foreign_key" =>  "{ to_table: :mock_table_name }" }
+      mock_line_content = { 'null' => 'true', 'foreign_key' => '{ to_table: :mock_table_name }' }
       ProjectFile.update_line('mock_name', 'reference_migration', /add_reference :mock_names/, mock_line_content)
 
       expect(tempfile).to eq(
-        "def change\n"\
-        "  add_reference :mock_names, :mock_names_second, null: true, foreign_key: { to_table: :mock_table_name }\n"\
+        "def change\n" \
+        "  add_reference :mock_names, :mock_names_second, null: true, foreign_key: { to_table: :mock_table_name }\n" \
         "end\n"
       )
     end

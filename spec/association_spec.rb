@@ -5,9 +5,9 @@ require 'ead'
 describe Association do
   before(:all) do
     ObjectSpace.garbage_collect
-    
+
     parsed_file = JSON.parse(File.read("#{__dir__}/association_spec_sample.json"))
-    
+
     parsed_tables = parsed_file['tables']
     parsed_nodes = parsed_file['nodes']
     parsed_edges = parsed_file['edges']
@@ -17,7 +17,6 @@ describe Association do
     end
 
     Table.update_superclasses(parsed_tables)
-    
 
     @nodes = parsed_nodes.map do |node|
       Entity.new(node)
@@ -76,7 +75,7 @@ describe Association do
   describe '#set_middle_entity' do
     it "sets the middle entity of a 'through' association " do
       Association.all.each(&:set_middle_entity)
-            
+
       entity3 = Entity.find_by_name('entity3')
       entity5 = Entity.find_by_name('entity5')
       entity6 = Entity.find_by_name('entity6')
@@ -102,7 +101,6 @@ describe Association do
 
       expect(entity3.children_has_one_through).to include(entity8)
       expect(entity8.parents_has_one_through).to include(entity3)
-      
     end
   end
 

@@ -22,14 +22,13 @@ class Table < TableEntityBase
 
   def self.update_superclasses(parsed_tables)
     all.each do |table|
-      superclass_id = parsed_tables[table.id]["superclassId"]
+      superclass_id = parsed_tables[table.id]['superclassId']
 
-      unless superclass_id == ""
-        super_class = Table.find superclass_id
-        table.superclass = super_class
-        super_class.subclasses << table
-      end
+      next if superclass_id == ''
 
+      super_class = Table.find superclass_id
+      table.superclass = super_class
+      super_class.subclasses << table
     end
   end
 
@@ -38,25 +37,23 @@ class Table < TableEntityBase
   end
 
   def root_class
-    nil unless @superclass 
-    
+    nil unless @superclass
+
     root = self
-    
-    while root.superclass
-      root = root.superclass
-    end
+
+    root = root.superclass while root.superclass
 
     root
   end
 
   def root_class?
-    not superclass
+    !superclass
   end
 
   def generate_reference_migration(name, polymorphic = false)
     command = "bundle exec rails generate migration Add#{name.camelize}RefTo#{root_class.name.camelize} #{name}:references"
 
-    command << "{polymorphic}" if polymorphic
+    command << '{polymorphic}' if polymorphic
 
     system(command)
   end
@@ -64,7 +61,7 @@ class Table < TableEntityBase
   def add_polymorphic_reference_migration_for_sti
     if superclass && polymorphic
       polymorphic_names.each do |name|
-        generate_reference_migration(name, true)  
+        generate_reference_migration(name, true)
       end
     end
   end
@@ -110,19 +107,13 @@ class Table < TableEntityBase
 
     command = "bundle exec rails generate model #{model_name}"
 
-    if (subclasses.any?) && (root_class?)
-      command << " type"
-    end
+    command << ' type' if subclasses.any? && root_class?
 
-    unless superclass
-      attributes.each { |attribute| attribute.add_to(command) }
-    end
+    attributes.each { |attribute| attribute.add_to(command) } unless superclass
 
     check_polymorphic(command)
 
-    if superclass
-      command << " --parent=#{superclass.name.classify}"
-    end
+    command << " --parent=#{superclass.name.classify}" if superclass
 
     system(command)
   end

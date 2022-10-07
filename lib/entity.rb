@@ -11,7 +11,7 @@ class Entity < TableEntityBase
     @id = node['id']
     @name = node['data']['name'].underscore.singularize
     @table = Table.find(node['data']['tableId'])
-    @table.entities << self 
+    @table.entities << self
 
     @parent_associations = []
     @associations = []
@@ -54,7 +54,6 @@ class Entity < TableEntityBase
   end
 
   def update_end_model_migration_files(start_entity, association)
-    
     return unless association.has_any?
 
     end_model_line = {}
@@ -69,16 +68,12 @@ class Entity < TableEntityBase
       end_migration_line['null'] = 'false'
     end
 
-    unless table.root_class?
-      end_migration_line['null'] = 'true'
-    end
-    
+    end_migration_line['null'] = 'true' unless table.root_class?
+
     polymorphic_end = one_polymorphic_names?(start_entity)
 
     unless polymorphic_end
-      if start_entity.table_name_different?
-        end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\""
-      end
+      end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\"" if start_entity.table_name_different?
 
       if start_entity.root_class_name_different?
         end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.table.root_class.name.pluralize} }"
@@ -87,7 +82,7 @@ class Entity < TableEntityBase
       if start_entity.table.superclass && start_entity.root_class_name_different?
         end_migration_line['column'] = ":#{start_entity.name}_id"
       end
-      
+
     end
 
     update_project_files(start_entity, end_model_line, end_migration_line)
@@ -97,9 +92,8 @@ class Entity < TableEntityBase
     update_model_files(start_entity, end_model_line)
     update_migration_files(start_entity, end_migration_line)
   end
-  
+
   def update_model_files(start_entity, end_model_line)
-    
     return if end_model_line.empty?
 
     polymorphic_end = one_polymorphic_names?(start_entity)
@@ -112,31 +106,30 @@ class Entity < TableEntityBase
   end
 
   def update_migration_files(start_entity, end_migration_line)
-
     return if end_migration_line.empty?
+
     polymorphic_end = one_polymorphic_names?(start_entity)
 
     if table.root_class? && polymorphic_end
-      migration_name = "Create#{ table.name.camelize.pluralize }".underscore
+      migration_name = "Create#{table.name.camelize.pluralize}".underscore
 
       ProjectFile.update_line(
-        migration_name, 
-        'migration', 
+        migration_name,
+        'migration',
         /t.references :#{start_entity.name}/,
         end_migration_line
       )
 
     else
-      migration_name = "Add#{ start_entity.name.camelize }RefTo#{ table.root_class.name.camelize }".underscore
+      migration_name = "Add#{start_entity.name.camelize}RefTo#{table.root_class.name.camelize}".underscore
 
       ProjectFile.update_line(
-        migration_name, 
-        'reference_migration', 
+        migration_name,
+        'reference_migration',
         /add_reference :#{table.root_class.name.pluralize}/,
         end_migration_line
       )
     end
-      
   end
 
   def update_start_model_file(end_entity, association)

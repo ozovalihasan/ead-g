@@ -27,9 +27,8 @@ class EAD
   end
 
   def create_objects(file)
-
     parsed_file = JSON.parse(file)
-  
+
     parsed_tables = parsed_file['tables']
     parsed_nodes = parsed_file['nodes']
     parsed_edges = parsed_file['edges']
@@ -39,7 +38,7 @@ class EAD
     end
 
     Table.update_superclasses(parsed_tables)
-    
+
     @nodes = parsed_nodes.map do |node|
       Entity.new(node)
     end
@@ -53,7 +52,7 @@ class EAD
     Table.all.each(&:create_model)
 
     Table.all.each(&:add_polymorphic_reference_migration_for_sti)
-    
+
     Table.all.each(&:add_reference_migration)
 
     Association.all.each(&:set_middle_entity)

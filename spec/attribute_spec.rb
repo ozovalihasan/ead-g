@@ -18,12 +18,12 @@ describe Attribute do
               'type' => 'string'
             }
           },
-          "superclassId": ""
+          'superclassId' => ''
         }
       }
     }
 
-    @table = Table.new('15', ead_file['tables']["15"])
+    @table = Table.new('15', ead_file['tables']['15'])
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end
 

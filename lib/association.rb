@@ -49,7 +49,7 @@ class Association
 
   def set_middle_entity
     return unless through?
-    
+
     source = first_entity
     target = second_entity
 
@@ -104,7 +104,6 @@ class Association
 
     end
   end
-
 
   def update_model_from_entity
     first_entity.update_model(second_entity, self)

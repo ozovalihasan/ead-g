@@ -4,11 +4,10 @@ require 'active_support/core_ext/string'
 require 'ead'
 
 describe Entity do
-  
   before :all do
     @parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))
     parsed_tables = @parsed_file['tables']
-    
+
     @tables = parsed_tables.map do |id, parsed_table|
       Table.new(id, parsed_table)
     end
@@ -16,30 +15,30 @@ describe Entity do
     Table.update_superclasses(parsed_tables)
   end
 
-  context "class methods" do
+  context 'class methods' do
     describe '.initialize' do
       it 'creates an instance of the class correctly' do
-        photograph = Entity.new(@parsed_file['nodes'].find {|node| node["id"] == "36"})
-        
+        photograph = Entity.new(@parsed_file['nodes'].find { |node| node['id'] == '36' })
+
         expect(photograph.id).to eq('36')
         expect(photograph.name).to eq('photograph')
         expect(photograph.table.name).to eq('picture')
         expect(photograph.table.entities.size).to eq(1)
-        expect(photograph.parent_associations).to be_empty()
-        expect(photograph.associations).to be_empty()
-        expect(photograph.parents_has_one).to be_empty()
-        expect(photograph.parents_has_many).to be_empty()
-        expect(photograph.parents_has_one_through).to be_empty()
-        expect(photograph.parents_has_many_through).to be_empty()
-        expect(photograph.parents_through).to be_empty()
-        expect(photograph.children_has_one).to be_empty()
-        expect(photograph.children_has_many).to be_empty()
-        expect(photograph.children_has_one_through).to be_empty()
-        expect(photograph.children_has_many_through).to be_empty()
-        expect(photograph.children_through).to be_empty()
+        expect(photograph.parent_associations).to be_empty
+        expect(photograph.associations).to be_empty
+        expect(photograph.parents_has_one).to be_empty
+        expect(photograph.parents_has_many).to be_empty
+        expect(photograph.parents_has_one_through).to be_empty
+        expect(photograph.parents_has_many_through).to be_empty
+        expect(photograph.parents_through).to be_empty
+        expect(photograph.children_has_one).to be_empty
+        expect(photograph.children_has_many).to be_empty
+        expect(photograph.children_has_one_through).to be_empty
+        expect(photograph.children_has_many_through).to be_empty
+        expect(photograph.children_through).to be_empty
       end
     end
-  
+
     describe '.find_by_name' do
       it 'returns the first entity if its name is the searched name ' do
         parsed_nodes = @parsed_file['nodes']
@@ -52,10 +51,9 @@ describe Entity do
         expect(Entity.find_by_name('account_history').id).to eq('47')
       end
     end
-    
   end
-  
-  context "instance methods" do  
+
+  context 'instance methods' do
     before :all do
       ObjectSpace.garbage_collect
 
@@ -119,152 +117,146 @@ describe Entity do
 
     describe '#update_end_model_migration_files' do
       it 'prepare necessary attributes to update model and migration_files' do
-        allow_any_instance_of(Entity).to receive(:update_project_files) do |_,start_entity, end_model_line, end_migration_line|
+        allow_any_instance_of(Entity).to receive(:update_project_files) do |_, start_entity, end_model_line, end_migration_line|
           expect([
-                  [
-                    "famous_person", 
-                    {"belongs_to" => ":famous_person", "class_name" => "\"User\""}, 
-                    {"foreign_key" => "{ to_table: :users }", "null" => "false"}
-                  ],
-                  [
-                    "supervisor", 
-                    {"belongs_to" => ":supervisor"}, 
-                    {"null" => "true"}
-                  ],
-                  [
-                    "assistant_professor", 
-                    {"belongs_to" => ":assistant_professor"}, 
-                    {"column" => ":assistant_professor_id", "foreign_key" => "{ to_table: :teachers }", "null" => "true"}
-                  ],
-                  [
-                    "client", 
-                    {"belongs_to" => ":client", "class_name" => "\"User\"", "optional" => "true"}, 
-                    {"foreign_key" => "{ to_table: :users }", "null" => "true"}
-                  ]
-                ]).to include( [ start_entity.name, end_model_line, end_migration_line ] )
+                   [
+                     'famous_person',
+                     { 'belongs_to' => ':famous_person', 'class_name' => '"User"' },
+                     { 'foreign_key' => '{ to_table: :users }', 'null' => 'false' }
+                   ],
+                   [
+                     'supervisor',
+                     { 'belongs_to' => ':supervisor' },
+                     { 'null' => 'true' }
+                   ],
+                   [
+                     'assistant_professor',
+                     { 'belongs_to' => ':assistant_professor' },
+                     { 'column' => ':assistant_professor_id', 'foreign_key' => '{ to_table: :teachers }',
+                       'null' => 'true' }
+                   ],
+                   [
+                     'client',
+                     { 'belongs_to' => ':client', 'class_name' => '"User"', 'optional' => 'true' },
+                     { 'foreign_key' => '{ to_table: :users }', 'null' => 'true' }
+                   ]
+                 ]).to include([start_entity.name, end_model_line, end_migration_line])
         end
-        
+
         famous_person = Entity.find_by_name('famous_person')
         association = famous_person.associations.find do |association|
           association.name == 'has_many'
         end
-        @followed.update_end_model_migration_files( famous_person, association )
+        @followed.update_end_model_migration_files(famous_person, association)
 
         supervisor = Entity.find_by_name('supervisor')
         supervisee = Entity.find_by_name('supervisee')
         association = supervisor.associations.find do |association|
           association.name == 'has_many'
-        end                                                                  
-        supervisee.update_end_model_migration_files( supervisor, association )
+        end
+        supervisee.update_end_model_migration_files(supervisor, association)
 
         assistant_professor = Entity.find_by_name('assistant_professor')
         project_student = Entity.find_by_name('project_student')
         association = assistant_professor.associations.find do |association|
           association.name == 'has_many'
-        end                                                                  
-        project_student.update_end_model_migration_files( assistant_professor, association )
-        
+        end
+        project_student.update_end_model_migration_files(assistant_professor, association)
+
         client = Entity.find_by_name('client')
         subordinate = Entity.find_by_name('subordinate')
         association = subordinate.associations.find do |association|
           association.name == 'has_many'
-        end                                                                  
-        subordinate.update_end_model_migration_files( client, association )
+        end
+        subordinate.update_end_model_migration_files(client, association)
 
         association = famous_person.associations.find do |association|
           association.name == ':through'
-        end                                                                  
+        end
         expect(
-          @fan.update_end_model_migration_files( famous_person, association )
+          @fan.update_end_model_migration_files(famous_person, association)
         ).to eq nil
       end
     end
-    
+
     describe '#update_project_files' do
       it 'updates model and migration files of a table' do
         allow_any_instance_of(Entity).to receive(:update_model_files) do |_, start_entity, end_model_line|
-          expect([ "famous_person" ]).to include start_entity.name
-          expect([ { "mock_end_model_line_key" => "mock_end_model_line_value" } ]).to include end_model_line
+          expect(['famous_person']).to include start_entity.name
+          expect([{ 'mock_end_model_line_key' => 'mock_end_model_line_value' }]).to include end_model_line
         end
 
         allow_any_instance_of(Entity).to receive(:update_migration_files) do |_, start_entity, end_migration_line|
-          expect([ "famous_person" ]).to include start_entity.name
-          expect([ { "mock_end_migration_line_key" => "mock_end_migration_line_value" }, ]).to include end_migration_line
+          expect(['famous_person']).to include start_entity.name
+          expect([{ 'mock_end_migration_line_key' => 'mock_end_migration_line_value' }]).to include end_migration_line
         end
 
         famous_person = Entity.find_by_name('famous_person')
 
         @followed.update_project_files(
-          famous_person, 
-          { "mock_end_model_line_key" => "mock_end_model_line_value" },
-          { "mock_end_migration_line_key" => "mock_end_migration_line_value" },
+          famous_person,
+          { 'mock_end_model_line_key' => 'mock_end_model_line_value' },
+          { 'mock_end_migration_line_key' => 'mock_end_migration_line_value' }
         )
-        
       end
     end
 
     describe '#update_model_files' do
       it 'updates model files' do
-        allow(ProjectFile).to receive(:add_belong_line) do | name, line_content|
-
+        allow(ProjectFile).to receive(:add_belong_line) do |name, line_content|
           expect([
-            ["account", {"mock_end_model_line_key" => "mock_end_model_line_value"}]
-
-          ]).to include [name, line_content]
-        end
-        
-        allow(ProjectFile).to receive(:update_line) do | name, type, keywords, line_content|
-          expect([
-            ["student", "model", /belongs_to :teachable/, {"mock_end_model_line_key" => "mock_end_model_line_value"}]
-          ]).to include [name, type, keywords, line_content]
-          
+                   ['account', { 'mock_end_model_line_key' => 'mock_end_model_line_value' }]
+                 ]).to include [name, line_content]
         end
 
-        end_model_line = { "mock_end_model_line_key" => "mock_end_model_line_value" }
+        allow(ProjectFile).to receive(:update_line) do |name, type, keywords, line_content|
+          expect([
+                   ['student', 'model', /belongs_to :teachable/,
+                    { 'mock_end_model_line_key' => 'mock_end_model_line_value' }]
+                 ]).to include [name, type, keywords, line_content]
+        end
+
+        end_model_line = { 'mock_end_model_line_key' => 'mock_end_model_line_value' }
 
         teachable = Entity.find_by_name('teachable')
         doctoral_student = Entity.find_by_name('doctoral_student')
-        doctoral_student.update_model_files( teachable, end_model_line )
+        doctoral_student.update_model_files(teachable, end_model_line)
 
         supplier = Entity.find_by_name('supplier')
         account = Entity.find_by_name('account')
-        account.update_model_files( supplier, end_model_line )
-        
+        account.update_model_files(supplier, end_model_line)
       end
     end
 
     describe '#update_migration_files' do
       it 'updates model files' do
-        
-        allow(ProjectFile).to receive(:update_line) do | name, type, keywords, line_content|
+        allow(ProjectFile).to receive(:update_line) do |name, type, keywords, line_content|
           expect([
-            [
-              "create_pictures", 
-              "migration", 
-              /t.references :postable/, 
-              {"mock_end_migration_line_key" => "mock_end_migration_line_value"}
-            ],
-            [
-              "add_manager_ref_to_user", 
-              "reference_migration", 
-              /add_reference :users/, 
-              {"mock_end_migration_line_key" => "mock_end_migration_line_value"}
-            ]
-
-          ]).to include [name, type, keywords, line_content]
+                   [
+                     'create_pictures',
+                     'migration',
+                     /t.references :postable/,
+                     { 'mock_end_migration_line_key' => 'mock_end_migration_line_value' }
+                   ],
+                   [
+                     'add_manager_ref_to_user',
+                     'reference_migration',
+                     /add_reference :users/,
+                     { 'mock_end_migration_line_key' => 'mock_end_migration_line_value' }
+                   ]
+                 ]).to include [name, type, keywords, line_content]
         end
 
-        end_migration_line = { "mock_end_migration_line_key" => "mock_end_migration_line_value" }
+        end_migration_line = { 'mock_end_migration_line_key' => 'mock_end_migration_line_value' }
 
         postable_post_card = Entity.all.select do |entity|
           entity.name == 'postable' && entity.table.name == 'postcard'
         end [0]
-        @photograph.update_migration_files( postable_post_card, end_migration_line )
+        @photograph.update_migration_files(postable_post_card, end_migration_line)
 
         manager = Entity.find_by_name('manager')
         subordinate = Entity.find_by_name('subordinate')
-        subordinate.update_migration_files( manager, end_migration_line )
-        
+        subordinate.update_migration_files(manager, end_migration_line)
       end
     end
 
@@ -293,11 +285,11 @@ describe Entity do
         end
 
         imageable_employee = Entity.all.select do |entity|
-                              entity.name == 'imageable' && entity.table.name == 'employee'
-                            end [0]
+                               entity.name == 'imageable' && entity.table.name == 'employee'
+                             end [0]
         postable_post_card = Entity.all.select do |entity|
-                              entity.name == 'postable' && entity.table.name == 'postcard'
-                            end [0]
+                               entity.name == 'postable' && entity.table.name == 'postcard'
+                             end [0]
         photograph = Entity.find_by_name('photograph')
 
         photograph.table.check_polymorphic('')

@@ -8,19 +8,16 @@ describe Table do
     ObjectSpace.garbage_collect
   end
 
-  describe "class methods" do 
-    let! (:parsed_limited_file) do
-      
+  describe 'class methods' do
+    let!(:parsed_limited_file) do
       parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))
       @parsed_tables = parsed_file['tables']
 
       {
-        "70" => parsed_file['tables']["70"], 
-        "74" => parsed_file['tables']["74"]
+        '70' => parsed_file['tables']['70'],
+        '74' => parsed_file['tables']['74']
       }
-    end 
-
-    
+    end
 
     describe '.initialize' do
       it 'creates an instance of the class correctly' do
@@ -29,7 +26,7 @@ describe Table do
         end
 
         teacher = Table.all.find { |table| table.name == 'teacher' }
-        
+
         expect(teacher.id).to eq('70')
         expect(teacher.name).to eq('teacher')
         expect(teacher.entities.size).to eq(0)
@@ -43,24 +40,24 @@ describe Table do
         expect(Table.all.size).to eq(2)
       end
     end
-  
+
     describe '.update_superclasses' do
       it 'updates superclass and subclasses of tables ' do
         parsed_limited_file.each do |id, parsed_table|
           Table.new(id, parsed_table)
         end
-        
+
         Table.update_superclasses(parsed_limited_file)
 
         university_staff = Table.all.find { |table| table.name == 'university_staff' }
 
-        expect(university_staff.superclass.name).to eq("teacher")
+        expect(university_staff.superclass.name).to eq('teacher')
         expect(university_staff.superclass.subclasses).to match_array([university_staff])
       end
     end
   end
 
-  describe "instance methods" do
+  describe 'instance methods' do
     before :all do
       ObjectSpace.garbage_collect
 
@@ -88,10 +85,8 @@ describe Table do
       @picture = Table.all.find { |table| table.name == 'picture' }
       @professor = Table.all.find { |table| table.name == 'professor' }
       @student = Table.all.find { |table| table.name == 'student' }
-      @graduate_student = Table.all.find{|table| table.name == 'graduate_student' }
+      @graduate_student = Table.all.find { |table| table.name == 'graduate_student' }
     end
-
-    
 
     describe '#model_name' do
       it 'returns camelized name ' do
@@ -118,55 +113,48 @@ describe Table do
         it 'creates a migration file for the table to add a reference' do
           allow_any_instance_of(Object).to receive(:system) do |_, call_with|
             expect([
-                    'bundle exec rails generate migration AddAccountRefToAccountHistory account:references'
-                  ]).to include call_with
+                     'bundle exec rails generate migration AddAccountRefToAccountHistory account:references'
+                   ]).to include call_with
           end
 
-          command = ''
           account = Entity.find_by_name('account')
           @account_history.generate_reference_migration(account.name)
-          
         end
       end
 
-      context "if it is a polymorphic association" do
+      context 'if it is a polymorphic association' do
         it 'creates a migration file for the table to add a polymorphic reference' do
           allow_any_instance_of(Object).to receive(:system) do |_, call_with|
             expect([
-              'bundle exec rails generate migration AddImageableRefToPicture imageable:references{polymorphic}'
-            ]).to include call_with 
+                     'bundle exec rails generate migration AddImageableRefToPicture imageable:references{polymorphic}'
+                   ]).to include call_with
           end
 
-          command = ''
-          @picture.generate_reference_migration("imageable", true)
-          
+          @picture.generate_reference_migration('imageable', true)
         end
       end
-      
-      context "if the table inherits from another table" do
+
+      context 'if the table inherits from another table' do
         it 'creates a migration file for the inherited table to add reference' do
           allow_any_instance_of(Object).to receive(:system) do |_, call_with|
             expect([
-              "bundle exec rails generate migration AddSupervisorRefToUser supervisor:references{polymorphic}"
-            ]).to include call_with
+                     'bundle exec rails generate migration AddSupervisorRefToUser supervisor:references{polymorphic}'
+                   ]).to include call_with
           end
-          
-          command = ''
-          @graduate_student.generate_reference_migration("supervisor", true)
+
+          @graduate_student.generate_reference_migration('supervisor', true)
         end
       end
-
     end
 
     describe '#add_polymorphic_reference_migration_for_sti' do
       it 'calls generate_reference_migration to create a migration file used to add a polymorphic reference' do
         allow_any_instance_of(Table).to receive(:generate_reference_migration) do |_, name, polymorphic|
-          expect([ "supervisor" ]).to include name
-          expect([ true ]).to include polymorphic
-
+          expect(['supervisor']).to include name
+          expect([true]).to include polymorphic
         end
-        
-        graduate_student = Table.all.find{|table| table.name == 'graduate_student' }
+
+        graduate_student = Table.all.find { |table| table.name == 'graduate_student' }
         graduate_student.update_polymorphic_names
 
         graduate_student.add_polymorphic_reference_migration_for_sti
@@ -198,7 +186,6 @@ describe Table do
         @account_history.update_polymorphic_names
         expect(@account_history.polymorphic_names).to eq([])
         expect(@account_history.polymorphic).to eq(false)
-
       end
     end
 
@@ -218,16 +205,16 @@ describe Table do
       it 'creates necessary commands and run them to create models in Rails project ' do
         allow(File).to receive(:exist?).and_return(false)
         allow_any_instance_of(Table).to receive(:check_polymorphic)
-        
+
         allow_any_instance_of(Object).to receive(:system) do |_, call_with|
           expect([
-                  'bundle exec rails generate model Picture',
-                  'bundle exec rails generate model AccountHistory' \
-                  ' credit_rating:integer access_time:datetime',
-                  'bundle exec rails generate model Relation',
-                  'bundle exec rails generate model Professor --parent=UniversityStaff',
-                  'bundle exec rails generate model User type'
-                ]).to include call_with
+                   'bundle exec rails generate model Picture',
+                   'bundle exec rails generate model AccountHistory' \
+                   ' credit_rating:integer access_time:datetime',
+                   'bundle exec rails generate model Relation',
+                   'bundle exec rails generate model Professor --parent=UniversityStaff',
+                   'bundle exec rails generate model User type'
+                 ]).to include call_with
         end
 
         @picture.create_model
@@ -243,12 +230,14 @@ describe Table do
     describe '#add_reference_migration' do
       it 'calls generate_reference_migration if the association between itself and its parent is not a polymorphic association' do
         call_generate_reference_migration = 0
-        allow_any_instance_of(Table).to receive(:generate_reference_migration) { |_arg| call_generate_reference_migration += 1 }
+        allow_any_instance_of(Table).to receive(:generate_reference_migration) { |_arg|
+                                          call_generate_reference_migration += 1
+                                        }
         allow_any_instance_of(Entity).to receive(:one_polymorphic_names?).and_return(true, false)
-      
+
         @account_history.add_reference_migration
         expect(call_generate_reference_migration).to eq(0)
-        
+
         @account_history.add_reference_migration
         expect(call_generate_reference_migration).to eq(1)
       end

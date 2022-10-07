@@ -83,11 +83,11 @@ describe Entity do
       end
     end
 
-    describe '#root_class_same?' do
+    describe '#root_classes_same?' do
       it 'returns boolean showing whether the tables of any entity and self are same' do
         famous_person = Entity.find_by_name('famous_person')
-        expect(@fan.root_class_same?(@account_history)).to eq(false)
-        expect(@fan.root_class_same?(famous_person)).to eq(true)
+        expect(@fan.root_classes_same?(@account_history)).to eq(false)
+        expect(@fan.root_classes_same?(famous_person)).to eq(true)
       end
     end
 

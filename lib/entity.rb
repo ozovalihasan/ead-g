@@ -37,7 +37,7 @@ class Entity < TableEntityBase
     table.name.camelize
   end
 
-  def root_class_same?(entity)
+  def root_classes_same?(entity)
     table.root_class == entity.table.root_class
   end
 
@@ -61,7 +61,7 @@ class Entity < TableEntityBase
 
     end_model_line['belongs_to'] = ":#{start_entity.name}"
 
-    if root_class_same?(start_entity)
+    if root_classes_same?(start_entity)
       end_model_line['optional'] = 'true'
       end_migration_line['null'] = 'true'
     else

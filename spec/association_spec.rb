@@ -105,9 +105,9 @@ describe Association do
   end
 
   describe '#update_model_from_entity' do
-    it "calls Entity#update_model" do
+    it 'calls Entity#update_model' do
       allow_any_instance_of(Entity).to receive(:update_model) do |first_entity, second_entity, association|
-        expect(["entity1", "entity2", "has_many"]).to eql [first_entity.name, second_entity.name, association.name]
+        expect(%w[entity1 entity2 has_many]).to eql [first_entity.name, second_entity.name, association.name]
       end
 
       @association1.update_model_from_entity

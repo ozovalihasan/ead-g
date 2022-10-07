@@ -7,7 +7,7 @@ class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
 
-    unless ['0.4.0', '0.4.1', '0.4.2', '0.4.2', '0.4.3', '0.4.4', '0.4.5'].include? JSON.parse(file)['version']
+    unless ['0.4.0', '0.4.1', '0.4.2', '0.4.3', '0.4.4', '0.4.5'].include? JSON.parse(file)['version']
       puts "\n\n----------------"
       puts "\e[31m#{
         'Versions of your EAD file and the gem are not compatible.'\

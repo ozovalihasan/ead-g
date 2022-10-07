@@ -104,6 +104,16 @@ describe Association do
     end
   end
 
+  describe '#update_model_from_entity' do
+    it "calls Entity#update_model" do
+      allow_any_instance_of(Entity).to receive(:update_model) do |first_entity, second_entity, association|
+        expect(["entity1", "entity2", "has_many"]).to eql [first_entity.name, second_entity.name, association.name]
+      end
+
+      @association1.update_model_from_entity
+    end
+  end
+
   describe '#has_many?' do
     it "returns whether an instance's name is 'has_many'" do
       expect(@association1.has_many?).to eq(true)

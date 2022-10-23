@@ -148,7 +148,7 @@ class Entity < TableEntityBase
     line_content = {}
 
     if association.has_many? || (children_has_many_through.include? end_entity)
-      line_content['has_many'] = if intermediate_entity&.one_polymorphic_names?(end_entity) &&  (children_has_many_through.include? end_entity)
+      line_content['has_many'] = if intermediate_entity&.one_polymorphic_names?(end_entity) && (children_has_many_through.include? end_entity)
                                    ":#{end_entity.table.name.pluralize}"
                                  else
                                    ":#{end_model}"

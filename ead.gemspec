@@ -15,8 +15,8 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.required_ruby_version = '>= 2.7.2'
 
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata['homepage_uri'] = spec.homepage
+  spec.metadata['source_code_uri'] = spec.homepage
 
   spec.add_runtime_dependency 'rest-client', '~> 2.0', '>= 2.0.2'
 

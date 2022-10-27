@@ -1,6 +1,6 @@
 {
-    "version": "0.4.2",
-    "idCounter": 6,
+    "version": "0.4.5",
+    "idCounter": 9,
     "associationType": "has_many",
     "nodes": [
         {
@@ -14,8 +14,8 @@
                 "tableId": "1",
                 "name": "entity1"
             },
-            "width": 138,
-            "height": 47
+            "width": 146,
+            "height": 65
         },
         {
             "id": "4",
@@ -46,18 +46,21 @@
     "tables": {
         "1": {
             "name": "entity1",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "2": {
             "name": "entity2",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": "1"
         }
     },
     "connectionStartId": "3",
+    "connectionStartNodeId": "6",
     "isConnectContinue": false,
-    "isMouseOnNode": false,
+    "isMouseOnNode": true,
     "isMouseOnEdge": false,
-    "mouseOnNodeId": null,
+    "mouseOnNodeId": "6",
     "mouseOnEdgeId": null,
     "selectedNodeIdForThrough": null,
     "showTextOnEdges": false

@@ -1,5 +1,5 @@
 {
-    "version": "0.4.4",
+    "version": "0.4.5",
     "idCounter": 31,
     "associationType": "through",
     "nodes": [
@@ -14,8 +14,8 @@
                 "tableId": "1",
                 "name": "entity1"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
                 "x": -225,
@@ -27,33 +27,39 @@
             "id": "10",
             "type": "entity",
             "position": {
-                "x": -225,
-                "y": 270
+                "x": 270,
+                "y": 225
             },
             "data": {
                 "tableId": "2",
                 "name": "entity2"
             },
-            "width": 138,
-            "height": 47
+            "width": 146,
+            "height": 65,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 270,
+                "y": 225
+            },
+            "dragging": false
         },
         {
             "id": "11",
             "type": "entity",
             "position": {
-                "x": -495,
-                "y": 435
+                "x": -525,
+                "y": 375
             },
             "data": {
                 "tableId": "3",
                 "name": "entity3"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
-                "x": -495,
-                "y": 435
+                "x": -525,
+                "y": 375
             },
             "dragging": false
         },
@@ -61,19 +67,19 @@
             "id": "12",
             "type": "entity",
             "position": {
-                "x": -225,
-                "y": 510
+                "x": -330,
+                "y": 525
             },
             "data": {
                 "tableId": "4",
                 "name": "entity4"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
-                "x": -225,
-                "y": 510
+                "x": -330,
+                "y": 525
             },
             "dragging": false
         },
@@ -81,19 +87,19 @@
             "id": "13",
             "type": "entity",
             "position": {
-                "x": -465,
-                "y": 615
+                "x": -270,
+                "y": 660
             },
             "data": {
                 "tableId": "8",
                 "name": "entity8"
             },
-            "width": 138,
-            "height": 47,
-            "selected": true,
+            "width": 146,
+            "height": 65,
+            "selected": false,
             "positionAbsolute": {
-                "x": -465,
-                "y": 615
+                "x": -270,
+                "y": 660
             },
             "dragging": false
         },
@@ -101,19 +107,19 @@
             "id": "14",
             "type": "entity",
             "position": {
-                "x": 30,
-                "y": 510
+                "x": -105,
+                "y": 585
             },
             "data": {
                 "tableId": "5",
                 "name": "entity5"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
-                "x": 30,
-                "y": 510
+                "x": -105,
+                "y": 585
             },
             "dragging": false
         },
@@ -121,19 +127,19 @@
             "id": "15",
             "type": "entity",
             "position": {
-                "x": 240,
-                "y": 390
+                "x": 210,
+                "y": 405
             },
             "data": {
                 "tableId": "7",
                 "name": "entity7"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
-                "x": 240,
-                "y": 390
+                "x": 210,
+                "y": 405
             },
             "dragging": false
         },
@@ -141,19 +147,19 @@
             "id": "22",
             "type": "entity",
             "position": {
-                "x": -15,
-                "y": 645
+                "x": 435,
+                "y": 690
             },
             "data": {
                 "tableId": "6",
                 "name": "entity6"
             },
-            "width": 138,
-            "height": 47,
+            "width": 146,
+            "height": 65,
             "selected": false,
             "positionAbsolute": {
-                "x": -15,
-                "y": 645
+                "x": 435,
+                "y": 690
             },
             "dragging": false
         }
@@ -202,7 +208,8 @@
             "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "type": "hasOne"
+            "type": "hasOne",
+            "selected": false
         },
         {
             "id": "23",
@@ -247,7 +254,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "10"
-            }
+            },
+            "selected": false
         },
         {
             "id": "27",
@@ -271,7 +279,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "14"
-            }
+            },
+            "selected": false
         },
         {
             "id": "29",
@@ -298,43 +307,52 @@
     "tables": {
         "1": {
             "name": "entity1",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "2": {
             "name": "entity2",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "3": {
             "name": "entity3",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "4": {
             "name": "entity4",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "5": {
             "name": "entity5",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "6": {
             "name": "entity6",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "7": {
             "name": "entity7",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         },
         "8": {
             "name": "entity8",
-            "attributes": {}
+            "attributes": {},
+            "superclassId": ""
         }
     },
-    "connectionStartId": "11",
+    "connectionStartNodeId": "6",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,
     "mouseOnNodeId": null,
     "mouseOnEdgeId": null,
     "selectedNodeIdForThrough": null,
+    "connectionStartId": "11",
     "showTextOnEdges": false
 }

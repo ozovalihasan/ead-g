@@ -7,7 +7,7 @@ class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
 
-    unless ['0.4.0', '0.4.1', '0.4.2', '0.4.2', '0.4.3', '0.4.4'].include? JSON.parse(file)['version']
+    unless ['0.4.0', '0.4.1', '0.4.2', '0.4.3', '0.4.4', '0.4.5'].include? JSON.parse(file)['version']
       puts "\n\n----------------"
       puts "\e[31m#{
         'Versions of your EAD file and the gem are not compatible.'\
@@ -27,45 +27,43 @@ class EAD
   end
 
   def create_objects(file)
-    @nodes = JSON.parse(file)['nodes']
-    @edges = JSON.parse(file)['edges']
-    @tables = JSON.parse(file)['tables']
+    parsed_file = JSON.parse(file)
 
-    @tables = @tables.map do |(id)|
-      Table.new(id, @tables)
+    parsed_tables = parsed_file['tables']
+    parsed_nodes = parsed_file['nodes']
+    parsed_edges = parsed_file['edges']
+
+    @tables = parsed_tables.map do |id, parsed_table|
+      Table.new(id, parsed_table)
     end
 
-    @nodes.map! do |node|
+    Table.update_superclasses(parsed_tables)
+
+    @nodes = parsed_nodes.map do |node|
       Entity.new(node)
     end
 
-    @edges.map! do |edge|
+    @edges = parsed_edges.map do |edge|
       Association.new(edge)
     end
   end
 
-  def check_implement_objects(file)
-    create_objects(file)
-
-    Entity.all.each do |entity|
-      entity.clone_parent.entities << entity
-    end
-
+  def check_implement_objects
     Table.all.each(&:create_model)
+
+    Table.all.each(&:add_polymorphic_reference_migration_for_sti)
 
     Table.all.each(&:add_reference_migration)
 
-    Association.set_middle_entities
+    Association.all.each(&:set_middle_entity)
 
-    Association.all.each do |association|
-      association.first_entity.update_model(association.second_entity, association)
-    end
+    Association.all.each(&:update_model_from_entity)
   end
 
   def check_latest_version
     response = JSON.parse RestClient.get 'https://api.github.com/repos/ozovalihasan/ead/tags'
 
-    unless response.first['name'] == 'v0.4.4'
+    unless response.first['name'] == 'v0.4.5'
       puts "\n\n----------------"
       puts "\n\e[33m#{
         'A new version of this gem has been released.'\
@@ -87,6 +85,7 @@ class EAD
   def start(user_arguments)
     check_latest_version
     file = import_JSON(user_arguments)
-    check_implement_objects(file)
+    create_objects(file)
+    check_implement_objects
   end
 end

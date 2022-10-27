@@ -4,117 +4,243 @@ require 'active_support/core_ext/string'
 require 'ead'
 
 describe Table do
-  before do
+  before :each do
     ObjectSpace.garbage_collect
-    @ead = EAD.new
-    file = @ead.import_JSON(['./spec/sample_EAD.json'])
-
-    @ead.create_objects(file)
-
-    Entity.all.each do |entity|
-      entity.clone_parent.entities << entity
-    end
-
-    @account_history = Table.all.select { |table| table.name == 'account_history' }[0]
-    @relation = Table.all.select { |table| table.name == 'relation' }[0]
-    @picture = Table.all.select { |table| table.name == 'picture' }[0]
   end
 
-  describe '#initialize' do
-    it 'creates an instance of the class correctly' do
-      expect(@account_history.id).to eq('12')
-      expect(@account_history.name).to eq('account_history')
-      expect(@account_history.entities.size).to eq(1)
-      expect(@account_history.polymorphic).to eq(false)
-      expect(@account_history.polymorphic_names).to eq([])
-      expect(@account_history.attributes[0].name).to eq('credit_rating')
-      expect(@account_history.attributes.size).to eq(2)
+  describe 'class methods' do
+    let!(:parsed_limited_file) do
+      parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))
+      @parsed_tables = parsed_file['tables']
+
+      {
+        '70' => parsed_file['tables']['70'],
+        '74' => parsed_file['tables']['74']
+      }
+    end
+
+    describe '.initialize' do
+      it 'creates an instance of the class correctly' do
+        parsed_limited_file.each do |id, parsed_table|
+          Table.new(id, parsed_table)
+        end
+
+        teacher = Table.all.find { |table| table.name == 'teacher' }
+
+        expect(teacher.id).to eq('70')
+        expect(teacher.name).to eq('teacher')
+        expect(teacher.entities.size).to eq(0)
+        expect(teacher.polymorphic).to eq(false)
+        expect(teacher.polymorphic_names).to eq([])
+        expect(teacher.attributes[0].name).to eq('full_name')
+        expect(teacher.attributes.size).to eq(2)
+        expect(teacher.superclass).to eq(nil)
+        expect(teacher.subclasses).to eq([])
+
+        expect(Table.all.size).to eq(2)
+      end
+    end
+
+    describe '.update_superclasses' do
+      it 'updates superclass and subclasses of tables ' do
+        parsed_limited_file.each do |id, parsed_table|
+          Table.new(id, parsed_table)
+        end
+
+        Table.update_superclasses(parsed_limited_file)
+
+        university_staff = Table.all.find { |table| table.name == 'university_staff' }
+
+        expect(university_staff.superclass.name).to eq('teacher')
+        expect(university_staff.superclass.subclasses).to match_array([university_staff])
+      end
     end
   end
 
-  describe '#model_name' do
-    it 'returns camelized name ' do
-      expect(@account_history.model_name).to eq('AccountHistory')
-    end
-  end
+  describe 'instance methods' do
+    before :all do
+      ObjectSpace.garbage_collect
 
-  describe '#add_references' do
-    it 'adds references to command' do
-      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
-        expect([
-                 'bundle exec rails generate migration AddAccountRefToAccountHistory account:references'
-               ]).to include call_with
+      parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))
+      parsed_tables = parsed_file['tables']
+      parsed_nodes = parsed_file['nodes']
+      parsed_edges = parsed_file['edges']
+
+      @tables = parsed_tables.map do |id, parsed_table|
+        Table.new(id, parsed_table)
       end
 
-      command = ''
-      account = Entity.find_by_name('account')
-      @account_history.add_references(account)
-    end
-  end
+      Table.update_superclasses(parsed_tables)
 
-  describe '#add_polymorphic_reference' do
-    it 'adds polymorphic reference to command' do
-      command = ''
-      @account_history.add_polymorphic_reference(command, 'mock_polymorphic_name')
-      expect(command).to eq(' mock_polymorphic_name:references{polymorphic}')
-    end
-  end
-
-  describe '#update_polymorphic_names' do
-    it 'adds polymorphic reference to command' do
-      @picture.update_polymorphic_names
-      expect(@picture.polymorphic_names).to eq(%w[postable imageable])
-    end
-  end
-
-  describe '#check_polymorphic' do
-    it 'checks polymorphic associations and updates polymorphic instance variable and the command given as parameter' do
-      command = ''
-      @picture.check_polymorphic(command)
-      expect(@picture.polymorphic).to eq(true)
-      expect(command).to eq(' postable:references{polymorphic} imageable:references{polymorphic}')
-
-      command = ''
-      @account_history.check_polymorphic(command)
-      expect(@account_history.polymorphic).to eq(false)
-      expect(command).to eq('')
-    end
-  end
-
-  describe '#create_model' do
-    it 'creates necessary commands and run them to create models in Rails project ' do
-      allow(File).to receive(:exist?).and_return(false)
-      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
-        expect([
-                 'bundle exec rails generate model Picture' \
-                 ' postable:references{polymorphic} imageable:references{polymorphic}',
-                 'bundle exec rails generate model AccountHistory' \
-                 ' credit_rating:integer access_time:datetime',
-                 'bundle exec rails generate model Relation'
-               ]).to include call_with
+      @nodes = parsed_nodes.map do |node|
+        Entity.new(node)
       end
 
-      @picture.create_model
-      @account_history.create_model
-      @relation.create_model
-    end
-  end
-
-  describe '#add_reference_migration' do
-    it 'creates necessary commands and run them to create models in Rails project ' do
-      allow(File).to receive(:exist?).and_return(false)
-      allow_any_instance_of(Object).to receive(:system) do |_, call_with|
-        expect([
-                 'bundle exec rails generate model AccountHistory credit_rating:integer access_time:datetime',
-                 'bundle exec rails generate model Relation'
-               ]).to include call_with
+      @edges = parsed_edges.map do |edge|
+        Association.new(edge)
       end
 
-      @picture.check_polymorphic('')
-      @picture.add_reference_migration
+      @account_history = Table.all.find { |table| table.name == 'account_history' }
+      @relation = Table.all.find { |table| table.name == 'relation' }
+      @picture = Table.all.find { |table| table.name == 'picture' }
+      @professor = Table.all.find { |table| table.name == 'professor' }
+      @student = Table.all.find { |table| table.name == 'student' }
+      @graduate_student = Table.all.find { |table| table.name == 'graduate_student' }
+    end
 
-      @account_history.create_model
-      @relation.create_model
+    describe '#model_name' do
+      it 'returns camelized name ' do
+        expect(@account_history.model_name).to eq('AccountHistory')
+      end
+    end
+
+    describe '#root_class' do
+      it 'returns the inherited table of any table or itself' do
+        expect(@account_history.root_class.name).to eq('account_history')
+        expect(@professor.root_class.name).to eq('teacher')
+      end
+    end
+
+    describe '#root_class?' do
+      it 'returns false if the table inherits from another table. If not, it returns true' do
+        expect(@account_history.root_class?).to eq(true)
+        expect(@professor.root_class?).to eq(false)
+      end
+    end
+
+    describe '#generate_reference_migration' do
+      context "if it isn't a polymorphic association" do
+        it 'creates a migration file for the table to add a reference' do
+          allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+            expect([
+                     'bundle exec rails generate migration AddAccountRefToAccountHistory account:references'
+                   ]).to include call_with
+          end
+
+          account = Entity.find_by_name('account')
+          @account_history.generate_reference_migration(account.name)
+        end
+      end
+
+      context 'if it is a polymorphic association' do
+        it 'creates a migration file for the table to add a polymorphic reference' do
+          allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+            expect([
+                     'bundle exec rails generate migration AddImageableRefToPicture imageable:references{polymorphic}'
+                   ]).to include call_with
+          end
+
+          @picture.generate_reference_migration('imageable', true)
+        end
+      end
+
+      context 'if the table inherits from another table' do
+        it 'creates a migration file for the inherited table to add reference' do
+          allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+            expect([
+                     'bundle exec rails generate migration AddSupervisorRefToUser supervisor:references{polymorphic}'
+                   ]).to include call_with
+          end
+
+          @graduate_student.generate_reference_migration('supervisor', true)
+        end
+      end
+    end
+
+    describe '#add_polymorphic_reference_migration_for_sti' do
+      it 'calls generate_reference_migration to create a migration file used to add a polymorphic reference' do
+        allow_any_instance_of(Table).to receive(:generate_reference_migration) do |_, name, polymorphic|
+          expect(['supervisor']).to include name
+          expect([true]).to include polymorphic
+        end
+
+        graduate_student = Table.all.find { |table| table.name == 'graduate_student' }
+        graduate_student.update_polymorphic_names
+
+        graduate_student.add_polymorphic_reference_migration_for_sti
+      end
+    end
+
+    describe '#add_polymorphic_reference' do
+      it 'adds polymorphic reference to command' do
+        command = ''
+        @account_history.add_polymorphic_reference(command, 'mock_polymorphic_name')
+        expect(command).to eq(' mock_polymorphic_name:references{polymorphic}')
+      end
+    end
+
+    describe '#update_polymorphic_names' do
+      it 'updates polymorphic names used to create polymorphic associations' do
+        @picture.update_polymorphic_names
+        expect(@picture.polymorphic_names).to eq(%w[postable imageable])
+        expect(@picture.polymorphic).to eq(true)
+
+        @student.update_polymorphic_names
+        expect(@student.polymorphic_names).to eq(%w[teachable])
+        expect(@student.polymorphic).to eq(true)
+
+        @graduate_student.update_polymorphic_names
+        expect(@graduate_student.polymorphic_names).to eq(%w[supervisor])
+        expect(@graduate_student.polymorphic).to eq(true)
+
+        @account_history.update_polymorphic_names
+        expect(@account_history.polymorphic_names).to eq([])
+        expect(@account_history.polymorphic).to eq(false)
+      end
+    end
+
+    describe '#check_polymorphic' do
+      it 'checks polymorphic associations and updates polymorphic instance variable and the command given as parameter' do
+        command = ''
+        @picture.check_polymorphic(command)
+        expect(command).to eq(' postable:references{polymorphic} imageable:references{polymorphic}')
+
+        command = ''
+        @account_history.check_polymorphic(command)
+        expect(command).to eq('')
+      end
+    end
+
+    describe '#create_model' do
+      it 'creates necessary commands and run them to create models in Rails project ' do
+        allow(File).to receive(:exist?).and_return(false)
+        allow_any_instance_of(Table).to receive(:check_polymorphic)
+
+        allow_any_instance_of(Object).to receive(:system) do |_, call_with|
+          expect([
+                   'bundle exec rails generate model Picture',
+                   'bundle exec rails generate model AccountHistory' \
+                   ' credit_rating:integer access_time:datetime',
+                   'bundle exec rails generate model Relation',
+                   'bundle exec rails generate model Professor --parent=UniversityStaff',
+                   'bundle exec rails generate model User type'
+                 ]).to include call_with
+        end
+
+        @picture.create_model
+        @account_history.create_model
+        @relation.create_model
+        @professor.create_model
+
+        user = Table.all.find { |table| table.name == 'user' }
+        user.create_model
+      end
+    end
+
+    describe '#add_reference_migration' do
+      it 'calls generate_reference_migration if the association between itself and its parent is not a polymorphic association' do
+        call_generate_reference_migration = 0
+        allow_any_instance_of(Table).to receive(:generate_reference_migration) { |_arg|
+                                          call_generate_reference_migration += 1
+                                        }
+        allow_any_instance_of(Entity).to receive(:one_polymorphic_names?).and_return(true, false)
+
+        @account_history.add_reference_migration
+        expect(call_generate_reference_migration).to eq(0)
+
+        @account_history.add_reference_migration
+        expect(call_generate_reference_migration).to eq(1)
+      end
     end
   end
 end

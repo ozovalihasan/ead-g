@@ -5,22 +5,24 @@ require 'ead'
 describe Association do
   before(:all) do
     ObjectSpace.garbage_collect
-    file = JSON.parse(File.read("#{__dir__}/association_spec_sample.json"))
-    file = file.to_json
 
-    @nodes = JSON.parse(file)['nodes']
-    @edges = JSON.parse(file)['edges']
-    @tables = JSON.parse(file)['tables']
+    parsed_file = JSON.parse(File.read("#{__dir__}/association_spec_sample.json"))
 
-    @tables = @tables.map do |(id)|
-      Table.new(id, @tables)
+    parsed_tables = parsed_file['tables']
+    parsed_nodes = parsed_file['nodes']
+    parsed_edges = parsed_file['edges']
+
+    @tables = parsed_tables.map do |(id)|
+      Table.new(id, parsed_tables[id])
     end
 
-    @nodes.map! do |node|
+    Table.update_superclasses(parsed_tables)
+
+    @nodes = parsed_nodes.map do |node|
       Entity.new(node)
     end
 
-    @edges.map! do |edge|
+    @edges = parsed_edges.map do |edge|
       Association.new(edge)
     end
 
@@ -72,32 +74,14 @@ describe Association do
 
   describe '#set_middle_entity' do
     it "sets the middle entity of a 'through' association " do
-      entity3 = Entity.find_by_name('entity3')
-      entity8 = Entity.find_by_name('entity8')
-
-      association = entity3.associations.find do |association|
-        (association.through_entity == @entity2) && (association.second_entity == @entity4)
-      end
-
-      association.set_middle_entity
-
-      expect(entity3.children_has_one_through).to include(@entity4)
-      expect(@entity4.parents_has_one_through).to include(entity3)
-
-      expect(entity3.children_has_one_through).to include(entity8)
-      expect(entity8.parents_has_one_through).to include(entity3)
-    end
-  end
-
-  describe '.set_middle_entities' do
-    it "sets all middle entities of any 'through' association " do
-      Association.set_middle_entities
+      Association.all.each(&:set_middle_entity)
 
       entity3 = Entity.find_by_name('entity3')
       entity5 = Entity.find_by_name('entity5')
       entity6 = Entity.find_by_name('entity6')
       entity7 = Entity.find_by_name('entity7')
       entity8 = Entity.find_by_name('entity8')
+
       association = entity7.associations.find(&:through?)
       expect(association.middle_entities_has_one).to include(entity5)
       expect(entity7.children_has_one_through).to include(entity6)
@@ -117,6 +101,16 @@ describe Association do
 
       expect(entity3.children_has_one_through).to include(entity8)
       expect(entity8.parents_has_one_through).to include(entity3)
+    end
+  end
+
+  describe '#update_model_from_entity' do
+    it 'calls Entity#update_model' do
+      allow_any_instance_of(Entity).to receive(:update_model) do |first_entity, second_entity, association|
+        expect(%w[entity1 entity2 has_many]).to eql [first_entity.name, second_entity.name, association.name]
+      end
+
+      @association1.update_model_from_entity
     end
   end
 

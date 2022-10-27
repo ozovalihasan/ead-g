@@ -17,12 +17,13 @@ describe Attribute do
               'name' => 'attribute2',
               'type' => 'string'
             }
-          }
+          },
+          'superclassId' => ''
         }
       }
     }
 
-    @table = Table.new('15', ead_file['tables'])
+    @table = Table.new('15', ead_file['tables']['15'])
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
   end
 

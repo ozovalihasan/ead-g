@@ -3,14 +3,14 @@ require 'fileutils'
 class ProjectFile
   def self.open_close(name, type, &block)
     case type
-    when 'migration'
-      tempfile_name = './db/migrate/migration_update.rb'
-      file_name = Dir.glob("./db/migrate/*_#{name.pluralize}.rb").first
     when 'model'
       tempfile_name = './app/models/model_update.rb'
       file_name = "./app/models/#{name}.rb"
-    when 'reference_migration'
+    when 'migration'
       tempfile_name = './db/migrate/migration_update.rb'
+      file_name = Dir.glob("./db/migrate/*_#{name}.rb").first
+    when 'reference_migration'
+      tempfile_name = './db/migrate/reference_migration_update.rb'
       file_name = Dir.glob("./db/migrate/*_#{name}.rb").first
     end
     tempfile = File.open(tempfile_name, 'w')
@@ -34,7 +34,7 @@ class ProjectFile
           line.gsub!(/ *\n/, '')
           line_content.each do |key, value|
             if line.include? key
-              line.gsub!(/#{key}: [^(\s,)]*/, "#{key}: #{value}#{Regexp.last_match(1)}")
+              line.gsub!(/#{key}: [^(,)]*/, "#{key}: #{value}")
             else
               line << ", #{key}: #{value}"
             end

@@ -61,7 +61,7 @@ EAD contains two parts;
 
 This repository contains the code of the EAD gem.
 
-EAD can be accessible from [this repository](https://github.com/ozovalihasan/ead) or [here](https://ead.ozovalihasan.com/) 
+EAD can be accessible from [this repository](https://github.com/ozovalihasan/ead) or [here](https://ozovalihasan.com/ead) 
 
 ## Built With
 

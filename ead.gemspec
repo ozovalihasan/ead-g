@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name = 'ead'
-  spec.version = '0.4.5'
+  spec.version = '0.4.6'
   spec.summary = 'Compiler for JSON files created by EAD'
   spec.description = 'The compiler updates/creates models and associations, used in a Ruby on Rails project, defined by EAD automatically.'
   spec.authors = ['Hasan Ozovali']

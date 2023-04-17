@@ -55,8 +55,8 @@ describe Association do
   end
 
   describe '.check_middle_entities_include' do
-    it "sets all middle entities of any 'through' association if the through entity of the association" \
-       ' is the given entity' do
+    it "sets all middle entities of any 'through' association if the through entity of the association " \
+       'is the given entity' do
       entity3 = Entity.find_by_name('entity3')
       entity8 = Entity.find_by_name('entity8')
 

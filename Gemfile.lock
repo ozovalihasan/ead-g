@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ead (0.4.5)
+    ead (0.4.6)
       rest-client (~> 2.0, >= 2.0.2)
 
 GEM

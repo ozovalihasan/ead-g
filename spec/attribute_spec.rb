@@ -3,7 +3,9 @@ require 'attribute'
 
 describe Attribute do
   before do
+    require 'attribute'
     ObjectSpace.garbage_collect
+
     ead_file = {
       'tables' => {
         '15' => {

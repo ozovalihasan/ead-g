@@ -5,6 +5,8 @@ require 'ead'
 
 describe Table do
   before :each do
+    require 'table'
+
     ObjectSpace.garbage_collect
   end
 
@@ -209,8 +211,8 @@ describe Table do
         allow_any_instance_of(Object).to receive(:system) do |_, call_with|
           expect([
                    'bundle exec rails generate model Picture',
-                   'bundle exec rails generate model AccountHistory' \
-                   ' credit_rating:integer access_time:datetime',
+                   'bundle exec rails generate model AccountHistory ' \
+                   'credit_rating:integer access_time:datetime',
                    'bundle exec rails generate model Relation',
                    'bundle exec rails generate model Professor --parent=UniversityStaff',
                    'bundle exec rails generate model User type'

@@ -5,6 +5,8 @@ require 'ead'
 
 describe Entity do
   before :all do
+    ObjectSpace.garbage_collect
+
     @parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))
     parsed_tables = @parsed_file['tables']
 

@@ -89,8 +89,8 @@ describe ProjectFile do
       ProjectFile.update_line('mock_name', 'reference_migration', /add_reference :mock_names/, mock_line_content)
 
       expect(tempfile).to eq(
-        "def change\n" \
-        "  add_reference :mock_names, :mock_names_second, null: true, foreign_key: { to_table: :mock_table_name }\n" \
+        "def change\n  " \
+        "add_reference :mock_names, :mock_names_second, null: true, foreign_key: { to_table: :mock_table_name }\n" \
         "end\n"
       )
     end
@@ -131,9 +131,9 @@ describe ProjectFile do
       ProjectFile.add_belong_line('mock_name', mock_line_content)
 
       expect(tempfile).to eq(
-        "class Mock\n" \
-        "  belongs_to mock2, mock2: content2\n" \
-        "  has_many mocks, mock: content\n" \
+        "class Mock\n  " \
+        "belongs_to mock2, mock2: content2\n  " \
+        "has_many mocks, mock: content\n" \
         "end\n"
       )
     end

@@ -59,10 +59,10 @@ class Table < TableEntityBase
   end
 
   def add_polymorphic_reference_migration_for_sti
-    if superclass && polymorphic
-      polymorphic_names.each do |name|
-        generate_reference_migration(name, true)
-      end
+    return unless superclass && polymorphic
+
+    polymorphic_names.each do |name|
+      generate_reference_migration(name, true)
     end
   end
 
@@ -71,7 +71,7 @@ class Table < TableEntityBase
   end
 
   def update_polymorphic_names
-    return if entities.size.zero?
+    return if entities.empty?
 
     belong_parents = []
     entities.each do |entity|

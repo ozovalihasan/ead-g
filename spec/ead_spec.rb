@@ -5,7 +5,7 @@ describe EAD do
   before do
     require 'ead'
     ObjectSpace.garbage_collect
-    
+
     @file = JSON.parse(File.read("#{__dir__}/ead_spec_sample.json"))
     @file = @file.to_json
     @ead = EAD.new
@@ -35,8 +35,8 @@ describe EAD do
       expect([
                "\n\n----------------",
                "\e[31m\ngem install ead -v 0.3.0\e[0m",
-               "\e[31mVersions of your EAD file and the gem are not compatible. So, you may have" \
-               " some unexpected results.To run your EAD file correctly, please run\e[0m",
+               "\e[31mVersions of your EAD file and the gem are not compatible. So, you may have " \
+               "some unexpected results.To run your EAD file correctly, please run\e[0m",
                "----------------\n\n"
              ]).to match_array shown_texts
     end
@@ -122,8 +122,8 @@ describe EAD do
           "\n\n----------------" \
           "\n\n" \
           "\e[31m" \
-          'If you want to check the latest version of this gem,' \
-          ' you need to have a stable internet connection.' \
+          'If you want to check the latest version of this gem, ' \
+          'you need to have a stable internet connection.' \
           "\e[0m" \
           "\n\n----------------\n\n"
         ).to_stdout

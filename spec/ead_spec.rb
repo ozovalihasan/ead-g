@@ -3,7 +3,9 @@ require 'active_support/core_ext/string'
 
 describe EAD do
   before do
+    require 'ead'
     ObjectSpace.garbage_collect
+    
     @file = JSON.parse(File.read("#{__dir__}/ead_spec_sample.json"))
     @file = @file.to_json
     @ead = EAD.new

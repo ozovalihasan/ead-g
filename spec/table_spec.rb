@@ -5,6 +5,9 @@ require 'ead'
 
 describe Table do
   before :each do
+    require 'table'
+    
+    
     ObjectSpace.garbage_collect
   end
 

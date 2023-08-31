@@ -2,7 +2,7 @@ class Attribute
   attr_accessor :name, :type
 
   def initialize(attribute)
-    @name = attribute['name']
+    @name = attribute['name'].underscore
     @type = attribute['type']
   end
 

@@ -18,6 +18,10 @@ describe Attribute do
             '17' => {
               'name' => 'attribute2',
               'type' => 'string'
+            },
+            '18' => {
+              'name' => 'attributeThree',
+              'type' => 'string'
             }
           },
           'superclassId' => ''
@@ -27,12 +31,16 @@ describe Attribute do
 
     @table = Table.new('15', ead_file['tables']['15'])
     @attribute = Attribute.all.select { |att| att.name == 'attribute1' }[0]
+    @attribute3 = Attribute.all.select { |att| att.name == 'attribute_three' }[0]
   end
 
   describe '#initialize' do
     it 'creates an instance of class correctly' do
       expect(@attribute.name).to eq('attribute1')
       expect(@attribute.type).to eq('string')
+      
+      expect(@attribute3.name).to eq('attribute_three')
+      expect(@attribute3.type).to eq('string')
     end
   end
 
@@ -46,7 +54,7 @@ describe Attribute do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(Attribute.all.size).to eq(2)
+      expect(Attribute.all.size).to eq(3)
     end
   end
 end

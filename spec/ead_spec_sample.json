@@ -14,8 +14,8 @@
                 "tableId": "1",
                 "name": "entity1"
             },
-            "width": 146,
-            "height": 65
+            "width": 144,
+            "height": 71
         },
         {
             "id": "4",
@@ -28,8 +28,8 @@
                 "tableId": "2",
                 "name": "entity2"
             },
-            "width": 138,
-            "height": 47
+            "width": 144,
+            "height": 71
         }
     ],
     "edges": [
@@ -40,7 +40,10 @@
             "sourceHandle": "bottom2",
             "targetHandle": "top",
             "type": "hasMany",
-            "label": "has many"
+            "label": "has many",
+            "data": {
+                "optional": false
+            }
         }
     ],
     "tables": {
@@ -55,13 +58,14 @@
             "superclassId": "1"
         }
     },
-    "connectionStartId": "3",
     "connectionStartNodeId": "6",
     "isConnectContinue": false,
-    "isMouseOnNode": true,
+    "isMouseOnNode": false,
     "isMouseOnEdge": false,
-    "mouseOnNodeId": "6",
+    "mouseOnNodeId": null,
     "mouseOnEdgeId": null,
     "selectedNodeIdForThrough": null,
+    "needFitView": false,
+    "connectionStartId": "3",
     "showTextOnEdges": false
 }

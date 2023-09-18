@@ -14,8 +14,8 @@
                 "tableId": "1",
                 "name": "entity1"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": -225,
@@ -34,8 +34,8 @@
                 "tableId": "2",
                 "name": "entity2"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": 270,
@@ -54,8 +54,8 @@
                 "tableId": "3",
                 "name": "entity3"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": -525,
@@ -74,8 +74,8 @@
                 "tableId": "4",
                 "name": "entity4"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": -330,
@@ -94,8 +94,8 @@
                 "tableId": "8",
                 "name": "entity8"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": -270,
@@ -114,8 +114,8 @@
                 "tableId": "5",
                 "name": "entity5"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": -105,
@@ -134,8 +134,8 @@
                 "tableId": "7",
                 "name": "entity7"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": 210,
@@ -154,8 +154,8 @@
                 "tableId": "6",
                 "name": "entity6"
             },
-            "width": 146,
-            "height": 65,
+            "width": 144,
+            "height": 71,
             "selected": false,
             "positionAbsolute": {
                 "x": 435,
@@ -172,7 +172,11 @@
             "sourceHandle": "bottom2",
             "targetHandle": "top",
             "type": "hasMany",
-            "label": "has many"
+            "label": "has many",
+            "data": {
+                "optional": false
+            },
+            "selected": false
         },
         {
             "id": "18",
@@ -181,7 +185,10 @@
             "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "type": "hasOne"
+            "type": "hasOne",
+            "data": {
+                "optional": false
+            }
         },
         {
             "id": "19",
@@ -190,7 +197,10 @@
             "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "type": "hasOne"
+            "type": "hasOne",
+            "data": {
+                "optional": false
+            }
         },
         {
             "id": "20",
@@ -199,7 +209,10 @@
             "sourceHandle": "bottom2",
             "targetHandle": "top",
             "type": "hasMany",
-            "label": "has many"
+            "label": "has many",
+            "data": {
+                "optional": false
+            }
         },
         {
             "id": "21",
@@ -209,7 +222,10 @@
             "targetHandle": "top",
             "label": "has one",
             "type": "hasOne",
-            "selected": false
+            "selected": false,
+            "data": {
+                "optional": false
+            }
         },
         {
             "id": "23",
@@ -218,7 +234,10 @@
             "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "type": "hasOne"
+            "type": "hasOne",
+            "data": {
+                "optional": false
+            }
         },
         {
             "id": "24",
@@ -289,7 +308,10 @@
             "sourceHandle": "bottom1",
             "targetHandle": "top",
             "label": "has one",
-            "type": "hasOne"
+            "type": "hasOne",
+            "data": {
+                "optional": false
+            }
         },
         {
             "id": "30",
@@ -353,6 +375,7 @@
     "mouseOnNodeId": null,
     "mouseOnEdgeId": null,
     "selectedNodeIdForThrough": null,
+    "needFitView": false,
     "connectionStartId": "11",
     "showTextOnEdges": false
 }

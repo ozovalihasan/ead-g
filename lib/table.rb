@@ -83,14 +83,14 @@ class Table < TableEntityBase
     belong_parent_names = belong_parents.map(&:name)
 
     filtered_parent_names = belong_parent_names.find_all do |parent_name|
-      belong_parent_names.count(parent_name) > 1
-    end.uniq
+                              belong_parent_names.count(parent_name) > 1
+                            end.uniq
 
     self.polymorphic_names = filtered_parent_names.find_all do |parent_name|
-      belong_parents.find_all do |entity|
-        entity.name == parent_name
-      end.map(&:table).map(&:name).uniq.size > 1
-    end
+                               belong_parents.find_all do |entity|
+                                 entity.name == parent_name
+                               end.map(&:table).map(&:name).uniq.size > 1
+                             end
 
     self.polymorphic = true if polymorphic_names.size.positive?
   end

@@ -51,23 +51,11 @@ class Table < TableEntityBase
   end
 
   def generate_reference_migration(name, polymorphic = false)
-    command = "bundle exec rails generate migration Add#{name.camelize}RefTo#{root_class.name.camelize} #{name}:references"
+    command = "bundle exec rails generate migration Add#{name.camelize}RefTo#{root_class.name.camelize} #{name}:belongs_to"
 
     command << '{polymorphic}' if polymorphic
 
     system(command)
-  end
-
-  def add_polymorphic_reference_migration_for_sti
-    return unless superclass && polymorphic
-
-    polymorphic_names.each do |name|
-      generate_reference_migration(name, true)
-    end
-  end
-
-  def add_polymorphic_reference(command, poly_name)
-    command << " #{poly_name}:references{polymorphic}"
   end
 
   def update_polymorphic_names
@@ -95,13 +83,6 @@ class Table < TableEntityBase
     self.polymorphic = true if polymorphic_names.size.positive?
   end
 
-  def check_polymorphic(command)
-    update_polymorphic_names
-    polymorphic_names.each do |poly_name|
-      add_polymorphic_reference(command, poly_name)
-    end
-  end
-
   def create_model
     return if File.exist?("./app/models/#{name}.rb")
 
@@ -111,19 +92,19 @@ class Table < TableEntityBase
 
     attributes.each { |attribute| attribute.add_to(command) } unless superclass
 
-    check_polymorphic(command)
-
     command << " --parent=#{superclass.name.classify}" if superclass
 
     system(command)
   end
 
   def add_reference_migration
+    update_polymorphic_names
+    
     entities.each do |entity|
-      (entity.parents_has_many + entity.parents_has_one).each do |parent|
-        next if entity.one_polymorphic_names?(parent)
-
-        generate_reference_migration(parent.name)
+      parent_entities = entity.parents_has_many + entity.parents_has_one
+      
+      parent_entities.uniq(&:name).each do |parent|
+        generate_reference_migration(parent.name, entity.one_polymorphic_names?(parent))
       end
     end
   end

@@ -63,11 +63,6 @@ describe EAD do
       call_create_model = 0
       allow_any_instance_of(Table).to receive(:create_model) { |_arg| call_create_model += 1 }
 
-      call_add_polymorphic_reference_migration_for_sti = 0
-      allow_any_instance_of(Table).to receive(:add_polymorphic_reference_migration_for_sti) { |_arg|
-                                        call_add_polymorphic_reference_migration_for_sti += 1
-                                      }
-
       call_add_reference_migration = 0
       allow_any_instance_of(Table).to receive(:add_reference_migration) { |_arg| call_add_reference_migration += 1 }
 
@@ -83,7 +78,6 @@ describe EAD do
       @ead.check_implement_objects
 
       expect(call_create_model).to eq(2)
-      expect(call_add_polymorphic_reference_migration_for_sti).to eq(2)
       expect(call_add_reference_migration).to eq(2)
       expect(call_set_middle_entity).to eq(1)
       expect(call_update_model_from_entity).to eq(1)
@@ -178,21 +172,21 @@ describe EAD do
 
       ead.start(['./spec/sample_EAD.json'])
 
-      expect(changes.size).to eq(98)
+      expect(changes.size).to eq(106)
       expect(changes).to match_array(
         [
-          'command bundle exec rails generate model GraduateStudent supervisor:references{polymorphic} --parent=Student run',
+          'command bundle exec rails generate model GraduateStudent supervisor:belongs_to{polymorphic} --parent=Student run',
           'command bundle exec rails generate model Technician run',
           'command bundle exec rails generate model Driver run',
-          'command bundle exec rails generate model Car drivable:references{polymorphic} --parent=Vehicle run',
+          'command bundle exec rails generate model Car drivable:belongs_to{polymorphic} --parent=Vehicle run',
           'command bundle exec rails generate model Vehicle type run',
           'command bundle exec rails generate model UniversityStaff --parent=Teacher run',
           'command bundle exec rails generate model Teacher type full_name:string branch:string run',
-          'command bundle exec rails generate model Student teachable:references{polymorphic} --parent=User run',
+          'command bundle exec rails generate model Student teachable:belongs_to{polymorphic} --parent=User run',
           'command bundle exec rails generate model AssistantProfessor --parent=UniversityStaff run',
           'command bundle exec rails generate model Professor --parent=UniversityStaff run',
           'command bundle exec rails generate model Employee run',
-          'command bundle exec rails generate model Picture postable:references{polymorphic} imageable:references{polymorphic} run',
+          'command bundle exec rails generate model Picture postable:belongs_to{polymorphic} imageable:belongs_to{polymorphic} run',
           'command bundle exec rails generate model Product run',
           'command bundle exec rails generate model Letter run',
           'command bundle exec rails generate model Postcard run',
@@ -201,18 +195,18 @@ describe EAD do
           'command bundle exec rails generate model AccountHistory credit_rating:integer access_time:datetime run',
           'command bundle exec rails generate model Account run',
           'command bundle exec rails generate model Supplier run',
-          'command bundle exec rails generate migration AddSupervisorRefToUser supervisor:references{polymorphic} run',
-          'command bundle exec rails generate migration AddDrivableRefToVehicle drivable:references{polymorphic} run',
-          'command bundle exec rails generate migration AddTeachableRefToUser teachable:references{polymorphic} run',
-          'command bundle exec rails generate migration AddTechnicianRefToVehicle technician:references run',
-          'command bundle exec rails generate migration AddAssistantProfessorRefToUser assistant_professor:references run',
-          'command bundle exec rails generate migration AddAssistantProfessorRefToUser assistant_professor:references run',
-          'command bundle exec rails generate migration AddManagerRefToUser manager:references run',
-          'command bundle exec rails generate migration AddSubordinateRefToUser subordinate:references run',
-          'command bundle exec rails generate migration AddFanRefToRelation fan:references run',
-          'command bundle exec rails generate migration AddFamousPersonRefToRelation famous_person:references run',
-          'command bundle exec rails generate migration AddAccountRefToAccountHistory account:references run',
-          'command bundle exec rails generate migration AddSupplierRefToAccount supplier:references run',
+          'command bundle exec rails generate migration AddSupervisorRefToUser supervisor:belongs_to{polymorphic} run',
+          'command bundle exec rails generate migration AddDrivableRefToVehicle drivable:belongs_to{polymorphic} run',
+          'command bundle exec rails generate migration AddTeachableRefToUser teachable:belongs_to{polymorphic} run',
+          'command bundle exec rails generate migration AddTechnicianRefToVehicle technician:belongs_to run',
+          'command bundle exec rails generate migration AddAssistantProfessorRefToUser assistant_professor:belongs_to run',
+          'command bundle exec rails generate migration AddAssistantProfessorRefToUser assistant_professor:belongs_to run',
+          'command bundle exec rails generate migration AddManagerRefToUser manager:belongs_to run',
+          'command bundle exec rails generate migration AddSubordinateRefToUser subordinate:belongs_to run',
+          'command bundle exec rails generate migration AddFanRefToRelation fan:belongs_to run',
+          'command bundle exec rails generate migration AddFamousPersonRefToRelation famous_person:belongs_to run',
+          'command bundle exec rails generate migration AddAccountRefToAccountHistory account:belongs_to run',
+          'command bundle exec rails generate migration AddSupplierRefToAccount supplier:belongs_to run',
           { file_name: 'technician', type: 'model', end_model: 'drivable',
             line: { 'has_one' => ':driver', 'through' => ':car', 'source' => ':drivable', 'source_type' => '"Driver" ' }, action: 'added' },
           { file_name: 'car', type: 'model', line: { 'belongs_to' => ':technician' }, action: 'added' },

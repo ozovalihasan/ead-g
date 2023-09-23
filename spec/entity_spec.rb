@@ -111,7 +111,7 @@ describe Entity do
       it 'returns boolean showing whether a entity name is one of polymorphic names of self' do
         photograph = Entity.find_by_name('photograph')
         postable = Entity.find_by_name('postable')
-        photograph.table.check_polymorphic('')
+        photograph.table.update_polymorphic_names
 
         expect(photograph.one_polymorphic_names?(postable)).to eq(true)
       end
@@ -264,7 +264,7 @@ describe Entity do
 
     describe '#update_start_model_file' do
       it 'updates the model file of an table' do
-        Association.all.each(&:set_middle_entity)
+        Association.all_references.each(&:set_middle_entity)
 
         allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
           expect(%w[user user]).to include name
@@ -298,7 +298,7 @@ describe Entity do
                              end [0]
         photograph = Entity.find_by_name('photograph')
 
-        photograph.table.check_polymorphic('')
+        photograph.table.update_polymorphic_names
 
         postable_post_card.update_start_model_file(photograph, postable_post_card.associations.find(&:has_many?))
         postable_post_card.update_start_model_file(imageable_employee, postable_post_card.associations.find(&:through?))

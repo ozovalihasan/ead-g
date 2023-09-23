@@ -43,21 +43,23 @@ class EAD
       Entity.new(node)
     end
 
+    Entity.dismiss_similar_ones
+
     @edges = parsed_edges.map do |edge|
       Association.new(edge)
     end
+
+    Association.dismiss_similar_ones
   end
 
   def check_implement_objects
     Table.all.each(&:create_model)
 
-    Table.all.each(&:add_polymorphic_reference_migration_for_sti)
-
     Table.all.each(&:add_reference_migration)
 
-    Association.all.each(&:set_middle_entity)
+    Association.all_references.each(&:set_middle_entity)
 
-    Association.all.each(&:update_model_from_entity)
+    Association.all_references.each(&:update_model_from_entity)
   end
 
   def check_latest_version

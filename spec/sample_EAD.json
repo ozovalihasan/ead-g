@@ -1,25 +1,25 @@
 {
     "version": "0.4.7",
-    "idCounter": 118,
-    "associationType": "through",
+    "idCounter": 133,
+    "associationType": "has_many",
     "nodes": [
         {
             "id": "20",
             "type": "entity",
             "position": {
-                "x": 495,
-                "y": 165
+                "x": 840,
+                "y": 765
             },
             "data": {
-                "tableId": "14",
+                "tableId": "124",
                 "name": "manager"
             },
             "width": 144,
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 495,
-                "y": 165
+                "x": 840,
+                "y": 765
             },
             "dragging": false
         },
@@ -27,22 +27,28 @@
             "id": "21",
             "type": "entity",
             "position": {
-                "x": 495,
-                "y": 255
+                "x": 840,
+                "y": 930
             },
             "data": {
-                "tableId": "14",
+                "tableId": "19",
                 "name": "subordinates"
             },
             "width": 144,
-            "height": 71
+            "height": 71,
+            "selected": false,
+            "positionAbsolute": {
+                "x": 840,
+                "y": 930
+            },
+            "dragging": false
         },
         {
             "id": "22",
             "type": "entity",
             "position": {
-                "x": 495,
-                "y": 360
+                "x": 960,
+                "y": 1275
             },
             "data": {
                 "tableId": "14",
@@ -52,8 +58,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 495,
-                "y": 360
+                "x": 960,
+                "y": 1275
             },
             "dragging": false
         },
@@ -61,8 +67,8 @@
             "id": "25",
             "type": "entity",
             "position": {
-                "x": 1020,
-                "y": 180
+                "x": 570,
+                "y": 255
             },
             "data": {
                 "tableId": "14",
@@ -72,8 +78,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 1020,
-                "y": 180
+                "x": 570,
+                "y": 255
             },
             "dragging": false
         },
@@ -81,8 +87,8 @@
             "id": "26",
             "type": "entity",
             "position": {
-                "x": 840,
-                "y": 180
+                "x": 390,
+                "y": 255
             },
             "data": {
                 "tableId": "14",
@@ -92,8 +98,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 840,
-                "y": 180
+                "x": 390,
+                "y": 255
             },
             "dragging": false
         },
@@ -101,8 +107,8 @@
             "id": "27",
             "type": "entity",
             "position": {
-                "x": 840,
-                "y": 300
+                "x": 390,
+                "y": 420
             },
             "data": {
                 "tableId": "13",
@@ -112,8 +118,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 840,
-                "y": 300
+                "x": 390,
+                "y": 420
             },
             "dragging": false
         },
@@ -121,8 +127,8 @@
             "id": "28",
             "type": "entity",
             "position": {
-                "x": 1020,
-                "y": 300
+                "x": 570,
+                "y": 420
             },
             "data": {
                 "tableId": "13",
@@ -132,8 +138,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 1020,
-                "y": 300
+                "x": 570,
+                "y": 420
             },
             "dragging": false
         },
@@ -141,8 +147,8 @@
             "id": "34",
             "type": "entity",
             "position": {
-                "x": 285,
-                "y": 480
+                "x": 15,
+                "y": 570
             },
             "data": {
                 "tableId": "16",
@@ -152,8 +158,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 285,
-                "y": 480
+                "x": 15,
+                "y": 570
             },
             "dragging": false
         },
@@ -161,8 +167,8 @@
             "id": "35",
             "type": "entity",
             "position": {
-                "x": 660,
-                "y": 480
+                "x": 390,
+                "y": 570
             },
             "data": {
                 "tableId": "17",
@@ -172,8 +178,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 660,
-                "y": 480
+                "x": 390,
+                "y": 570
             },
             "dragging": false
         },
@@ -181,8 +187,8 @@
             "id": "36",
             "type": "entity",
             "position": {
-                "x": 630,
-                "y": 675
+                "x": 360,
+                "y": 765
             },
             "data": {
                 "tableId": "18",
@@ -193,16 +199,16 @@
             "selected": false,
             "dragging": false,
             "positionAbsolute": {
-                "x": 630,
-                "y": 675
+                "x": 360,
+                "y": 765
             }
         },
         {
             "id": "37",
             "type": "entity",
             "position": {
-                "x": 855,
-                "y": 480
+                "x": 585,
+                "y": 570
             },
             "data": {
                 "tableId": "19",
@@ -212,8 +218,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 855,
-                "y": 480
+                "x": 585,
+                "y": 570
             },
             "dragging": false
         },
@@ -221,8 +227,8 @@
             "id": "38",
             "type": "entity",
             "position": {
-                "x": 480,
-                "y": 480
+                "x": 210,
+                "y": 570
             },
             "data": {
                 "tableId": "15",
@@ -232,8 +238,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 480,
-                "y": 480
+                "x": 210,
+                "y": 570
             },
             "dragging": false
         },
@@ -241,8 +247,8 @@
             "id": "45",
             "type": "entity",
             "position": {
-                "x": 1095,
-                "y": 480
+                "x": 840,
+                "y": 255
             },
             "data": {
                 "tableId": "10",
@@ -252,8 +258,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 1095,
-                "y": 480
+                "x": 840,
+                "y": 255
             },
             "dragging": false
         },
@@ -261,8 +267,8 @@
             "id": "46",
             "type": "entity",
             "position": {
-                "x": 1095,
-                "y": 600
+                "x": 840,
+                "y": 420
             },
             "data": {
                 "tableId": "11",
@@ -272,8 +278,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 1095,
-                "y": 600
+                "x": 840,
+                "y": 420
             },
             "dragging": false
         },
@@ -281,8 +287,8 @@
             "id": "47",
             "type": "entity",
             "position": {
-                "x": 1095,
-                "y": 720
+                "x": 840,
+                "y": 585
             },
             "data": {
                 "tableId": "12",
@@ -292,8 +298,8 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 1095,
-                "y": 720
+                "x": 840,
+                "y": 585
             },
             "dragging": false
         },
@@ -328,7 +334,7 @@
                 "tableId": "54",
                 "name": "supervisor"
             },
-            "selected": true,
+            "selected": false,
             "width": 144,
             "height": 71,
             "positionAbsolute": {
@@ -361,8 +367,8 @@
             "id": "77",
             "type": "entity",
             "position": {
-                "x": -165,
-                "y": 555
+                "x": -405,
+                "y": 570
             },
             "data": {
                 "tableId": "53",
@@ -372,8 +378,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": -165,
-                "y": 555
+                "x": -405,
+                "y": 570
             },
             "dragging": false
         },
@@ -381,8 +387,8 @@
             "id": "78",
             "type": "entity",
             "position": {
-                "x": -165,
-                "y": 735
+                "x": -405,
+                "y": 750
             },
             "data": {
                 "tableId": "55",
@@ -392,8 +398,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": -165,
-                "y": 735
+                "x": -405,
+                "y": 750
             },
             "dragging": false
         },
@@ -421,8 +427,8 @@
             "id": "87",
             "type": "entity",
             "position": {
-                "x": 15,
-                "y": 735
+                "x": -225,
+                "y": 750
             },
             "data": {
                 "tableId": "55",
@@ -432,8 +438,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": 15,
-                "y": 735
+                "x": -225,
+                "y": 750
             },
             "dragging": false
         },
@@ -441,8 +447,8 @@
             "id": "88",
             "type": "entity",
             "position": {
-                "x": 15,
-                "y": 555
+                "x": -225,
+                "y": 570
             },
             "data": {
                 "tableId": "70",
@@ -450,14 +456,19 @@
             },
             "selected": false,
             "width": 144,
-            "height": 71
+            "height": 71,
+            "positionAbsolute": {
+                "x": -225,
+                "y": 570
+            },
+            "dragging": false
         },
         {
             "id": "90",
             "type": "entity",
             "position": {
-                "x": -570,
-                "y": 510
+                "x": -405,
+                "y": 930
             },
             "data": {
                 "tableId": "54",
@@ -467,8 +478,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": -570,
-                "y": 510
+                "x": -405,
+                "y": 930
             },
             "dragging": false
         },
@@ -476,8 +487,8 @@
             "id": "91",
             "type": "entity",
             "position": {
-                "x": -570,
-                "y": 675
+                "x": -405,
+                "y": 1140
             },
             "data": {
                 "tableId": "55",
@@ -485,14 +496,19 @@
             },
             "selected": false,
             "width": 144,
-            "height": 71
+            "height": 71,
+            "positionAbsolute": {
+                "x": -405,
+                "y": 1140
+            },
+            "dragging": false
         },
         {
             "id": "93",
             "type": "entity",
             "position": {
-                "x": -390,
-                "y": 510
+                "x": -225,
+                "y": 930
             },
             "data": {
                 "tableId": "54",
@@ -502,8 +518,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": -390,
-                "y": 510
+                "x": -225,
+                "y": 930
             },
             "dragging": false
         },
@@ -511,8 +527,8 @@
             "id": "94",
             "type": "entity",
             "position": {
-                "x": -390,
-                "y": 675
+                "x": -225,
+                "y": 1140
             },
             "data": {
                 "tableId": "55",
@@ -522,8 +538,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": -390,
-                "y": 675
+                "x": -225,
+                "y": 1140
             },
             "dragging": false
         },
@@ -531,8 +547,8 @@
             "id": "98",
             "type": "entity",
             "position": {
-                "x": 540,
-                "y": 1005
+                "x": 330,
+                "y": 1140
             },
             "data": {
                 "tableId": "97",
@@ -542,8 +558,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": 540,
-                "y": 1005
+                "x": 330,
+                "y": 1140
             },
             "dragging": false
         },
@@ -551,8 +567,8 @@
             "id": "99",
             "type": "entity",
             "position": {
-                "x": 285,
-                "y": 795
+                "x": 75,
+                "y": 930
             },
             "data": {
                 "tableId": "14",
@@ -562,8 +578,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": 285,
-                "y": 795
+                "x": 75,
+                "y": 930
             },
             "dragging": false
         },
@@ -571,8 +587,8 @@
             "id": "102",
             "type": "entity",
             "position": {
-                "x": 450,
-                "y": 795
+                "x": 240,
+                "y": 930
             },
             "data": {
                 "tableId": "101",
@@ -582,8 +598,8 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": 450,
-                "y": 795
+                "x": 240,
+                "y": 930
             },
             "dragging": false
         },
@@ -591,8 +607,8 @@
             "id": "107",
             "type": "entity",
             "position": {
-                "x": 780,
-                "y": 795
+                "x": 570,
+                "y": 930
             },
             "data": {
                 "tableId": "106",
@@ -602,9 +618,125 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": 780,
-                "y": 795
+                "x": 570,
+                "y": 930
             },
+            "dragging": false
+        },
+        {
+            "id": "118",
+            "type": "entity",
+            "position": {
+                "x": -405,
+                "y": 255
+            },
+            "data": {
+                "tableId": "53",
+                "name": "supervisor"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "dragging": false,
+            "positionAbsolute": {
+                "x": -405,
+                "y": 255
+            }
+        },
+        {
+            "id": "119",
+            "type": "entity",
+            "position": {
+                "x": -405,
+                "y": 390
+            },
+            "data": {
+                "tableId": "62",
+                "name": "supervisee"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "dragging": false,
+            "positionAbsolute": {
+                "x": -405,
+                "y": 390
+            }
+        },
+        {
+            "id": "123",
+            "type": "entity",
+            "position": {
+                "x": 1050,
+                "y": 930
+            },
+            "data": {
+                "tableId": "19",
+                "name": "subordinates"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "dragging": false,
+            "positionAbsolute": {
+                "x": 1050,
+                "y": 930
+            }
+        },
+        {
+            "id": "125",
+            "type": "entity",
+            "position": {
+                "x": 1050,
+                "y": 765
+            },
+            "data": {
+                "tableId": "124",
+                "name": "manager"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "dragging": false,
+            "positionAbsolute": {
+                "x": 1050,
+                "y": 765
+            }
+        },
+        {
+            "id": "128",
+            "type": "entity",
+            "position": {
+                "x": 1050,
+                "y": 1095
+            },
+            "data": {
+                "tableId": "19",
+                "name": "customer_representative"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "dragging": false,
+            "positionAbsolute": {
+                "x": 1050,
+                "y": 1095
+            }
+        },
+        {
+            "id": "131",
+            "type": "entity",
+            "position": {
+                "x": 840,
+                "y": 1095
+            },
+            "data": {
+                "tableId": "124",
+                "name": "customer_representative"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
             "dragging": false
         }
     ],
@@ -618,20 +750,9 @@
             "type": "hasMany",
             "label": "has many",
             "data": {
-                "optional": false
-            }
-        },
-        {
-            "id": "24",
-            "source": "21",
-            "target": "22",
-            "sourceHandle": "bottom2",
-            "targetHandle": "top",
-            "type": "hasMany",
-            "label": "has many",
-            "data": {
-                "optional": false
-            }
+                "optional": true
+            },
+            "selected": false
         },
         {
             "id": "29",
@@ -643,7 +764,8 @@
             "label": "has many",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "30",
@@ -655,7 +777,8 @@
             "label": "has many",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "31",
@@ -667,7 +790,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "27"
-            }
+            },
+            "selected": false
         },
         {
             "id": "33",
@@ -679,7 +803,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "28"
-            }
+            },
+            "selected": false
         },
         {
             "id": "39",
@@ -691,7 +816,8 @@
             "label": "has many",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "40",
@@ -703,7 +829,8 @@
             "label": "has many",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "41",
@@ -715,7 +842,8 @@
             "label": "has many",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "42",
@@ -727,7 +855,8 @@
             "label": "has many",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "43",
@@ -739,7 +868,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "36"
-            }
+            },
+            "selected": false
         },
         {
             "id": "44",
@@ -751,7 +881,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "36"
-            }
+            },
+            "selected": false
         },
         {
             "id": "48",
@@ -763,7 +894,8 @@
             "type": "hasOne",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "49",
@@ -775,7 +907,8 @@
             "type": "hasOne",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "50",
@@ -787,7 +920,8 @@
             "type": "through",
             "data": {
                 "throughNodeId": "46"
-            }
+            },
+            "selected": false
         },
         {
             "id": "64",
@@ -798,8 +932,9 @@
             "label": "has many",
             "type": "hasMany",
             "data": {
-                "optional": false
-            }
+                "optional": true
+            },
+            "selected": false
         },
         {
             "id": "65",
@@ -823,7 +958,8 @@
             "type": "hasMany",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "86",
@@ -835,7 +971,7 @@
             "type": "hasMany",
             "selected": false,
             "data": {
-                "optional": false
+                "optional": true
             }
         },
         {
@@ -848,7 +984,8 @@
             "type": "hasMany",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "92",
@@ -860,7 +997,8 @@
             "type": "hasMany",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "95",
@@ -872,7 +1010,8 @@
             "type": "hasMany",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "114",
@@ -897,7 +1036,8 @@
             "type": "hasMany",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "116",
@@ -909,7 +1049,8 @@
             "type": "hasOne",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "117",
@@ -921,7 +1062,59 @@
             "type": "through",
             "data": {
                 "throughNodeId": "98"
+            },
+            "selected": false
+        },
+        {
+            "id": "120",
+            "source": "118",
+            "target": "119",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            },
+            "selected": false
+        },
+        {
+            "id": "126",
+            "source": "125",
+            "target": "123",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
             }
+        },
+        {
+            "id": "130",
+            "source": "128",
+            "target": "22",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            },
+            "selected": false
+        },
+        {
+            "id": "132",
+            "source": "131",
+            "target": "22",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            },
+            "selected": true
         }
     ],
     "tables": {
@@ -982,7 +1175,7 @@
         "19": {
             "name": "employee",
             "attributes": {},
-            "superclassId": ""
+            "superclassId": "14"
         },
         "53": {
             "name": "professor",
@@ -1042,9 +1235,14 @@
             "name": "Technician",
             "attributes": {},
             "superclassId": ""
+        },
+        "124": {
+            "name": "director",
+            "attributes": {},
+            "superclassId": "19"
         }
     },
-    "connectionStartNodeId": "107",
+    "connectionStartNodeId": "131",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

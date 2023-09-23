@@ -6,12 +6,11 @@ class ProjectFile
     when 'model'
       tempfile_name = './app/models/model_update.rb'
       file_name = "./app/models/#{name}.rb"
-    when 'migration'
-      tempfile_name = './db/migrate/migration_update.rb'
-      file_name = Dir.glob("./db/migrate/*_#{name}.rb").first
     when 'reference_migration'
       tempfile_name = './db/migrate/reference_migration_update.rb'
       file_name = Dir.glob("./db/migrate/*_#{name}.rb").first
+    else 
+      raise StandardError.new "Type(#{type} is not suitable)"
     end
     tempfile = File.open(tempfile_name, 'w')
     file = File.new(file_name)

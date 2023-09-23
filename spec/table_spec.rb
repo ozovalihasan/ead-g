@@ -115,7 +115,7 @@ describe Table do
         it 'creates a migration file for the table to add a reference' do
           allow_any_instance_of(Object).to receive(:system) do |_, call_with|
             expect([
-                     'bundle exec rails generate migration AddAccountRefToAccountHistory account:references'
+                     'bundle exec rails generate migration AddAccountRefToAccountHistory account:belongs_to'
                    ]).to include call_with
           end
 
@@ -128,7 +128,7 @@ describe Table do
         it 'creates a migration file for the table to add a polymorphic reference' do
           allow_any_instance_of(Object).to receive(:system) do |_, call_with|
             expect([
-                     'bundle exec rails generate migration AddImageableRefToPicture imageable:references{polymorphic}'
+                     'bundle exec rails generate migration AddImageableRefToPicture imageable:belongs_to{polymorphic}'
                    ]).to include call_with
           end
 
@@ -140,34 +140,12 @@ describe Table do
         it 'creates a migration file for the inherited table to add reference' do
           allow_any_instance_of(Object).to receive(:system) do |_, call_with|
             expect([
-                     'bundle exec rails generate migration AddSupervisorRefToUser supervisor:references{polymorphic}'
+                     'bundle exec rails generate migration AddSupervisorRefToUser supervisor:belongs_to{polymorphic}'
                    ]).to include call_with
           end
 
           @graduate_student.generate_reference_migration('supervisor', true)
         end
-      end
-    end
-
-    describe '#add_polymorphic_reference_migration_for_sti' do
-      it 'calls generate_reference_migration to create a migration file used to add a polymorphic reference' do
-        allow_any_instance_of(Table).to receive(:generate_reference_migration) do |_, name, polymorphic|
-          expect(['supervisor']).to include name
-          expect([true]).to include polymorphic
-        end
-
-        graduate_student = Table.all.find { |table| table.name == 'graduate_student' }
-        graduate_student.update_polymorphic_names
-
-        graduate_student.add_polymorphic_reference_migration_for_sti
-      end
-    end
-
-    describe '#add_polymorphic_reference' do
-      it 'adds polymorphic reference to command' do
-        command = ''
-        @account_history.add_polymorphic_reference(command, 'mock_polymorphic_name')
-        expect(command).to eq(' mock_polymorphic_name:references{polymorphic}')
       end
     end
 
@@ -191,22 +169,9 @@ describe Table do
       end
     end
 
-    describe '#check_polymorphic' do
-      it 'checks polymorphic associations and updates polymorphic instance variable and the command given as parameter' do
-        command = ''
-        @picture.check_polymorphic(command)
-        expect(command).to eq(' postable:references{polymorphic} imageable:references{polymorphic}')
-
-        command = ''
-        @account_history.check_polymorphic(command)
-        expect(command).to eq('')
-      end
-    end
-
     describe '#create_model' do
       it 'creates necessary commands and run them to create models in Rails project ' do
         allow(File).to receive(:exist?).and_return(false)
-        allow_any_instance_of(Table).to receive(:check_polymorphic)
 
         allow_any_instance_of(Object).to receive(:system) do |_, call_with|
           expect([

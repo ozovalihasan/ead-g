@@ -5,13 +5,15 @@ require 'project_file'
 class Entity < TableEntityBase
   attr_accessor(:name, :id, :table, :parent, :parent_association, :associations, :parent_associations,
                 :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
-                :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through)
+                :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through, :reference_entity)
 
   def initialize(node)
     @id = node['id']
     @name = node['data']['name'].underscore.singularize
     @table = Table.find(node['data']['tableId'])
+    @reference_entity = self
     @table.entities << self
+    
 
     @parent_associations = []
     @associations = []
@@ -31,6 +33,19 @@ class Entity < TableEntityBase
 
   def self.find_by_name(name)
     all.find { |entity| entity.name == name }
+  end
+
+  def self.dismiss_similar_ones
+    grouped_entities = all.group_by {|entity| [entity.name, entity.table.id]}
+    grouped_entities.values.each do |subgroup_entities|
+      next if subgroup_entities.size == 1
+
+      reference_entity_of_subgroup = subgroup_entities.first
+      
+      subgroup_entities.each do |subgroup_entity|
+        subgroup_entity.reference_entity = reference_entity_of_subgroup
+      end
+    end
   end
 
   def model_name
@@ -61,7 +76,7 @@ class Entity < TableEntityBase
 
     end_model_line['belongs_to'] = ":#{start_entity.name}"
 
-    if root_classes_same?(start_entity)
+    if root_classes_same?(start_entity) || association.optional?
       end_model_line['optional'] = 'true'
       end_migration_line['null'] = 'true'
     else
@@ -72,7 +87,9 @@ class Entity < TableEntityBase
 
     polymorphic_end = one_polymorphic_names?(start_entity)
 
-    unless polymorphic_end
+    if polymorphic_end
+      end_model_line['polymorphic'] = "true"
+    else
       end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\"" if start_entity.table_name_different?
 
       if start_entity.root_class_name_different?
@@ -96,40 +113,20 @@ class Entity < TableEntityBase
   def update_model_files(start_entity, end_model_line)
     return if end_model_line.empty?
 
-    polymorphic_end = one_polymorphic_names?(start_entity)
-
-    if polymorphic_end
-      ProjectFile.update_line(table.name, 'model', /belongs_to :#{start_entity.name}/, end_model_line)
-    else
-      ProjectFile.add_belong_line(table.name, end_model_line)
-    end
+    ProjectFile.add_belong_line(table.name, end_model_line)
   end
 
   def update_migration_files(start_entity, end_migration_line)
     return if end_migration_line.empty?
 
-    polymorphic_end = one_polymorphic_names?(start_entity)
+    migration_name = "Add#{start_entity.name.camelize}RefTo#{table.root_class.name.camelize}".underscore
 
-    if table.root_class? && polymorphic_end
-      migration_name = "Create#{table.name.camelize.pluralize}".underscore
-
-      ProjectFile.update_line(
-        migration_name,
-        'migration',
-        /t.references :#{start_entity.name}/,
-        end_migration_line
-      )
-
-    else
-      migration_name = "Add#{start_entity.name.camelize}RefTo#{table.root_class.name.camelize}".underscore
-
-      ProjectFile.update_line(
-        migration_name,
-        'reference_migration',
-        /add_reference :#{table.root_class.name.pluralize}/,
-        end_migration_line
-      )
-    end
+    ProjectFile.update_line(
+      migration_name,
+      'reference_migration',
+      /add_reference :#{table.root_class.name.pluralize}/,
+      end_migration_line
+    )
   end
 
   def update_start_model_file(end_entity, association)

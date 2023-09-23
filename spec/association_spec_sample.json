@@ -1,7 +1,7 @@
 {
     "version": "0.4.7",
-    "idCounter": 31,
-    "associationType": "through",
+    "idCounter": 51,
+    "associationType": "has_many",
     "nodes": [
         {
             "id": "9",
@@ -147,8 +147,8 @@
             "id": "22",
             "type": "entity",
             "position": {
-                "x": 435,
-                "y": 690
+                "x": 135,
+                "y": 720
             },
             "data": {
                 "tableId": "6",
@@ -158,8 +158,108 @@
             "height": 71,
             "selected": false,
             "positionAbsolute": {
-                "x": 435,
-                "y": 690
+                "x": 135,
+                "y": 720
+            },
+            "dragging": false
+        },
+        {
+            "id": "35",
+            "type": "entity",
+            "position": {
+                "x": 705,
+                "y": 465
+            },
+            "data": {
+                "tableId": "31",
+                "name": "entity9"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": 705,
+                "y": 465
+            },
+            "dragging": false
+        },
+        {
+            "id": "36",
+            "type": "entity",
+            "position": {
+                "x": 375,
+                "y": 720
+            },
+            "data": {
+                "tableId": "33",
+                "name": "entity10"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": 375,
+                "y": 720
+            },
+            "dragging": false
+        },
+        {
+            "id": "38",
+            "type": "entity",
+            "position": {
+                "x": 570,
+                "y": 720
+            },
+            "data": {
+                "tableId": "34",
+                "name": "entity11"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": 570,
+                "y": 720
+            },
+            "dragging": false
+        },
+        {
+            "id": "43",
+            "type": "entity",
+            "position": {
+                "x": 795,
+                "y": 735
+            },
+            "data": {
+                "tableId": "41",
+                "name": "entity12"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": 795,
+                "y": 735
+            },
+            "dragging": false
+        },
+        {
+            "id": "45",
+            "type": "entity",
+            "position": {
+                "x": 960,
+                "y": 750
+            },
+            "data": {
+                "tableId": "44",
+                "name": "entity13"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": 960,
+                "y": 750
             },
             "dragging": false
         }
@@ -188,7 +288,8 @@
             "type": "hasOne",
             "data": {
                 "optional": false
-            }
+            },
+            "selected": false
         },
         {
             "id": "19",
@@ -324,6 +425,58 @@
             "data": {
                 "throughNodeId": "12"
             }
+        },
+        {
+            "id": "47",
+            "source": "35",
+            "target": "36",
+            "sourceHandle": "bottom1",
+            "targetHandle": "top",
+            "type": "hasOne",
+            "label": "has one",
+            "data": {
+                "optional": false
+            },
+            "selected": false
+        },
+        {
+            "id": "48",
+            "source": "35",
+            "target": "38",
+            "sourceHandle": "bottom1",
+            "targetHandle": "top",
+            "type": "hasOne",
+            "label": "has one",
+            "data": {
+                "optional": true
+            },
+            "selected": false
+        },
+        {
+            "id": "49",
+            "source": "35",
+            "target": "43",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            },
+            "selected": false
+        },
+        {
+            "id": "50",
+            "source": "35",
+            "target": "45",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": true
+            },
+            "selected": false
         }
     ],
     "tables": {
@@ -366,9 +519,34 @@
             "name": "entity8",
             "attributes": {},
             "superclassId": ""
+        },
+        "31": {
+            "name": "entity9",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "33": {
+            "name": "entity10",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "34": {
+            "name": "entity11",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "41": {
+            "name": "entity12",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "44": {
+            "name": "entity13",
+            "attributes": {},
+            "superclassId": ""
         }
     },
-    "connectionStartNodeId": "6",
+    "connectionStartNodeId": "35",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

@@ -51,6 +51,38 @@ describe Association do
       expect(@entity2.children_has_one.any?(@entity3)).to eq(true)
       expect(@entity4.parents_through.any?(@entity3)).to eq(true)
       expect(@entity3.children_through.any?(@entity4)).to eq(true)
+
+      entity9 = Entity.find_by_name('entity9')
+      
+      entity10 = Entity.find_by_name('entity10')
+      association4 = entity9.associations.find {|association| association.second_entity == entity10}
+      
+      expect(association4.optional).to eq(false)
+      
+      entity11 = Entity.find_by_name('entity11')
+      association5 = entity9.associations.find {|association| association.second_entity == entity11}
+      
+      expect(association5.optional).to eq(true)
+      
+      entity12 = Entity.find_by_name('entity12')
+      association6 = entity9.associations.find {|association| association.second_entity == entity12}
+      
+      expect(association6.optional).to eq(false)
+
+      entity13 = Entity.find_by_name('entity13')
+      association7 = entity9.associations.find {|association| association.second_entity == entity13}
+      
+      expect(association7.optional).to eq(true)
+    end
+  end
+
+  describe '#optional?' do
+    it "returns whether the association is optional or not" do
+      entity9 = Entity.find_by_name('entity9')
+      entity11 = Entity.find_by_name('entity11')
+      association5 = entity9.associations.find {|association| association.second_entity == entity11}
+      
+      expect(association5.optional?).to eq(true)
     end
   end
 
@@ -74,7 +106,7 @@ describe Association do
 
   describe '#set_middle_entity' do
     it "sets the middle entity of a 'through' association " do
-      Association.all.each(&:set_middle_entity)
+      Association.all_references.each(&:set_middle_entity)
 
       entity3 = Entity.find_by_name('entity3')
       entity5 = Entity.find_by_name('entity5')
@@ -141,7 +173,7 @@ describe Association do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(Association.all.size).to eq(13)
+      expect(Association.all.size).to eq(17)
     end
   end
 end

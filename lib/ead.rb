@@ -50,6 +50,8 @@ class EAD
     end
 
     Association.dismiss_similar_ones
+    
+    Table.all.each(&:update_polymorphic_names)
   end
 
   def check_implement_objects

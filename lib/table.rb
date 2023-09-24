@@ -115,8 +115,6 @@ class Table < TableEntityBase
   end
 
   def add_reference_migration
-    update_polymorphic_names
-    
     entities.each do |entity|
       parent_entities = entity.parents_has_many + entity.parents_has_one
       

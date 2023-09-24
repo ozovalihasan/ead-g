@@ -63,7 +63,7 @@ class Table < TableEntityBase
 
     belong_parents = []
     entities.each do |entity|
-      entity.parent_associations.each do |association|
+      entity.parent_associations.select(&:has_any?).each do |association|
         belong_parents << association.first_entity
       end
     end
@@ -83,7 +83,7 @@ class Table < TableEntityBase
 
     find_associations_related_to = lambda do |polymorphic_name|
       entities.map do |entity| 
-        entity.parent_associations.select {|association| association.first_entity.name == polymorphic_name}
+        entity.parent_associations.select {|association| has_any? && (association.first_entity.name == polymorphic_name)}
       end.flatten
     end
 

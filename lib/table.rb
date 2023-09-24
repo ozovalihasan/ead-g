@@ -37,8 +37,6 @@ class Table < TableEntityBase
   end
 
   def root_class
-    nil unless @superclass
-
     root = self
 
     root = root.superclass while root.superclass

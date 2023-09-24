@@ -83,7 +83,7 @@ class Table < TableEntityBase
 
     find_associations_related_to = lambda do |polymorphic_name|
       entities.map do |entity| 
-        entity.parent_associations.select {|association| has_any? && (association.first_entity.name == polymorphic_name)}
+        entity.parent_associations.select {|association| association.has_any? && (association.first_entity.name == polymorphic_name)}
       end.flatten
     end
 

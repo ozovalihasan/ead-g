@@ -138,8 +138,8 @@ class Association
   end
 
   def self.dismiss_similar_ones
-    @similar_associations_groups = all.group_by {|association| [association.first_entity, association.second_entity, association.through_entity]}
-    @similar_associations_groups.values.each do |similar_associations| 
+    similar_association_groups = all.group_by {|association| [association.first_entity, association.second_entity, association.through_entity]}
+    similar_association_groups.values.each do |similar_associations| 
       next if similar_associations.size == 1
 
       reference_association_of_group = similar_associations.find(&:optional?) || similar_associations.first

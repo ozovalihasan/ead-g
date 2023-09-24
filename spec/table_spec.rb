@@ -149,21 +149,21 @@ describe Table do
       end
     end
 
-    describe '#update_polymorphic_names' do
+    describe '#set_polymorphic_names' do
       it 'updates polymorphic names used to create polymorphic associations' do
-        @picture.update_polymorphic_names
+        @picture.set_polymorphic_names
         expect(@picture.polymorphic_names).to eq(%w[postable imageable])
         expect(@picture.polymorphic).to eq(true)
 
-        @student.update_polymorphic_names
+        @student.set_polymorphic_names
         expect(@student.polymorphic_names).to eq(%w[teachable])
         expect(@student.polymorphic).to eq(true)
 
-        @graduate_student.update_polymorphic_names
+        @graduate_student.set_polymorphic_names
         expect(@graduate_student.polymorphic_names).to eq(%w[supervisor])
         expect(@graduate_student.polymorphic).to eq(true)
 
-        @account_history.update_polymorphic_names
+        @account_history.set_polymorphic_names
         expect(@account_history.polymorphic_names).to eq([])
         expect(@account_history.polymorphic).to eq(false)
       end

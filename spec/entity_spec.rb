@@ -70,7 +70,7 @@ describe Entity do
         Association.new(edge)
       end
 
-      Table.all.each(&:update_polymorphic_names)
+      Table.all.each(&:set_polymorphic_names)
 
       @account_history = Entity.find_by_name('account_history')
       @followed = Entity.find_by_name('followed')
@@ -111,7 +111,7 @@ describe Entity do
       it 'returns boolean showing whether a entity name is one of polymorphic names of self' do
         photograph = Entity.find_by_name('photograph')
         postable = Entity.find_by_name('postable')
-        photograph.table.update_polymorphic_names
+        photograph.table.set_polymorphic_names
 
         expect(photograph.one_polymorphic_names?(postable)).to eq(true)
       end
@@ -298,7 +298,7 @@ describe Entity do
                              end [0]
         photograph = Entity.find_by_name('photograph')
 
-        photograph.table.update_polymorphic_names
+        photograph.table.set_polymorphic_names
 
         postable_post_card.update_start_model_file(photograph, postable_post_card.associations.find(&:has_many?))
         postable_post_card.update_start_model_file(imageable_employee, postable_post_card.associations.find(&:through?))

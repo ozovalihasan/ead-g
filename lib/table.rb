@@ -58,7 +58,7 @@ class Table < TableEntityBase
     system(command)
   end
 
-  def update_polymorphic_names
+  def set_polymorphic_names
     return if entities.empty?
 
     belong_parents = []

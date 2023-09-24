@@ -12,10 +12,7 @@ class Table < TableEntityBase
     @entities = []
     @polymorphic = false
     @polymorphic_names = {}
-    @attributes = []
-    table['attributes'].each do |(_attribute_id, attribute)|
-      @attributes << Attribute.new(attribute)
-    end
+    @attributes = table['attributes'].values.map { |attribute| Attribute.new(attribute) }
     @superclass = nil
     @subclasses = []
   end
@@ -23,8 +20,7 @@ class Table < TableEntityBase
   def self.update_superclasses(parsed_tables)
     all.each do |table|
       superclass_id = parsed_tables[table.id]['superclassId']
-
-      next if superclass_id == ''
+      next if superclass_id.empty?
 
       super_class = Table.find superclass_id
       table.superclass = super_class

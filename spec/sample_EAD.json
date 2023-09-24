@@ -1114,7 +1114,7 @@
             "data": {
                 "optional": false
             },
-            "selected": true
+            "selected": false
         }
     ],
     "tables": {

@@ -11,7 +11,7 @@ class Table < TableEntityBase
     @name = table['name'].underscore.singularize
     @entities = []
     @polymorphic = false
-    @polymorphic_names = []
+    @polymorphic_names = {}
     @attributes = []
     table['attributes'].each do |(_attribute_id, attribute)|
       @attributes << Attribute.new(attribute)
@@ -78,8 +78,25 @@ class Table < TableEntityBase
                                belong_parents.find_all do |entity|
                                  entity.name == parent_name
                                end.map(&:table).map(&:name).uniq.size > 1
-                             end
+                             end 
+                             .map {|polymorphic_name| [polymorphic_name, nil]}.to_h
 
+    find_associations_related_to = lambda do |polymorphic_name|
+      entities.map do |entity| 
+        entity.parent_associations.select {|association| association.first_entity.name == polymorphic_name}
+      end.flatten
+    end
+
+    self.polymorphic_names = polymorphic_names.map do |polymorphic_name, _|
+                               [
+                                 polymorphic_name, 
+                                 {
+                                   associations: find_associations_related_to.call(polymorphic_name),
+                                   checked: false
+                                 }
+                               ]
+                             end.to_h
+    
     self.polymorphic = true if polymorphic_names.size.positive?
   end
 

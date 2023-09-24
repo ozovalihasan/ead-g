@@ -65,7 +65,7 @@ class Entity < TableEntityBase
   end
 
   def one_polymorphic_names?(entity)
-    table.polymorphic && table.polymorphic_names.include?(entity.name)
+    table.polymorphic && table.polymorphic_names.key?(entity.name)
   end
 
   def update_end_model_migration_files(start_entity, association)
@@ -86,8 +86,17 @@ class Entity < TableEntityBase
     end_migration_line['null'] = 'true' unless table.root_class?
 
     polymorphic_end = one_polymorphic_names?(start_entity)
-
+  
     if polymorphic_end
+      return if table.polymorphic_names[start_entity.name][:checked]
+
+      table.polymorphic_names[start_entity.name][:checked] = true
+      
+      if table.polymorphic_names[start_entity.name][:associations].any?(&:optional?)
+        end_model_line['optional'] = 'true'
+        end_migration_line['null'] = 'true'
+      end
+
       end_model_line['polymorphic'] = "true"
     else
       end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\"" if start_entity.table_name_different?

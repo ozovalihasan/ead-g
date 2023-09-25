@@ -50,6 +50,7 @@ class EAD
     end
 
     Association.dismiss_similar_ones
+    Association.all_references.each(&:set_middle_entity)
     
     Table.all.each(&:set_polymorphic_names)
   end
@@ -58,8 +59,6 @@ class EAD
     Table.all.each(&:create_model)
 
     Table.all.each(&:add_reference_migration)
-
-    Association.all_references.each(&:set_middle_entity)
 
     Association.all_references.each(&:update_model_from_entity)
   end

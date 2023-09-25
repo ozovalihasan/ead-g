@@ -33,7 +33,7 @@ describe Table do
         expect(teacher.name).to eq('teacher')
         expect(teacher.entities.size).to eq(0)
         expect(teacher.polymorphic).to eq(false)
-        expect(teacher.polymorphic_names).to eq([])
+        expect(teacher.polymorphic_names).to eq({})
         expect(teacher.attributes[0].name).to eq('full_name')
         expect(teacher.attributes.size).to eq(2)
         expect(teacher.superclass).to eq(nil)
@@ -78,9 +78,13 @@ describe Table do
         Entity.new(node)
       end
 
+      Entity.dismiss_similar_ones
+
       @edges = parsed_edges.map do |edge|
         Association.new(edge)
       end
+
+      Association.dismiss_similar_ones
 
       @account_history = Table.all.find { |table| table.name == 'account_history' }
       @relation = Table.all.find { |table| table.name == 'relation' }
@@ -151,20 +155,25 @@ describe Table do
 
     describe '#set_polymorphic_names' do
       it 'updates polymorphic names used to create polymorphic associations' do
+        
         @picture.set_polymorphic_names
-        expect(@picture.polymorphic_names).to eq(%w[postable imageable])
+        expect(@picture.polymorphic_names.keys).to eq(%w[postable imageable])
+        expect(@picture.polymorphic_names["postable"][:associations].size).to eq(2)
+        expect(@picture.polymorphic_names["imageable"][:associations].size).to eq(2)
         expect(@picture.polymorphic).to eq(true)
 
         @student.set_polymorphic_names
-        expect(@student.polymorphic_names).to eq(%w[teachable])
+        expect(@student.polymorphic_names.keys).to eq(%w[teachable])
+        expect(@student.polymorphic_names["teachable"][:associations].size).to eq(2)
         expect(@student.polymorphic).to eq(true)
-
+        
         @graduate_student.set_polymorphic_names
-        expect(@graduate_student.polymorphic_names).to eq(%w[supervisor])
+        expect(@graduate_student.polymorphic_names.keys).to eq(%w[supervisor])
+        expect(@graduate_student.polymorphic_names["supervisor"][:associations].size).to eq(4)
         expect(@graduate_student.polymorphic).to eq(true)
-
+        
         @account_history.set_polymorphic_names
-        expect(@account_history.polymorphic_names).to eq([])
+        expect(@account_history.polymorphic_names.keys).to eq([])
         expect(@account_history.polymorphic).to eq(false)
       end
     end
@@ -177,7 +186,7 @@ describe Table do
           expect([
                    'bundle exec rails generate model Picture',
                    'bundle exec rails generate model AccountHistory ' \
-                   'credit_rating:integer access_time:datetime',
+                     'credit_rating:integer access_time:datetime',
                    'bundle exec rails generate model Relation',
                    'bundle exec rails generate model Professor --parent=UniversityStaff',
                    'bundle exec rails generate model User type'
@@ -195,16 +204,16 @@ describe Table do
     end
 
     describe '#add_reference_migration' do
-      it 'calls generate_reference_migration if the association between itself and its parent is not a polymorphic association' do
+      it 'calls generate_reference_migration for parents along "has_many" and "has_one" associations' do
         call_generate_reference_migration = 0
-        allow_any_instance_of(Table).to receive(:generate_reference_migration) { |_arg|
+        allow_any_instance_of(Table).to receive(:generate_reference_migration) { |_arg, parent_name, _|
                                           call_generate_reference_migration += 1
+                                          expect(['account']).to include parent_name
                                         }
         allow_any_instance_of(Entity).to receive(:one_polymorphic_names?).and_return(true, false)
 
-        @account_history.add_reference_migration
-        expect(call_generate_reference_migration).to eq(0)
-
+        expect( @account_history.entities.sum {|entity| entity.parent_associations.size} ).to eq(2)
+        expect( @account_history.entities.sum {|entity| entity.parent_associations.count(&:has_any?)} ).to eq(1)
         @account_history.add_reference_migration
         expect(call_generate_reference_migration).to eq(1)
       end

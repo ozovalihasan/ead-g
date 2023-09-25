@@ -44,8 +44,8 @@ class Table < TableEntityBase
     !superclass
   end
 
-  def generate_reference_migration(name, polymorphic = false)
-    command = "bundle exec rails generate migration Add#{name.camelize}RefTo#{root_class.name.camelize} #{name}:belongs_to"
+  def generate_reference_migration(parent_name, polymorphic = false)
+    command = "bundle exec rails generate migration Add#{parent_name.camelize}RefTo#{root_class.name.camelize} #{parent_name}:belongs_to"
 
     command << '{polymorphic}' if polymorphic
 

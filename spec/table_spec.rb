@@ -34,6 +34,7 @@ describe Table do
         expect(teacher.entities.size).to eq(0)
         expect(teacher.polymorphic).to eq(false)
         expect(teacher.polymorphic_names).to eq({})
+        expect(teacher.belongs_to_checked).to eq(Set.new)
         expect(teacher.attributes[0].name).to eq('full_name')
         expect(teacher.attributes.size).to eq(2)
         expect(teacher.superclass).to eq(nil)

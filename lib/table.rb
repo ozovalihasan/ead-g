@@ -4,7 +4,7 @@ require 'association'
 require 'active_support/core_ext/string'
 
 class Table < TableEntityBase
-  attr_accessor :name, :id, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses
+  attr_accessor :name, :id, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses, :belongs_to_checked
 
   def initialize(table_id, table)
     @id = table_id
@@ -12,6 +12,7 @@ class Table < TableEntityBase
     @entities = []
     @polymorphic = false
     @polymorphic_names = {}
+    @belongs_to_checked = Set.new
     @attributes = table['attributes'].values.map { |attribute| Attribute.new(attribute) }
     @superclass = nil
     @subclasses = []
@@ -85,8 +86,7 @@ class Table < TableEntityBase
                                [
                                  polymorphic_name, 
                                  {
-                                   associations: find_associations_related_to.call(polymorphic_name),
-                                   checked: false
+                                   associations: find_associations_related_to.call(polymorphic_name)
                                  }
                                ]
                              end.to_h

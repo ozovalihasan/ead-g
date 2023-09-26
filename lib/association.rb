@@ -8,7 +8,6 @@ class Association
   
   def initialize(edge)
     @first_entity = Entity.find(edge['source']).reference_entity
-    
     @second_entity = Entity.find(edge['target']).reference_entity
     @through_entity = nil
     @reference_association = self
@@ -44,6 +43,7 @@ class Association
 
   def self.check_middle_entities_include(entity)
     associations = Association.all.select { |association| association.through_entity == entity }
+    
     associations.each do |association|
       unless (association.middle_entities_has_many.include? entity) || (association.middle_entities_has_one.include? entity)
         association.set_middle_entity
@@ -138,10 +138,10 @@ class Association
   end
 
   def self.dismiss_similar_ones
-    similar_association_groups = all.group_by {|association| [association.first_entity, association.second_entity, association.through_entity]}
+    similar_association_groups = all.group_by {|association| [association.first_entity, association.second_entity, association.through_entity, association.name]}
     similar_association_groups.values.each do |similar_associations| 
       next if similar_associations.size == 1
-
+      
       reference_association_of_group = similar_associations.find(&:optional?) || similar_associations.first
       similar_associations.each {|association| association.reference_association = reference_association_of_group}
     end

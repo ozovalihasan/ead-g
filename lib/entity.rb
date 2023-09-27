@@ -74,6 +74,9 @@ class Entity < TableEntityBase
     end_model_line = {}
     end_migration_line = {}
 
+    return if table.belongs_to_checked.include? start_entity.name
+    table.belongs_to_checked << start_entity.name
+    
     end_model_line['belongs_to'] = ":#{start_entity.name}"
 
     if root_classes_same?(start_entity) || association.optional?
@@ -88,10 +91,6 @@ class Entity < TableEntityBase
     polymorphic_end = one_polymorphic_names?(start_entity)
   
     if polymorphic_end
-      return if table.polymorphic_names[start_entity.name][:checked]
-
-      table.polymorphic_names[start_entity.name][:checked] = true
-      
       if table.polymorphic_names[start_entity.name][:associations].any?(&:optional?)
         end_model_line['optional'] = 'true'
         end_migration_line['null'] = 'true'

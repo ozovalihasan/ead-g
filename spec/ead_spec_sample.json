@@ -1,6 +1,6 @@
 {
     "version": "0.4.7",
-    "idCounter": 9,
+    "idCounter": 12,
     "associationType": "has_many",
     "nodes": [
         {
@@ -21,7 +21,7 @@
             "id": "4",
             "type": "entity",
             "position": {
-                "x": -300,
+                "x": -480,
                 "y": 525
             },
             "data": {
@@ -29,7 +29,53 @@
                 "name": "entity2"
             },
             "width": 144,
-            "height": 71
+            "height": 71,
+            "selected": false,
+            "positionAbsolute": {
+                "x": -480,
+                "y": 525
+            },
+            "dragging": false
+        },
+        {
+            "id": "9",
+            "type": "entity",
+            "position": {
+                "x": -225,
+                "y": 360
+            },
+            "data": {
+                "tableId": "1",
+                "name": "entity1"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": -225,
+                "y": 360
+            },
+            "dragging": false
+        },
+        {
+            "id": "10",
+            "type": "entity",
+            "position": {
+                "x": -225,
+                "y": 525
+            },
+            "data": {
+                "tableId": "2",
+                "name": "entity2"
+            },
+            "selected": false,
+            "width": 144,
+            "height": 71,
+            "positionAbsolute": {
+                "x": -225,
+                "y": 525
+            },
+            "dragging": false
         }
     ],
     "edges": [
@@ -44,6 +90,19 @@
             "data": {
                 "optional": false
             }
+        },
+        {
+            "id": "11",
+            "source": "9",
+            "target": "10",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            },
+            "selected": false
         }
     ],
     "tables": {
@@ -58,7 +117,7 @@
             "superclassId": "1"
         }
     },
-    "connectionStartNodeId": "6",
+    "connectionStartNodeId": "9",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

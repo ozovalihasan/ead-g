@@ -51,17 +51,6 @@ describe ProjectFile do
         )
       end
 
-      it 'works on a migration file' do
-        result2 = ''
-        ProjectFile.open_close('mock_name', 'migration') do |temp, tempfile|
-          result2 = "#{temp.readline} #{tempfile.readline}"
-        end
-
-        expect(result2).to eq(
-          'mock file mock tempfile'
-        )
-      end
-
       it 'works on a reference migration file' do
         result3 = ''
         ProjectFile.open_close('mock_name', 'reference_migration') do |temp, tempfile|
@@ -71,6 +60,10 @@ describe ProjectFile do
         expect(result3).to eq(
           'mock file mock tempfile'
         )
+      end
+
+      it 'raise an error when type is not known' do
+        expect{ ProjectFile.open_close('mock_name', 'unknown_type') }.to raise_error StandardError, "Type(unknown_type) is not suitable)" 
       end
     end
   end

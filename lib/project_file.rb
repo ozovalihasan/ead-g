@@ -10,7 +10,7 @@ class ProjectFile
       tempfile_name = './db/migrate/reference_migration_update.rb'
       file_name = Dir.glob("./db/migrate/*_#{name}.rb").first
     else 
-      raise StandardError.new "Type(#{type} is not suitable)"
+      raise StandardError.new "Type(#{type}) is not suitable)"
     end
     tempfile = File.open(tempfile_name, 'w')
     file = File.new(file_name)

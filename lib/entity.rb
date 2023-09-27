@@ -32,7 +32,7 @@ class Entity < TableEntityBase
   end
 
   def self.find_by_name(name)
-    all.find { |entity| entity.name == name }
+    all.select {|entity| entity.reference_entity == entity}.find { |entity| entity.name == name }
   end
 
   def self.dismiss_similar_ones

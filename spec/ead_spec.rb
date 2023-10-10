@@ -30,14 +30,38 @@ describe EAD do
       end
       incompatible_file = { version: '0.3.0' }.to_json
       allow(File).to receive(:read).and_return(incompatible_file)
+
       expect { @ead.import_JSON([]) }.to raise_error('Incompatible version')
       expect([
-               "\n\n----------------",
-               "\e[31m\ngem install ead -v 0.3.0\e[0m",
-               "\e[31mVersions of your EAD file and the gem are not compatible. So, you may have " \
-               "some unexpected results.To run your EAD file correctly, please run\e[0m",
-               "----------------\n\n"
-             ]).to match_array shown_texts
+        "\n\n----------------", 
+        "\e[31m\nVersions of your EAD file and the gem are not compatible. So, you may have some unexpected results.To run your EAD file correctly, please run\n\e[0m", 
+        "\e[31m\n\ngem install ead -v 0.3.0\n\e[0m", 
+        "----------------\n\n"
+      ]).to match_array shown_texts
+    end
+  end
+
+  describe '#warning' do
+    it 'prints a warning with red color' do
+      shown_texts = []
+      allow_any_instance_of(Object).to receive(:puts) do |_, str|
+        shown_texts << str
+      end
+
+      @ead.warning("mock string")
+      
+      expect(shown_texts).to eq ["\e[31m\nmock string\n\e[0m"]
+    end
+
+    it 'prints a warning with yellow color' do
+      shown_texts = []
+      allow_any_instance_of(Object).to receive(:puts) do |_, str|
+        shown_texts << str
+      end
+
+      @ead.warning("mock string", :yellow)
+      
+      expect(shown_texts).to eq ["\e[33m\nmock string\n\e[0m"]
     end
   end
 
@@ -94,18 +118,14 @@ describe EAD do
 
         allow(RestClient).to receive(:get).and_return(response)
 
-        shown_texts = []
-        allow_any_instance_of(Object).to receive(:puts) do |_, str|
-          shown_texts << str
+        allow_any_instance_of(Object).to receive(:puts)
+        allow_any_instance_of(EAD).to receive(:warning) do |_, call_with|
+          expect([
+                  "A new version of this gem has been released. Please check it. https://github.com/ozovalihasan/ead-g/releases"
+                 ]).to include call_with
         end
 
         @ead.check_latest_version
-
-        expect([
-                 "\n\n----------------",
-                 "\n\e[33mA new version of this gem has been released. Please check it. https://github.com/ozovalihasan/ead-g/releases\e[0m",
-                 "\n----------------\n\n"
-               ]).to match_array(shown_texts)
       end
     end
 
@@ -114,16 +134,14 @@ describe EAD do
         response = StandardError
 
         allow(RestClient).to receive(:get).and_return(response)
+        allow_any_instance_of(Object).to receive(:puts)
+        allow_any_instance_of(EAD).to receive(:warning) do |_, call_with|
+          expect([
+                   'If you want to check the latest version of this gem, you need to have a stable internet connection.'
+                 ]).to include call_with
+        end
 
-        expect { @ead.check_latest_version }.to output(
-          "\n\n----------------" \
-          "\n\n" \
-          "\e[31m" \
-          'If you want to check the latest version of this gem, ' \
-          'you need to have a stable internet connection.' \
-          "\e[0m" \
-          "\n\n----------------\n\n"
-        ).to_stdout
+        @ead.check_latest_version
       end
     end
   end
@@ -214,18 +232,25 @@ describe EAD do
           "command bundle exec rails generate migration AddFamousPersonRefToRelation famous_person:belongs_to run", 
           "command bundle exec rails generate migration AddAccountRefToAccountHistory account:belongs_to run", 
           "command bundle exec rails generate migration AddSupplierRefToAccount supplier:belongs_to run", 
-          {:file_name=>"car", :type=>"model", :line=>{"belongs_to"=>":drivable", "polymorphic"=>"true"}, :action=>"added"}, 
-          {:file_name=>"add_drivable_ref_to_vehicle", :type=>"reference_migration", :keywords=>/add_reference :vehicles/, :line=>{"null"=>"true"}, :action=>"updated"}, 
-          {:file_name=>"user", :type=>"model", :end_model=>"cars", :line=>{"has_many"=>":cars", "as"=>":drivable"}, :action=>"added"}, 
-          {:file_name=>"driver", :type=>"model", :end_model=>"cars", :line=>{"has_many"=>":cars", "as"=>":drivable"}, :action=>"added"}, 
-          {:file_name=>"user", :type=>"model", :line=>{"belongs_to"=>":customer_representative", "optional"=>"true", "polymorphic"=>"true"}, :action=>"added"}, 
-          {:file_name=>"add_customer_representative_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true"}, :action=>"updated"}, 
-          {:file_name=>"director", :type=>"model", :end_model=>"clients", :line=>{"has_many"=>":clients", "class_name"=>"\"User\"", "as"=>":customer_representative"}, :action=>"added"}, 
-          {:file_name=>"employee", :type=>"model", :end_model=>"clients", :line=>{"has_many"=>":clients", "class_name"=>"\"User\"", "as"=>":customer_representative"}, :action=>"added"}, 
+          
           {:file_name=>"technician", :type=>"model", :end_model=>"drivable", :line=>{"has_one"=>":driver", "through"=>":car", "source"=>":drivable", "source_type"=>"\"Driver\" "}, :action=>"added"}, 
           {:file_name=>"car", :type=>"model", :line=>{"belongs_to"=>":technician"}, :action=>"added"}, 
           {:file_name=>"add_technician_ref_to_vehicle", :type=>"reference_migration", :keywords=>/add_reference :vehicles/, :line=>{"null"=>"true"}, :action=>"updated"}, 
           {:file_name=>"technician", :type=>"model", :end_model=>"car", :line=>{"has_one"=>":car"}, :action=>"added"}, 
+          {:file_name=>"user", :type=>"model", :line=>{"belongs_to"=>":customer_representative", "optional"=>"true", "polymorphic"=>"true"}, :action=>"added"}, 
+          {:file_name=>"add_customer_representative_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true"}, :action=>"updated"}, 
+          {:file_name=>"director", :type=>"model", :end_model=>"clients", :line=>{"has_many"=>":clients", "class_name"=>"\"User\"", "as"=>":customer_representative"}, :action=>"added"}, 
+          {:file_name=>"employee", :type=>"model", :end_model=>"clients", :line=>{"has_many"=>":clients", "class_name"=>"\"User\"", "as"=>":customer_representative"}, :action=>"added"}, 
+          {:file_name=>"employee", :type=>"model", :line=>{"belongs_to"=>":manager", "optional"=>"true", "class_name"=>"\"Director\""}, :action=>"added"}, 
+          {:file_name=>"add_manager_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true", "foreign_key"=>"{ to_table: :users }", "column"=>":manager_id"}, :action=>"updated"}, 
+          {:file_name=>"director", :type=>"model", :end_model=>"subordinates", :line=>{"has_many"=>":subordinates", "class_name"=>"\"Employee\"", "foreign_key"=>"\"manager_id\""}, :action=>"added"}, 
+          {:file_name=>"graduate_student", :type=>"model", :line=>{"belongs_to"=>":supervisor", "polymorphic"=>"true"}, :action=>"added"}, 
+          {:file_name=>"add_supervisor_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true"}, :action=>"updated"}, 
+          {:file_name=>"professor", :type=>"model", :end_model=>"supervisees", :line=>{"has_many"=>":supervisees", "class_name"=>"\"GraduateStudent\"", "as"=>":supervisor"}, :action=>"added"}, 
+          {:file_name=>"car", :type=>"model", :line=>{"belongs_to"=>":drivable", "polymorphic"=>"true"}, :action=>"added"}, 
+          {:file_name=>"add_drivable_ref_to_vehicle", :type=>"reference_migration", :keywords=>/add_reference :vehicles/, :line=>{"null"=>"true"}, :action=>"updated"}, 
+          {:file_name=>"user", :type=>"model", :end_model=>"cars", :line=>{"has_many"=>":cars", "as"=>":drivable"}, :action=>"added"}, 
+          {:file_name=>"driver", :type=>"model", :end_model=>"cars", :line=>{"has_many"=>":cars", "as"=>":drivable"}, :action=>"added"}, 
           {:file_name=>"student", :type=>"model", :line=>{"belongs_to"=>":assistant_professor"}, :action=>"added"}, 
           {:file_name=>"add_assistant_professor_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true", "foreign_key"=>"{ to_table: :teachers }", "column"=>":assistant_professor_id"}, :action=>"updated"}, 
           {:file_name=>"assistant_professor", :type=>"model", :end_model=>"undergraduate_students", :line=>{"has_many"=>":undergraduate_students", "class_name"=>"\"Student\""}, :action=>"added"}, 
@@ -233,12 +258,9 @@ describe EAD do
           {:file_name=>"student", :type=>"model", :line=>{"belongs_to"=>":teachable", "polymorphic"=>"true"}, :action=>"added"}, 
           {:file_name=>"add_teachable_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true"}, :action=>"updated"}, 
           {:file_name=>"teacher", :type=>"model", :end_model=>"students", :line=>{"has_many"=>":students", "as"=>":teachable"}, :action=>"added"}, 
-          {:file_name=>"graduate_student", :type=>"model", :line=>{"belongs_to"=>":supervisor", "optional"=>"true", "polymorphic"=>"true"}, :action=>"added"}, 
-          {:file_name=>"add_supervisor_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true"}, :action=>"updated"}, 
           {:file_name=>"teacher", :type=>"model", :end_model=>"supervisees", :line=>{"has_many"=>":supervisees", "class_name"=>"\"GraduateStudent\"", "as"=>":supervisor"}, :action=>"added"}, 
           {:file_name=>"professor", :type=>"model", :end_model=>"doctoral_students", :line=>{"has_many"=>":doctoral_students", "class_name"=>"\"Student\"", "as"=>":teachable"}, :action=>"added"}, 
           {:file_name=>"assistant_professor", :type=>"model", :end_model=>"supervisees", :line=>{"has_many"=>":supervisees", "class_name"=>"\"GraduateStudent\"", "as"=>":supervisor"}, :action=>"added"}, 
-          {:file_name=>"professor", :type=>"model", :end_model=>"supervisees", :line=>{"has_many"=>":supervisees", "class_name"=>"\"GraduateStudent\"", "as"=>":supervisor"}, :action=>"added"}, 
           {:file_name=>"supplier", :type=>"model", :end_model=>"account_history", :line=>{"has_one"=>":account_history", "through"=>":account"}, :action=>"added"}, 
           {:file_name=>"account_history", :type=>"model", :line=>{"belongs_to"=>":account"}, :action=>"added"}, 
           {:file_name=>"add_account_ref_to_account_history", :type=>"reference_migration", :keywords=>/add_reference :account_histories/, :line=>{"null"=>"false"}, :action=>"updated"}, 
@@ -263,10 +285,7 @@ describe EAD do
           {:file_name=>"user", :type=>"model", :end_model=>"followeds", :line=>{"has_many"=>":followeds", "class_name"=>"\"Relation\"", "foreign_key"=>"\"famous_person_id\""}, :action=>"added"}, 
           {:file_name=>"relation", :type=>"model", :line=>{"belongs_to"=>":fan", "class_name"=>"\"User\""}, :action=>"added"}, 
           {:file_name=>"add_fan_ref_to_relation", :type=>"reference_migration", :keywords=>/add_reference :relations/, :line=>{"null"=>"false", "foreign_key"=>"{ to_table: :users }"}, :action=>"updated"}, 
-          {:file_name=>"user", :type=>"model", :end_model=>"followings", :line=>{"has_many"=>":followings", "class_name"=>"\"Relation\"", "foreign_key"=>"\"fan_id\""}, :action=>"added"}, 
-          {:file_name=>"employee", :type=>"model", :line=>{"belongs_to"=>":manager", "optional"=>"true", "class_name"=>"\"Director\""}, :action=>"added"}, 
-          {:file_name=>"add_manager_ref_to_user", :type=>"reference_migration", :keywords=>/add_reference :users/, :line=>{"null"=>"true", "foreign_key"=>"{ to_table: :users }", "column"=>":manager_id"}, :action=>"updated"}, 
-          {:file_name=>"director", :type=>"model", :end_model=>"subordinates", :line=>{"has_many"=>":subordinates", "class_name"=>"\"Employee\"", "foreign_key"=>"\"manager_id\""}, :action=>"added"}
+          {:file_name=>"user", :type=>"model", :end_model=>"followings", :line=>{"has_many"=>":followings", "class_name"=>"\"Relation\"", "foreign_key"=>"\"fan_id\""}, :action=>"added"}
         ]
       )
     end

@@ -635,7 +635,7 @@
             "type": "hasOne",
             "label": "has one",
             "data": {
-                "optional": false
+                "optional": true
             },
             "selected": false
         },
@@ -661,7 +661,7 @@
             "type": "hasMany",
             "label": "has many",
             "data": {
-                "optional": false
+                "optional": true
             },
             "selected": false
         },
@@ -700,7 +700,7 @@
             "type": "hasOne",
             "label": "has one",
             "data": {
-                "optional": false
+                "optional": true
             },
             "selected": false
         },

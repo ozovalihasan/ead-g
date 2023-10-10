@@ -1080,7 +1080,7 @@
             "label": "has many",
             "type": "hasMany",
             "data": {
-                "optional": false
+                "optional": true
             },
             "selected": false
         },
@@ -1119,7 +1119,7 @@
             "type": "hasMany",
             "selected": false,
             "data": {
-                "optional": false
+                "optional": true
             }
         },
         {

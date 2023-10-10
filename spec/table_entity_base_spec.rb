@@ -1,6 +1,6 @@
 require 'ead'
 require 'table'
-require 'active_support/core_ext/string'
+require 'active_support/inflector'
 
 describe TableEntityBase do
   before do

@@ -1,7 +1,7 @@
 require 'table_entity_base'
 require 'attribute'
 require 'association'
-require 'active_support/core_ext/string'
+require 'active_support/inflector'
 
 class Table < TableEntityBase
   attr_accessor :name, :id, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses, :belongs_to_checked

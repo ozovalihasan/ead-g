@@ -1,5 +1,5 @@
 require 'ead'
-require 'active_support/core_ext/string'
+require 'active_support/inflector'
 
 describe EAD do
   before :each do

@@ -1,6 +1,6 @@
 require 'table'
 require 'entity'
-require 'active_support/core_ext/string'
+require 'active_support/inflector'
 require 'ead'
 
 describe Entity do

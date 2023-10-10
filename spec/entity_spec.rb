@@ -160,7 +160,6 @@ describe Entity do
                      'assistant_professor',
                      { 'belongs_to' => ':assistant_professor' },
                      { 
-                       'column' => ':assistant_professor_id', 
                        'foreign_key' => '{ to_table: :teachers }',
                        'null' => 'true' 
                      }

@@ -103,11 +103,6 @@ class Entity < TableEntityBase
       if start_entity.root_class_name_different?
         end_migration_line['foreign_key'] = "{ to_table: :#{start_entity.table.root_class.name.pluralize} }"
       end
-
-      if start_entity.table.superclass && start_entity.root_class_name_different?
-        end_migration_line['column'] = ":#{start_entity.name}_id"
-      end
-
     end
 
     update_project_files(start_entity, end_model_line, end_migration_line)

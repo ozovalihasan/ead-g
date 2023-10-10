@@ -24,20 +24,24 @@ describe EAD do
     end
 
     it 'raises an error if the version of JSON file is not compatible' do
-      shown_texts = []
       allow_any_instance_of(Object).to receive(:puts) do |_, str|
-        shown_texts << str
+        expect([
+          "\n\n----------------", 
+          "----------------\n\n"
+        ]).to include str
       end
+      allow_any_instance_of(EAD).to receive(:warning) do |_, call_with|
+        expect([
+          "Versions of your EAD file and the gem are not compatible. To run your EAD file correctly, please run",
+          "gem install ead -v 0.3.0",
+          "Or, upload your file to EAD(user interface) and download it again. It will be updated automatically."
+        ]).to include call_with
+      end
+
       incompatible_file = { version: '0.3.0' }.to_json
       allow(File).to receive(:read).and_return(incompatible_file)
 
       expect { @ead.import_JSON([]) }.to raise_error('Incompatible version')
-      expect([
-        "\n\n----------------", 
-        "\e[31m\nVersions of your EAD file and the gem are not compatible. So, you may have some unexpected results.To run your EAD file correctly, please run\n\e[0m", 
-        "\e[31m\n\ngem install ead -v 0.3.0\n\e[0m", 
-        "----------------\n\n"
-      ]).to match_array shown_texts
     end
   end
 

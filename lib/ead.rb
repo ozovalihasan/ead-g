@@ -22,12 +22,15 @@ class EAD
       
       warning(
         'Versions of your EAD file and the gem are not compatible. '\
-        'So, you may have some unexpected results.'\
         'To run your EAD file correctly, please run'
       )
 
       warning(
-        "\ngem install ead -v #{JSON.parse(file)['version']}"
+        "gem install ead -v #{JSON.parse(file)['version']}"
+      )
+
+      warning(
+        "Or, upload your file to EAD(user interface) and download it again. It will be updated automatically."
       )
       
       puts "----------------\n\n"

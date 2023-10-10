@@ -21,7 +21,11 @@
                 "x": -210,
                 "y": -45
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "10",
@@ -41,7 +45,11 @@
                 "x": 570,
                 "y": 180
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "11",
@@ -61,7 +69,11 @@
                 "x": 30,
                 "y": 435
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "12",
@@ -81,7 +93,11 @@
                 "x": -105,
                 "y": 255
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "13",
@@ -101,7 +117,11 @@
                 "x": -270,
                 "y": 660
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "14",
@@ -121,7 +141,11 @@
                 "x": 225,
                 "y": 450
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "15",
@@ -141,7 +165,11 @@
                 "x": 360,
                 "y": 630
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "22",
@@ -161,7 +189,11 @@
                 "x": 120,
                 "y": 870
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "35",
@@ -181,7 +213,11 @@
                 "x": 1500,
                 "y": 450
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "36",
@@ -201,7 +237,11 @@
                 "x": 1215,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "38",
@@ -221,7 +261,11 @@
                 "x": 1410,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "43",
@@ -241,7 +285,11 @@
                 "x": 1590,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "45",
@@ -261,7 +309,11 @@
                 "x": 1770,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "51",
@@ -281,7 +333,11 @@
                 "x": 780,
                 "y": 450
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "52",
@@ -301,7 +357,11 @@
                 "x": 585,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "55",
@@ -321,7 +381,11 @@
                 "x": 2040,
                 "y": 450
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "56",
@@ -341,7 +405,11 @@
                 "x": 2040,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "59",
@@ -361,7 +429,11 @@
                 "x": 780,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "62",
@@ -381,7 +453,11 @@
                 "x": 975,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         }
     ],
     "edges": [
@@ -559,7 +635,7 @@
             "type": "hasOne",
             "label": "has one",
             "data": {
-                "optional": true
+                "optional": false
             },
             "selected": false
         },
@@ -585,7 +661,7 @@
             "type": "hasMany",
             "label": "has many",
             "data": {
-                "optional": true
+                "optional": false
             },
             "selected": false
         },
@@ -624,7 +700,7 @@
             "type": "hasOne",
             "label": "has one",
             "data": {
-                "optional": true
+                "optional": false
             },
             "selected": false
         },
@@ -744,6 +820,21 @@
             "superclassId": ""
         }
     },
+    "orderedTables": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "31",
+        "33",
+        "34",
+        "41",
+        "44"
+    ],
     "connectionStartNodeId": "35",
     "isConnectContinue": false,
     "isMouseOnNode": false,

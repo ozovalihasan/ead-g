@@ -15,7 +15,11 @@
                 "name": "entity1"
             },
             "width": 144,
-            "height": 71
+            "height": 71,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "4",
@@ -35,7 +39,11 @@
                 "x": -480,
                 "y": 525
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "9",
@@ -55,7 +63,11 @@
                 "x": -225,
                 "y": 360
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "10",
@@ -75,7 +87,11 @@
                 "x": -225,
                 "y": 525
             },
-            "dragging": false
+            "dragging": false,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
         }
     ],
     "edges": [
@@ -117,6 +133,10 @@
             "superclassId": "1"
         }
     },
+    "orderedTables": [
+        "1",
+        "2"
+    ],
     "connectionStartNodeId": "9",
     "isConnectContinue": false,
     "isMouseOnNode": false,

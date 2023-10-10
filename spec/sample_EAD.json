@@ -86,7 +86,7 @@
                 "tableId": "14",
                 "name": "famous_person"
             },
-            "width": 144,
+            "width": 159,
             "height": 71,
             "selected": false,
             "positionAbsolute": {
@@ -95,9 +95,10 @@
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 159,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "26",
@@ -110,7 +111,7 @@
                 "tableId": "14",
                 "name": "fan"
             },
-            "width": 144,
+            "width": 114,
             "height": 71,
             "selected": false,
             "positionAbsolute": {
@@ -119,9 +120,10 @@
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 114,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "27",
@@ -439,7 +441,7 @@
             "id": "77",
             "type": "entity",
             "position": {
-                "x": -405,
+                "x": -435,
                 "y": 570
             },
             "data": {
@@ -450,7 +452,7 @@
             "width": 144,
             "height": 71,
             "positionAbsolute": {
-                "x": -405,
+                "x": -435,
                 "y": 570
             },
             "dragging": false,
@@ -463,7 +465,7 @@
             "id": "78",
             "type": "entity",
             "position": {
-                "x": -405,
+                "x": -450,
                 "y": 750
             },
             "data": {
@@ -471,17 +473,18 @@
                 "name": "doctoral_student"
             },
             "selected": false,
-            "width": 144,
+            "width": 174,
             "height": 71,
             "positionAbsolute": {
-                "x": -405,
+                "x": -450,
                 "y": 750
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 174,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "85",
@@ -559,7 +562,7 @@
             "id": "90",
             "type": "entity",
             "position": {
-                "x": -405,
+                "x": -480,
                 "y": 930
             },
             "data": {
@@ -567,47 +570,49 @@
                 "name": "assistant_professor"
             },
             "selected": false,
-            "width": 144,
+            "width": 189,
             "height": 71,
             "positionAbsolute": {
-                "x": -405,
+                "x": -480,
                 "y": 930
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 189,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "91",
             "type": "entity",
             "position": {
-                "x": -405,
-                "y": 1140
+                "x": -465,
+                "y": 1155
             },
             "data": {
                 "tableId": "55",
                 "name": "project_students"
             },
             "selected": false,
-            "width": 144,
+            "width": 159,
             "height": 71,
             "positionAbsolute": {
-                "x": -405,
-                "y": 1140
+                "x": -465,
+                "y": 1155
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 159,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "93",
             "type": "entity",
             "position": {
-                "x": -225,
+                "x": -195,
                 "y": 930
             },
             "data": {
@@ -615,41 +620,43 @@
                 "name": "assistant_professor"
             },
             "selected": false,
-            "width": 144,
+            "width": 189,
             "height": 71,
             "positionAbsolute": {
-                "x": -225,
+                "x": -195,
                 "y": 930
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 189,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "94",
             "type": "entity",
             "position": {
                 "x": -225,
-                "y": 1140
+                "y": 1155
             },
             "data": {
                 "tableId": "55",
                 "name": "undergraduate_students"
             },
             "selected": false,
-            "width": 144,
+            "width": 234,
             "height": 71,
             "positionAbsolute": {
                 "x": -225,
-                "y": 1140
+                "y": 1155
             },
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 234,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "98",
@@ -855,7 +862,7 @@
                 "name": "customer_representative"
             },
             "selected": false,
-            "width": 144,
+            "width": 234,
             "height": 71,
             "dragging": false,
             "positionAbsolute": {
@@ -863,15 +870,16 @@
                 "y": 1095
             },
             "style": {
-                "width": 144,
+                "width": 234,
                 "height": 71
-            }
+            },
+            "resizing": false
         },
         {
             "id": "131",
             "type": "entity",
             "position": {
-                "x": 840,
+                "x": 765,
                 "y": 1095
             },
             "data": {
@@ -879,12 +887,17 @@
                 "name": "customer_representative"
             },
             "selected": false,
-            "width": 144,
+            "width": 234,
             "height": 71,
             "dragging": false,
             "style": {
-                "width": 144,
+                "width": 234,
                 "height": 71
+            },
+            "resizing": false,
+            "positionAbsolute": {
+                "x": 765,
+                "y": 1095
             }
         }
     ],

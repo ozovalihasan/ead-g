@@ -57,3 +57,9 @@ RSpec/AnyInstance:
   Enabled: false
 RSpec/IndexedLet:
   Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ExpectActual:
+  Enabled: false

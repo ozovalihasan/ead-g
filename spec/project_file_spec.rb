@@ -18,7 +18,7 @@ describe ProjectFile do
                    './db/migrate/reference_migration_update.rb'
                  ]).to include file_name
 
-          double('file', readline: 'mock tempfile', close: '')
+          instance_double(File, readline: 'mock tempfile', close: '')
         end
 
         allow(File).to receive(:new) do |file_name|
@@ -27,7 +27,7 @@ describe ProjectFile do
                    'mock_found_file'
                  ]).to include file_name
 
-          double('file', readline: 'mock file', close: '')
+          instance_double(File, readline: 'mock file', close: '')
         end
 
         allow(FileUtils).to receive(:mv) do |deleted_file, changed_file|

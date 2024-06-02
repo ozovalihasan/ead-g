@@ -4,12 +4,13 @@ require 'active_support/inflector'
 require 'ead'
 
 describe Entity do
+  let(:parsed_file) { JSON.parse(File.read("#{__dir__}/sample_EAD.json")) }
+
   before do
     ObjectSpace.garbage_collect
 
-    @parsed_file = JSON.parse(File.read("#{__dir__}/sample_EAD.json"))
-    parsed_tables = @parsed_file['tables']
-    parsed_nodes = @parsed_file['nodes']
+    parsed_tables = parsed_file['tables']
+    parsed_nodes = parsed_file['nodes']
 
     @tables = parsed_tables.map do |id, parsed_table|
       Table.new(id, parsed_table)
@@ -71,11 +72,17 @@ describe Entity do
   end
 
   context 'instance methods' do
+    let(:account_history) { described_class.find_by_name('account_history') }
+    let(:followed) { described_class.find_by_name('followed') }
+    let(:fan) { described_class.find_by_name('fan') }
+    let(:photograph) { described_class.find_by_name('photograph') }
+    let(:supplier) { described_class.find_by_name('supplier') }
+
     before do
       ObjectSpace.garbage_collect
 
-      parsed_nodes = @parsed_file['nodes']
-      parsed_edges = @parsed_file['edges']
+      parsed_nodes = parsed_file['nodes']
+      parsed_edges = parsed_file['edges']
 
       @nodes = parsed_nodes.map do |node|
         described_class.new(node)
@@ -89,39 +96,33 @@ describe Entity do
       Association.all_references.each(&:set_middle_entity)
 
       Table.all.each(&:set_polymorphic_names)
-
-      @account_history = described_class.find_by_name('account_history')
-      @followed = described_class.find_by_name('followed')
-      @fan = described_class.find_by_name('fan')
-      @photograph = described_class.find_by_name('photograph')
-      @supplier = described_class.find_by_name('supplier')
     end
 
     describe '#model_name' do
       it 'returns camelized clone parent name' do
-        expect(@photograph.model_name).to eq('Picture')
+        expect(photograph.model_name).to eq('Picture')
       end
     end
 
     describe '#root_classes_same?' do
       it 'returns boolean showing whether the tables of any entity and self are same' do
         famous_person = described_class.find_by_name('famous_person')
-        expect(@fan.root_classes_same?(@account_history)).to be(false)
-        expect(@fan.root_classes_same?(famous_person)).to be(true)
+        expect(fan.root_classes_same?(account_history)).to be(false)
+        expect(fan.root_classes_same?(famous_person)).to be(true)
       end
     end
 
     describe '#table_name_different?' do
       it 'returns boolean showing whether the clone and its table names are different' do
-        expect(@supplier.table_name_different?).to be(false)
-        expect(@fan.table_name_different?).to be(true)
+        expect(supplier.table_name_different?).to be(false)
+        expect(fan.table_name_different?).to be(true)
       end
     end
 
     describe '#root_class_name_different??' do
       it 'returns boolean showing whether the clone and its table names are different' do
-        expect(@account_history.root_class_name_different?).to be(false)
-        expect(@fan.root_class_name_different?).to be(true)
+        expect(account_history.root_class_name_different?).to be(false)
+        expect(fan.root_class_name_different?).to be(true)
       end
     end
 
@@ -180,7 +181,7 @@ describe Entity do
         association = famous_person.associations.find do |association|
           association.name == 'has_many'
         end.reference_association
-        @followed.update_end_model_migration_files(famous_person, association)
+        followed.update_end_model_migration_files(famous_person, association)
 
         supervisor = described_class.find_by_name('supervisor')
         supervisee = described_class.find_by_name('supervisee')
@@ -219,7 +220,7 @@ describe Entity do
         end.reference_association
 
         expect(call_update_project_files).to eq 4
-        @fan.update_end_model_migration_files(famous_person, association)
+        fan.update_end_model_migration_files(famous_person, association)
         expect(call_update_project_files).to eq 4
       end
     end
@@ -238,7 +239,7 @@ describe Entity do
 
         famous_person = described_class.find_by_name('famous_person')
 
-        @followed.update_project_files(
+        followed.update_project_files(
           famous_person,
           { 'mock_end_model_line_key' => 'mock_end_model_line_value' },
           { 'mock_end_migration_line_key' => 'mock_end_migration_line_value' }
@@ -303,8 +304,8 @@ describe Entity do
 
         famous_person = described_class.find_by_name('famous_person')
         following = described_class.find_by_name('following')
-        @fan.update_start_model_file(following, @fan.associations.find(&:has_many?))
-        @fan.update_start_model_file(famous_person, @fan.associations.find(&:through?))
+        fan.update_start_model_file(following, fan.associations.find(&:has_many?))
+        fan.update_start_model_file(famous_person, fan.associations.find(&:through?))
 
         allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
           expect([
@@ -344,7 +345,7 @@ describe Entity do
         postable_post_card.update_start_model_file(imageable_employee, postable_post_card.associations.find(&:through?))
 
         account = described_class.find_by_name('account')
-        account.update_start_model_file(@account_history, account.associations.find(&:has_one?))
+        account.update_start_model_file(account_history, account.associations.find(&:has_one?))
 
         technician = described_class.find_by_name('technician')
         drivable_driver = described_class.all.select do |entity|
@@ -367,7 +368,7 @@ describe Entity do
         end
 
         following = described_class.find_by_name('following')
-        @fan.update_model(following, @fan.associations.find(&:has_many?))
+        fan.update_model(following, fan.associations.find(&:has_many?))
         expect(call_update_end_model_migration_files).to eq(1)
         expect(call_update_start_model_file).to eq(1)
       end

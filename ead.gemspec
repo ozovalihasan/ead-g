@@ -22,12 +22,13 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'activesupport', '~> 7.1.0'
   spec.add_development_dependency 'bundler', '~> 2.2'
-  spec.add_development_dependency 'pry', '~> 0.14.1'
-  spec.add_development_dependency 'rspec', '~> 3.10'
-  spec.add_development_dependency 'rubocop', '~> 1.13'
-  spec.add_development_dependency 'simplecov', '~> 0.21.2'
   spec.add_development_dependency 'guard', '~> 2.18'
   spec.add_development_dependency 'guard-rspec', '~> 4.7'
+  spec.add_development_dependency 'pry', '~> 0.14.1'
+  spec.add_development_dependency 'rspec', '~> 3.10'
+  spec.add_development_dependency 'rubocop', '~> 1.64'
+  spec.add_development_dependency 'rubocop-rspec', '~> 2.29'
+  spec.add_development_dependency 'simplecov', '~> 0.21.2'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
 end

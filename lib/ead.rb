@@ -15,7 +15,7 @@ class EAD
   def import_JSON(user_arguments)
     file = File.read(user_arguments[0] || './EAD.json')
 
-    unless '0.4.7' == JSON.parse(file)['version']
+    unless JSON.parse(file)['version'] == '0.4.7'
       puts "\n\n----------------"
 
       warning(
@@ -33,7 +33,7 @@ class EAD
 
       puts "----------------\n\n"
 
-      raise StandardError, msg = 'Incompatible version'
+      raise StandardError, 'Incompatible version'
     end
 
     file

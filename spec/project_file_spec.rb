@@ -42,7 +42,7 @@ describe ProjectFile do
 
       it 'works on a model file' do
         result = ''
-        ProjectFile.open_close('mock_name', 'model') do |temp, tempfile|
+        described_class.open_close('mock_name', 'model') do |temp, tempfile|
           result = "#{temp.readline} #{tempfile.readline}"
         end
 
@@ -53,7 +53,7 @@ describe ProjectFile do
 
       it 'works on a reference migration file' do
         result3 = ''
-        ProjectFile.open_close('mock_name', 'reference_migration') do |temp, tempfile|
+        described_class.open_close('mock_name', 'reference_migration') do |temp, tempfile|
           result3 = "#{temp.readline} #{tempfile.readline}"
         end
 
@@ -64,8 +64,8 @@ describe ProjectFile do
 
       it 'raise an error when type is not known' do
         expect do
-          ProjectFile.open_close('mock_name',
-                                 'unknown_type')
+          described_class.open_close('mock_name',
+                                     'unknown_type')
         end.to raise_error StandardError, 'Type(unknown_type) is not suitable)'
       end
     end
@@ -75,14 +75,14 @@ describe ProjectFile do
     it 'adds a line with line content to tempfile' do
       file = ["def change\n", "  add_reference :mock_names, :mock_names_second, null: false\n", "end\n"]
       tempfile = ''
-      allow(ProjectFile).to receive(:open_close) do |name, type, &block|
+      allow(described_class).to receive(:open_close) do |name, type, &block|
         block.call(file, tempfile)
         expect('mock_name').to include name
         expect(['reference_migration']).to include type
       end
 
       mock_line_content = { 'null' => 'true', 'foreign_key' => '{ to_table: :mock_table_name }' }
-      ProjectFile.update_line('mock_name', 'reference_migration', /add_reference :mock_names/, mock_line_content)
+      described_class.update_line('mock_name', 'reference_migration', /add_reference :mock_names/, mock_line_content)
 
       expect(tempfile).to eq(
         "def change\n  " \
@@ -96,14 +96,14 @@ describe ProjectFile do
     it 'adds a line with line content to tempfile' do
       file = ["class Mock\n", "end\n"]
       tempfile = ''
-      allow(ProjectFile).to receive(:open_close) do |name, type, &block|
+      allow(described_class).to receive(:open_close) do |name, type, &block|
         block.call(file, tempfile)
         expect('mock_name').to include name
         expect(['model']).to include type
       end
 
       mock_line_content = { 'has_many' => 'mocks', 'mock' => 'content' }
-      ProjectFile.add_line('mock_name', 'mock_end_model', mock_line_content)
+      described_class.add_line('mock_name', 'mock_end_model', mock_line_content)
 
       expect(tempfile).to eq("class Mock\n  has_many mocks, mock: content\nend\n")
     end
@@ -117,14 +117,14 @@ describe ProjectFile do
         "end\n"
       ]
       tempfile = ''
-      allow(ProjectFile).to receive(:open_close) do |name, type, &block|
+      allow(described_class).to receive(:open_close) do |name, type, &block|
         block.call(file, tempfile)
         expect('mock_name').to include name
         expect(['model']).to include type
       end
 
       mock_line_content = { 'belongs_to' => 'mock2', 'mock2' => 'content2' }
-      ProjectFile.add_belong_line('mock_name', mock_line_content)
+      described_class.add_belong_line('mock_name', mock_line_content)
 
       expect(tempfile).to eq(
         "class Mock\n  " \

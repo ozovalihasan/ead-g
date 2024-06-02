@@ -21,13 +21,13 @@ describe TableEntityBase do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(TableEntityBase.all.size).to eq(58)
+      expect(described_class.all.size).to eq(58)
     end
   end
 
   describe '.find' do
     it 'returns found object by using id' do
-      expect(TableEntityBase.find('18').name).to eq('picture')
+      expect(described_class.find('18').name).to eq('picture')
     end
   end
 end

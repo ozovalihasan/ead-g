@@ -75,7 +75,7 @@ class Table < TableEntityBase
                                  entity.name == parent_name
                                end.map(&:table).map(&:name).uniq.size > 1
                              end
-      .map { |polymorphic_name| [polymorphic_name, nil] }.to_h
+      .to_h { |polymorphic_name| [polymorphic_name, nil] }
 
     find_associations_related_to = lambda do |polymorphic_name|
       entities.map do |entity|
@@ -85,14 +85,14 @@ class Table < TableEntityBase
       end.flatten
     end
 
-    self.polymorphic_names = polymorphic_names.map do |polymorphic_name, _|
+    self.polymorphic_names = polymorphic_names.to_h do |polymorphic_name, _|
       [
         polymorphic_name,
         {
           associations: find_associations_related_to.call(polymorphic_name)
         }
       ]
-    end.to_h
+    end
 
     self.polymorphic = true if polymorphic_names.size.positive?
   end

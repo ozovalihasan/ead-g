@@ -7,7 +7,7 @@ describe EAD do
 
     @file = JSON.parse(File.read("#{__dir__}/ead_spec_sample.json"))
     @file = @file.to_json
-    @ead = EAD.new
+    @ead = described_class.new
   end
 
   describe '.import_JSON' do
@@ -30,7 +30,7 @@ describe EAD do
                  "----------------\n\n"
                ]).to include str
       end
-      allow_any_instance_of(EAD).to receive(:warning) do |_, call_with|
+      allow_any_instance_of(described_class).to receive(:warning) do |_, call_with|
         expect([
                  'Versions of your EAD file and the gem are not compatible. To run your EAD file correctly, please run',
                  'gem install ead -v 0.3.0',
@@ -123,7 +123,7 @@ describe EAD do
         allow(RestClient).to receive(:get).and_return(response)
 
         allow_any_instance_of(Object).to receive(:puts)
-        allow_any_instance_of(EAD).to receive(:warning) do |_, call_with|
+        allow_any_instance_of(described_class).to receive(:warning) do |_, call_with|
           expect([
                    'A new version of this gem has been released. Please check it. https://github.com/ozovalihasan/ead-g/releases'
                  ]).to include call_with
@@ -139,7 +139,7 @@ describe EAD do
 
         allow(RestClient).to receive(:get).and_return(response)
         allow_any_instance_of(Object).to receive(:puts)
-        allow_any_instance_of(EAD).to receive(:warning) do |_, call_with|
+        allow_any_instance_of(described_class).to receive(:warning) do |_, call_with|
           expect([
                    'If you want to check the latest version of this gem, you need to have a stable internet connection.'
                  ]).to include call_with
@@ -153,16 +153,18 @@ describe EAD do
   describe '.start' do
     it 'starts all process' do
       call_check_latest_version = 0
-      allow_any_instance_of(EAD).to receive(:check_latest_version) { |_arg| call_check_latest_version += 1 }
+      allow_any_instance_of(described_class).to receive(:check_latest_version) { |_arg| call_check_latest_version += 1 }
 
       call_import_JSON = 0
-      allow_any_instance_of(EAD).to receive(:import_JSON) { |_arg| call_import_JSON += 1 }
+      allow_any_instance_of(described_class).to receive(:import_JSON) { |_arg| call_import_JSON += 1 }
 
       call_create_objects = 0
-      allow_any_instance_of(EAD).to receive(:create_objects) { |_arg| call_create_objects += 1 }
+      allow_any_instance_of(described_class).to receive(:create_objects) { |_arg| call_create_objects += 1 }
 
       call_check_implement_objects = 0
-      allow_any_instance_of(EAD).to receive(:check_implement_objects) { |_arg| call_check_implement_objects += 1 }
+      allow_any_instance_of(described_class).to receive(:check_implement_objects) { |_arg|
+                                                  call_check_implement_objects += 1
+                                                }
 
       @ead.start([])
 
@@ -193,7 +195,7 @@ describe EAD do
         changes << "command #{command} run"
       end
 
-      ead = EAD.new
+      ead = described_class.new
 
       ead.start(['./spec/sample_EAD.json'])
 

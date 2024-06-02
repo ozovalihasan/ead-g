@@ -4,14 +4,12 @@ require 'entity'
 require 'rest-client'
 
 class EAD
-
   def warning(str, color = :red)
     if color == :red
-      puts "\e[31m\n#{ str }\n\e[0m"
+      puts "\e[31m\n#{str}\n\e[0m"
     elsif :yellow
-      puts "\e[33m\n#{ str }\n\e[0m"
+      puts "\e[33m\n#{str}\n\e[0m"
     end
-
   end
 
   def import_JSON(user_arguments)
@@ -19,9 +17,9 @@ class EAD
 
     unless '0.4.7' == JSON.parse(file)['version']
       puts "\n\n----------------"
-      
+
       warning(
-        'Versions of your EAD file and the gem are not compatible. '\
+        'Versions of your EAD file and the gem are not compatible. ' \
         'To run your EAD file correctly, please run'
       )
 
@@ -30,9 +28,9 @@ class EAD
       )
 
       warning(
-        "Or, upload your file to EAD(user interface) and download it again. It will be updated automatically."
+        'Or, upload your file to EAD(user interface) and download it again. It will be updated automatically.'
       )
-      
+
       puts "----------------\n\n"
 
       raise StandardError, msg = 'Incompatible version'
@@ -66,7 +64,7 @@ class EAD
 
     Association.dismiss_similar_ones
     Association.all_references.each(&:set_middle_entity)
-    
+
     Table.all.each(&:set_polymorphic_names)
   end
 
@@ -84,7 +82,7 @@ class EAD
     unless response.first['name'] == 'v0.4.7'
       puts "\n\n----------------"
       warning(
-        'A new version of this gem has been released. '\
+        'A new version of this gem has been released. ' \
         'Please check it. https://github.com/ozovalihasan/ead-g/releases',
         :yellow
       )
@@ -93,8 +91,8 @@ class EAD
   rescue StandardError
     puts "\n\n----------------"
     warning(
-      "If you want to check the latest version of this gem, "\
-      "you need to have a stable internet connection."
+      'If you want to check the latest version of this gem, ' \
+      'you need to have a stable internet connection.'
     )
     puts "\n----------------\n\n"
   end

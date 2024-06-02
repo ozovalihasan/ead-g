@@ -2,7 +2,7 @@ require 'association'
 require 'entity'
 require 'ead'
 
-def set_associations 
+def set_associations
   ObjectSpace.garbage_collect
 
   parsed_file = JSON.parse(File.read("#{__dir__}/association_spec_sample.json"))
@@ -26,15 +26,14 @@ def set_associations
   @edges = parsed_edges.map do |edge|
     Association.new(edge)
   end
-
 end
 
 describe Association do
-  describe "by dismissing duplicated associations" do
-    before(:all) do 
-      set_associations()
+  describe 'by dismissing duplicated associations' do
+    before(:all) do
+      set_associations
       Association.dismiss_similar_ones
-      
+
       @entity1 = Entity.find_by_name('entity1')
       @association1 = @entity1.associations.first
       @entity2 = Entity.find_by_name('entity2')
@@ -63,42 +62,42 @@ describe Association do
         expect(@entity3.children_through.any?(@entity4)).to eq(true)
 
         entity9 = Entity.find_by_name('entity9')
-        
+
         entity10 = Entity.find_by_name('entity10')
-        association4 = entity9.associations.find {|association| association.second_entity == entity10}
-        
+        association4 = entity9.associations.find { |association| association.second_entity == entity10 }
+
         expect(association4.optional).to eq(false)
-        
+
         entity11 = Entity.find_by_name('entity11')
-        association5 = entity9.associations.find {|association| association.second_entity == entity11}
-        
+        association5 = entity9.associations.find { |association| association.second_entity == entity11 }
+
         expect(association5.optional).to eq(true)
-        
+
         entity12 = Entity.find_by_name('entity12')
-        association6 = entity9.associations.find {|association| association.second_entity == entity12}
-        
+        association6 = entity9.associations.find { |association| association.second_entity == entity12 }
+
         expect(association6.optional).to eq(false)
 
         entity13 = Entity.find_by_name('entity13')
-        association7 = entity9.associations.find {|association| association.second_entity == entity13}
-        
+        association7 = entity9.associations.find { |association| association.second_entity == entity13 }
+
         expect(association7.optional).to eq(true)
       end
     end
 
     describe '#optional?' do
-      it "returns whether the association is optional or not" do
+      it 'returns whether the association is optional or not' do
         entity9 = Entity.find_by_name('entity9')
         entity11 = Entity.find_by_name('entity11')
-        association5 = entity9.associations.find {|association| association.second_entity == entity11}
-        
+        association5 = entity9.associations.find { |association| association.second_entity == entity11 }
+
         expect(association5.optional?).to eq(true)
       end
     end
 
     describe '.check_middle_entities_include' do
       it "sets all middle entities of any 'through' association if the through entity of the association " \
-        'is the given entity' do
+         'is the given entity' do
         entity3 = Entity.find_by_name('entity3')
         entity8 = Entity.find_by_name('entity8')
 
@@ -115,7 +114,7 @@ describe Association do
     end
 
     describe '#set_middle_entity' do
-      it "sets the middle entity of a 'through' association " do
+      it "sets the middle entity of a 'through' association" do
         Association.all_references.each(&:set_middle_entity)
 
         entity3 = Entity.find_by_name('entity3')
@@ -149,7 +148,7 @@ describe Association do
     describe '#update_model_from_entity' do
       it 'calls Entity#update_model' do
         allow_any_instance_of(Entity).to receive(:update_model) do |first_entity, second_entity, association|
-          expect(%w[entity1 entity2 has_many]).to eql [first_entity.name, second_entity.name, association.name]
+          expect([first_entity.name, second_entity.name, association.name]).to eql(%w[entity1 entity2 has_many])
         end
 
         @association1.update_model_from_entity
@@ -192,17 +191,15 @@ describe Association do
         expect(Association.all.size).to eq(23)
       end
     end
-
   end
 
-  describe "without dismissing duplicated associations" do
-    before(:all) do 
-      set_associations() 
+  describe 'without dismissing duplicated associations' do
+    before(:all) do
+      set_associations
     end
 
-    describe ".dismiss_similar_ones" do
+    describe '.dismiss_similar_ones' do
       it 'returns all reference associations' do
-        
         expect(Association.all_references.size).to eq(23)
 
         Association.dismiss_similar_ones
@@ -213,32 +210,48 @@ describe Association do
         entity12 = Entity.find_by_name('entity12').reference_entity
         entity13 = Entity.find_by_name('entity13').reference_entity
 
-        associations_between_9_and_13 = Association.all.find_all {|association| association.first_entity == entity9 && association.second_entity == entity13}
+        associations_between_9_and_13 = Association.all.find_all do |association|
+          association.first_entity == entity9 && association.second_entity == entity13
+        end
 
         expect(associations_between_9_and_13.size).to eq(2)
         expect(associations_between_9_and_13.map(&:reference_association).uniq.size).to eq(1)
         expect(associations_between_9_and_13.first.reference_association.optional?).to eq(true)
-        expect(associations_between_9_and_13.count {|association| association.reference_association == association}).to eq(1)
+        expect(associations_between_9_and_13.count do |association|
+                 association.reference_association == association
+               end).to eq(1)
 
-        associations_between_12_and_11 = Association.all.find_all {|association| association.first_entity == entity12 && association.second_entity == entity11}
+        associations_between_12_and_11 = Association.all.find_all do |association|
+          association.first_entity == entity12 && association.second_entity == entity11
+        end
 
         expect(associations_between_12_and_11.size).to eq(2)
         expect(associations_between_12_and_11.map(&:reference_association).uniq.size).to eq(1)
-        expect(associations_between_12_and_11.count {|association| association.reference_association == association}).to eq(1)
+        expect(associations_between_12_and_11.count do |association|
+                 association.reference_association == association
+               end).to eq(1)
 
-        associations_between_9_and_12 = Association.all.find_all {|association| association.first_entity == entity9 && association.second_entity == entity12}
+        associations_between_9_and_12 = Association.all.find_all do |association|
+          association.first_entity == entity9 && association.second_entity == entity12
+        end
 
         expect(associations_between_9_and_12.size).to eq(2)
         expect(associations_between_9_and_12.map(&:reference_association).uniq.size).to eq(1)
         expect(associations_between_9_and_12.first.reference_association.optional?).to eq(false)
-        expect(associations_between_9_and_12.count {|association| association.reference_association == association}).to eq(1)
-        
-        associations_between_9_and_10 = Association.all.find_all {|association| association.first_entity == entity9 && association.second_entity == entity10}
+        expect(associations_between_9_and_12.count do |association|
+                 association.reference_association == association
+               end).to eq(1)
+
+        associations_between_9_and_10 = Association.all.find_all do |association|
+          association.first_entity == entity9 && association.second_entity == entity10
+        end
 
         expect(associations_between_9_and_10.size).to eq(2)
         expect(associations_between_9_and_10.map(&:reference_association).uniq.size).to eq(2)
-        expect(associations_between_9_and_10.count {|association| association.reference_association == association}).to eq(2)
-        
+        expect(associations_between_9_and_10.count do |association|
+                 association.reference_association == association
+               end).to eq(2)
+
         expect(Association.all_references.size).to eq(19)
       end
     end

@@ -25,7 +25,7 @@ describe Entity do
   context 'class methods' do
     describe '.initialize' do
       it 'creates an instance of the class correctly' do
-        photograph = Entity.find("36")
+        photograph = Entity.find('36')
 
         expect(photograph.id).to eq('36')
         expect(photograph.name).to eq('photograph')
@@ -50,22 +50,22 @@ describe Entity do
     describe '.find_by_name' do
       it 'returns the first entity if its name is the searched name and it is a reference entity' do
         manager = Entity.find_by_name('manager')
-        
+
         expect(manager.name).to eq('manager')
         expect(manager.reference_entity).to eq(manager)
       end
     end
 
     describe '.dismiss_similar_ones' do
-      it 'makes reference entities of entities having same name and referring to the same table ' do
-        managers = Entity.all.select {|entity| entity.name == "manager"}
+      it 'makes reference entities of entities having same name and referring to the same table' do
+        managers = Entity.all.select { |entity| entity.name == 'manager' }
         expect(managers.map(&:reference_entity).uniq.size).to eq(2)
-        expect(Entity.all.count {|entity| entity.reference_entity == entity}).to eq(37)
-        
+        expect(Entity.all.count { |entity| entity.reference_entity == entity }).to eq(37)
+
         Entity.dismiss_similar_ones
-        
+
         expect(managers.map(&:reference_entity).uniq.size).to eq(1)
-        expect(Entity.all.count {|entity| entity.reference_entity == entity}).to eq(32)
+        expect(Entity.all.count { |entity| entity.reference_entity == entity }).to eq(32)
       end
     end
   end
@@ -87,7 +87,7 @@ describe Entity do
 
       Association.dismiss_similar_ones
       Association.all_references.each(&:set_middle_entity)
-      
+
       Table.all.each(&:set_polymorphic_names)
 
       @account_history = Entity.find_by_name('account_history')
@@ -98,7 +98,7 @@ describe Entity do
     end
 
     describe '#model_name' do
-      it 'returns camelized clone parent name ' do
+      it 'returns camelized clone parent name' do
         expect(@photograph.model_name).to eq('Picture')
       end
     end
@@ -137,7 +137,7 @@ describe Entity do
 
     describe '#update_end_model_migration_files' do
       it 'prepare necessary attributes to update model and migration_files' do
-        call_update_project_files = 0 
+        call_update_project_files = 0
         allow_any_instance_of(Entity).to receive(:update_project_files) do |_, start_entity, end_model_line, end_migration_line|
           call_update_project_files += 1
 
@@ -149,27 +149,27 @@ describe Entity do
                    ],
                    [
                      'supervisor',
-                     { 
-                       'belongs_to' => ':supervisor', 
-                       'optional' => 'true', 
+                     {
+                       'belongs_to' => ':supervisor',
+                       'optional' => 'true',
                        'polymorphic' => 'true'
-                     }, 
+                     },
                      { 'null' => 'true' }
                    ],
                    [
                      'assistant_professor',
                      { 'belongs_to' => ':assistant_professor' },
-                     { 
+                     {
                        'foreign_key' => '{ to_table: :teachers }',
-                       'null' => 'true' 
+                       'null' => 'true'
                      }
                    ],
                    [
                      'client',
-                     { 
-                       'belongs_to' => ':client', 
-                       'class_name' => '"User"', 
-                       'optional' => 'true' 
+                     {
+                       'belongs_to' => ':client',
+                       'class_name' => '"User"',
+                       'optional' => 'true'
                      },
                      { 'foreign_key' => '{ to_table: :users }', 'null' => 'true' }
                    ]
@@ -178,49 +178,49 @@ describe Entity do
 
         famous_person = Entity.find_by_name('famous_person')
         association = famous_person.associations.find do |association|
-                        association.name == 'has_many'
-                      end.reference_association
+          association.name == 'has_many'
+        end.reference_association
         @followed.update_end_model_migration_files(famous_person, association)
 
         supervisor = Entity.find_by_name('supervisor')
         supervisee = Entity.find_by_name('supervisee')
         association = supervisor.associations.find do |association|
-                        association.name == 'has_many'
-                      end.reference_association
+          association.name == 'has_many'
+        end.reference_association
         supervisee.update_end_model_migration_files(supervisor, association)
 
         client = Entity.find_by_name('client')
         subordinate = Entity.find_by_name('subordinate')
 
         association = subordinate.parent_associations.find do |association|
-                        association.name == 'has_many'
-                      end.reference_association
+          association.name == 'has_many'
+        end.reference_association
         subordinate.update_end_model_migration_files(client, association)
 
         assistant_professor = Entity.find_by_name('assistant_professor')
         project_student = Entity.find_by_name('project_student')
         association = assistant_professor.associations.find do |association|
-                        association.name == 'has_many'
-                      end
+          association.name == 'has_many'
+        end
         project_student.update_end_model_migration_files(assistant_professor, association)
-        
+
         undergraduate_student = Entity.find_by_name('undergraduate_student')
         association = assistant_professor.associations.find do |association|
-                        association.name == 'has_many'
-                      end
+          association.name == 'has_many'
+        end
         undergraduate_student.update_end_model_migration_files(assistant_professor, association)
 
-        expect( call_update_project_files ).to eq 4
+        expect(call_update_project_files).to eq 4
         undergraduate_student.update_end_model_migration_files(assistant_professor, association)
-        expect( call_update_project_files ).to eq 4
+        expect(call_update_project_files).to eq 4
 
         association = famous_person.associations.find do |association|
-                        association.name == ':through'
-                      end.reference_association
+          association.name == ':through'
+        end.reference_association
 
-        expect( call_update_project_files ).to eq 4
+        expect(call_update_project_files).to eq 4
         @fan.update_end_model_migration_files(famous_person, association)
-        expect( call_update_project_files ).to eq 4
+        expect(call_update_project_files).to eq 4
       end
     end
 
@@ -290,14 +290,14 @@ describe Entity do
         allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
           expect(%w[user user]).to include name
           expect(%w[followings famous_people]).to include end_model
-          expect([{ 
-                    'has_many' => ':followings', 
-                    'class_name' => '"Relation"', 
-                    'foreign_key' => '"fan_id"' 
-                  },
-                  { 
-                    'has_many' => ':famous_people', 
-                    'through' => ':followings' 
+          expect([{
+                   'has_many' => ':followings',
+                   'class_name' => '"Relation"',
+                   'foreign_key' => '"fan_id"'
+                 },
+                  {
+                    'has_many' => ':famous_people',
+                    'through' => ':followings'
                   }]).to include line_content
         end
 
@@ -309,28 +309,24 @@ describe Entity do
         allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
           expect([
                    ['postcard', 'photographs',
-                     { 
-                       'as' => ':postable', 
-                       'class_name' => '"Picture"', 
-                       'has_many' => ':photographs' 
-                     }
-                   ],
+                    {
+                      'as' => ':postable',
+                      'class_name' => '"Picture"',
+                      'has_many' => ':photographs'
+                    }],
                    ['postcard', 'imageables',
-                     { 'has_many' => ':employees', 
-                       'source' => ':imageable', 
-                       'source_type' => '"Employee" ', 
-                       'through' => ':photographs' 
-                     }
-                   ],
+                    { 'has_many' => ':employees',
+                      'source' => ':imageable',
+                      'source_type' => '"Employee" ',
+                      'through' => ':photographs' }],
                    ['account', 'account_history', { 'has_one' => ':account_history' }],
                    ['technician', 'drivable',
-                     { 
-                       'has_one' => ':driver', 
-                       'source' => ':drivable', 
-                       'source_type' => '"Driver" ', 
-                       'through' => ':car' 
-                     }
-                   ]
+                    {
+                      'has_one' => ':driver',
+                      'source' => ':drivable',
+                      'source_type' => '"Driver" ',
+                      'through' => ':car'
+                    }]
                  ]).to include [name, end_model, line_content]
         end
 

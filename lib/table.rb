@@ -4,7 +4,8 @@ require 'association'
 require 'active_support/inflector'
 
 class Table < TableEntityBase
-  attr_accessor :name, :id, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses, :belongs_to_checked
+  attr_accessor :name, :id, :attributes, :entities, :polymorphic, :polymorphic_names, :superclass, :subclasses,
+                :belongs_to_checked
 
   def initialize(table_id, table)
     @id = table_id
@@ -66,31 +67,33 @@ class Table < TableEntityBase
     belong_parent_names = belong_parents.map(&:name)
 
     filtered_parent_names = belong_parent_names.find_all do |parent_name|
-                              belong_parent_names.count(parent_name) > 1
-                            end.uniq
+      belong_parent_names.count(parent_name) > 1
+    end.uniq
 
     self.polymorphic_names = filtered_parent_names.find_all do |parent_name|
                                belong_parents.find_all do |entity|
                                  entity.name == parent_name
                                end.map(&:table).map(&:name).uniq.size > 1
-                             end 
-                             .map {|polymorphic_name| [polymorphic_name, nil]}.to_h
+                             end
+      .map { |polymorphic_name| [polymorphic_name, nil] }.to_h
 
     find_associations_related_to = lambda do |polymorphic_name|
-      entities.map do |entity| 
-        entity.parent_associations.select {|association| association.has_any? && (association.first_entity.name == polymorphic_name)}
+      entities.map do |entity|
+        entity.parent_associations.select do |association|
+          association.has_any? && (association.first_entity.name == polymorphic_name)
+        end
       end.flatten
     end
 
     self.polymorphic_names = polymorphic_names.map do |polymorphic_name, _|
-                               [
-                                 polymorphic_name, 
-                                 {
-                                   associations: find_associations_related_to.call(polymorphic_name)
-                                 }
-                               ]
-                             end.to_h
-    
+      [
+        polymorphic_name,
+        {
+          associations: find_associations_related_to.call(polymorphic_name)
+        }
+      ]
+    end.to_h
+
     self.polymorphic = true if polymorphic_names.size.positive?
   end
 
@@ -111,7 +114,7 @@ class Table < TableEntityBase
   def add_reference_migration
     entities.each do |entity|
       parent_entities = entity.parents_has_many + entity.parents_has_one
-      
+
       parent_entities.uniq(&:name).each do |parent|
         generate_reference_migration(parent.name, entity.one_polymorphic_names?(parent))
       end

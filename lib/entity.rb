@@ -13,7 +13,6 @@ class Entity < TableEntityBase
     @table = Table.find(node['data']['tableId'])
     @reference_entity = self
     @table.entities << self
-    
 
     @parent_associations = []
     @associations = []
@@ -32,16 +31,16 @@ class Entity < TableEntityBase
   end
 
   def self.find_by_name(name)
-    all.select {|entity| entity.reference_entity == entity}.find { |entity| entity.name == name }
+    all.select { |entity| entity.reference_entity == entity }.find { |entity| entity.name == name }
   end
 
   def self.dismiss_similar_ones
-    grouped_entities = all.group_by {|entity| [entity.name, entity.table.id]}
+    grouped_entities = all.group_by { |entity| [entity.name, entity.table.id] }
     grouped_entities.values.each do |subgroup_entities|
       next if subgroup_entities.size == 1
 
       reference_entity_of_subgroup = subgroup_entities.first
-      
+
       subgroup_entities.each do |subgroup_entity|
         subgroup_entity.reference_entity = reference_entity_of_subgroup
       end
@@ -75,8 +74,9 @@ class Entity < TableEntityBase
     end_migration_line = {}
 
     return if table.belongs_to_checked.include? start_entity.name
+
     table.belongs_to_checked << start_entity.name
-    
+
     end_model_line['belongs_to'] = ":#{start_entity.name}"
 
     if root_classes_same?(start_entity) || association.optional?
@@ -89,14 +89,14 @@ class Entity < TableEntityBase
     end_migration_line['null'] = 'true' unless table.root_class?
 
     polymorphic_end = one_polymorphic_names?(start_entity)
-  
+
     if polymorphic_end
       if table.polymorphic_names[start_entity.name][:associations].any?(&:optional?)
         end_model_line['optional'] = 'true'
         end_migration_line['null'] = 'true'
       end
 
-      end_model_line['polymorphic'] = "true"
+      end_model_line['polymorphic'] = 'true'
     else
       end_model_line['class_name'] = "\"#{start_entity.table.name.camelize}\"" if start_entity.table_name_different?
 
@@ -113,7 +113,7 @@ class Entity < TableEntityBase
     update_migration_files(start_entity, end_migration_line)
   end
 
-  def update_model_files(start_entity, end_model_line)
+  def update_model_files(_start_entity, end_model_line)
     return if end_model_line.empty?
 
     ProjectFile.add_belong_line(table.name, end_model_line)

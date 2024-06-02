@@ -4,7 +4,7 @@ require 'project_file'
 describe ProjectFile do
   describe '.open_close' do
     describe 'opens, updates and closes a file' do
-      before(:each) do
+      before do
         allow(Dir).to receive(:glob) do |name|
           expect([
                    './db/migrate/*_mock_name.rb'
@@ -63,7 +63,10 @@ describe ProjectFile do
       end
 
       it 'raise an error when type is not known' do
-        expect{ ProjectFile.open_close('mock_name', 'unknown_type') }.to raise_error StandardError, "Type(unknown_type) is not suitable)" 
+        expect do
+          ProjectFile.open_close('mock_name',
+                                 'unknown_type')
+        end.to raise_error StandardError, 'Type(unknown_type) is not suitable)'
       end
     end
   end

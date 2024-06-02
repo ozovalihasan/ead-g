@@ -38,7 +38,7 @@ describe Attribute do
     it 'creates an instance of class correctly' do
       expect(@attribute.name).to eq('attribute1')
       expect(@attribute.type).to eq('string')
-      
+
       expect(@attribute3.name).to eq('attribute_three')
       expect(@attribute3.type).to eq('string')
     end
@@ -48,12 +48,12 @@ describe Attribute do
     it 'adds attribute name and type to command' do
       command = ''
       @attribute.add_to(command)
-      
+
       expect(command).to eq(' attribute1:string')
 
       command = ''
       @attribute3.add_to(command)
-      
+
       expect(command).to eq(' attribute_three:string')
     end
   end

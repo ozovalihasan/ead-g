@@ -15,12 +15,17 @@
 #
 # and, you'll have to watch "config/Guardfile" instead of "Guardfile"
 
+guard :rubocop, all_on_start: false, cli: ['-a', '--display-cop-names', '--extra-details', '--display-style-guide'] do
+  # Specify the directories to check for RuboCop
+  watch(%r{^(.+).rb$})
+end
+
 guard :rspec, cmd: 'bundle exec rspec' do
   # watch /lib/ files
   watch(%r{^lib/(.+).rb$}) do |m|
     "spec/#{m[1]}_spec.rb"
   end
-# watch /spec/ files
+  # watch /spec/ files
   watch(%r{^spec/(.+).rb$}) do |m|
     "spec/#{m[1]}.rb"
   end

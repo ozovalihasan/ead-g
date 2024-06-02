@@ -46,6 +46,9 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    guard-rubocop (1.5.0)
+      guard (~> 2.0)
+      rubocop (< 2.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -153,6 +156,7 @@ DEPENDENCIES
   ead!
   guard (~> 2.18)
   guard-rspec (~> 4.7)
+  guard-rubocop (~> 1.5)
   pry (~> 0.14.1)
   rspec (~> 3.10)
   rubocop (~> 1.64)

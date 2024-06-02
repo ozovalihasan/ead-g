@@ -52,3 +52,8 @@ Style/HashTransformKeys:
   Enabled: false
 Style/HashTransformValues:
   Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/IndexedLet:
+  Enabled: false

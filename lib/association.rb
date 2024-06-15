@@ -33,9 +33,6 @@ class Association
       @name = 'has_one'
       @optional = edge['data']['optional']
     when 'through'
-      @first_entity.children_through << @second_entity
-      @second_entity.parents_through << @first_entity
-
       @name = ':through'
       @through_entity = Entity.find(edge['data']['throughNodeId']).reference_entity
     end
@@ -66,22 +63,21 @@ class Association
         source.children_has_many_through +
         source.children_has_one +
         source.children_has_one_through
-      ).include?(through_entity) &&
-       (
-         (
-           target.parents_has_many +
-           target.parents_has_many_through +
-           target.parents_has_one +
-           target.parents_has_one_through +
-           target.children_has_many +
-           target.children_has_many_through +
-           target.children_has_one +
-           target.children_has_one_through
-         ).include?(through_entity) || (
-           through_entity.parents_has_many.map(&:table).include?(target.table) ||
-           through_entity.parents_has_one.map(&:table).include?(target.table)
-         )
-       )
+      ).include?(through_entity) && (
+        (
+          target.parents_has_many +
+          target.parents_has_many_through +
+          target.parents_has_one +
+          target.parents_has_one_through +
+          target.children_has_many +
+          target.children_has_many_through +
+          target.children_has_one +
+          target.children_has_one_through
+        ).include?(through_entity) || (
+          through_entity.parents_has_many.map(&:table).include?(target.table) ||
+          through_entity.parents_has_one.map(&:table).include?(target.table)
+        )
+      )
 
       if (
           source.children_has_many.include?(through_entity) ||

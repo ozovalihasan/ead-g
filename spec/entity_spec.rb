@@ -39,12 +39,10 @@ describe Entity do
         expect(photograph.parents_has_many).to be_empty
         expect(photograph.parents_has_one_through).to be_empty
         expect(photograph.parents_has_many_through).to be_empty
-        expect(photograph.parents_through).to be_empty
         expect(photograph.children_has_one).to be_empty
         expect(photograph.children_has_many).to be_empty
         expect(photograph.children_has_one_through).to be_empty
         expect(photograph.children_has_many_through).to be_empty
-        expect(photograph.children_through).to be_empty
       end
     end
 

@@ -58,8 +58,6 @@ describe Association do
         expect(entity1.children_has_many.any?(entity2)).to be(true)
         expect(entity3.parents_has_one.any?(entity2)).to be(true)
         expect(entity2.children_has_one.any?(entity3)).to be(true)
-        expect(entity4.parents_through.any?(entity3)).to be(true)
-        expect(entity3.children_through.any?(entity4)).to be(true)
 
         entity9 = Entity.find_by_name('entity9')
 

@@ -4,7 +4,7 @@ require 'project_file'
 
 class Entity < TableEntityBase
   attr_accessor(:name, :id, :table, :parent, :parent_association, :associations, :parent_associations,
-                :parents_has_one, :parents_has_many, :parents_through, :children_has_one, :children_has_many, :children_through,
+                :parents_has_one, :parents_has_many, :children_has_one, :children_has_many,
                 :children_has_one_through, :children_has_many_through, :parents_has_one_through, :parents_has_many_through, :reference_entity)
 
   def initialize(node)
@@ -21,13 +21,11 @@ class Entity < TableEntityBase
     @parents_has_many = []
     @parents_has_one_through = []
     @parents_has_many_through = []
-    @parents_through = []
 
     @children_has_one = []
     @children_has_many = []
     @children_has_one_through = []
     @children_has_many_through = []
-    @children_through = []
   end
 
   def self.find_by_name(name)

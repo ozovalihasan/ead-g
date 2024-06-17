@@ -21,7 +21,7 @@ describe TableEntityBase do
 
   describe '.all' do
     it 'returns all created instances' do
-      expect(described_class.all.size).to eq(58)
+      expect(described_class.all.size).to eq(60)
     end
   end
 

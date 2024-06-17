@@ -1,7 +1,7 @@
 {
     "version": "0.4.7",
-    "idCounter": 133,
-    "associationType": "has_many",
+    "idCounter": 136,
+    "associationType": "through",
     "nodes": [
         {
             "id": "20",
@@ -298,7 +298,7 @@
             "type": "entity",
             "position": {
                 "x": 840,
-                "y": 255
+                "y": 240
             },
             "data": {
                 "tableId": "10",
@@ -309,7 +309,7 @@
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
-                "y": 255
+                "y": 240
             },
             "dragging": false,
             "style": {
@@ -322,7 +322,7 @@
             "type": "entity",
             "position": {
                 "x": 840,
-                "y": 420
+                "y": 405
             },
             "data": {
                 "tableId": "11",
@@ -333,7 +333,7 @@
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
-                "y": 420
+                "y": 405
             },
             "dragging": false,
             "style": {
@@ -346,7 +346,7 @@
             "type": "entity",
             "position": {
                 "x": 840,
-                "y": 585
+                "y": 570
             },
             "data": {
                 "tableId": "12",
@@ -357,7 +357,7 @@
             "selected": false,
             "positionAbsolute": {
                 "x": 840,
-                "y": 585
+                "y": 570
             },
             "dragging": false,
             "style": {
@@ -899,6 +899,31 @@
                 "x": 765,
                 "y": 1095
             }
+        },
+        {
+            "id": "134",
+            "position": {
+                "x": 1110,
+                "y": 435
+            },
+            "data": {
+                "tableId": "133",
+                "name": "not_valid_association"
+            },
+            "selected": true,
+            "type": "entity",
+            "width": 204,
+            "height": 71,
+            "style": {
+                "width": 204,
+                "height": 71
+            },
+            "positionAbsolute": {
+                "x": 1110,
+                "y": 435
+            },
+            "dragging": false,
+            "resizing": false
         }
     ],
     "edges": [
@@ -1276,6 +1301,18 @@
                 "optional": false
             },
             "selected": false
+        },
+        {
+            "id": "135",
+            "source": "45",
+            "target": "134",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "type": "through",
+            "label": "through",
+            "data": {
+                "throughNodeId": "47"
+            }
         }
     ],
     "tables": {
@@ -1401,6 +1438,11 @@
             "name": "director",
             "attributes": {},
             "superclassId": "19"
+        },
+        "133": {
+            "name": "accountant",
+            "attributes": {},
+            "superclassId": "14"
         }
     },
     "orderedTables": [
@@ -1409,24 +1451,25 @@
         "12",
         "13",
         "14",
+        "133",
+        "55",
+        "62",
+        "19",
+        "124",
         "15",
         "16",
         "17",
         "18",
-        "19",
-        "53",
-        "54",
-        "55",
-        "62",
         "70",
         "74",
+        "54",
+        "53",
         "96",
         "97",
         "101",
-        "106",
-        "124"
+        "106"
     ],
-    "connectionStartNodeId": "131",
+    "connectionStartNodeId": "45",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

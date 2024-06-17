@@ -7,6 +7,8 @@ describe Entity do
   let(:parsed_file) { JSON.parse(File.read("#{__dir__}/sample_EAD.json")) }
 
   before do
+    allow_any_instance_of(Object).to receive(:puts)
+
     ObjectSpace.garbage_collect
 
     parsed_tables = parsed_file['tables']
@@ -59,12 +61,12 @@ describe Entity do
       it 'makes reference entities of entities having same name and referring to the same table' do
         managers = described_class.all.select { |entity| entity.name == 'manager' }
         expect(managers.map(&:reference_entity).uniq.size).to eq(2)
-        expect(described_class.all.count { |entity| entity.reference_entity == entity }).to eq(37)
+        expect(described_class.all.count { |entity| entity.reference_entity == entity }).to eq(38)
 
         described_class.dismiss_similar_ones
 
         expect(managers.map(&:reference_entity).uniq.size).to eq(1)
-        expect(described_class.all.count { |entity| entity.reference_entity == entity }).to eq(32)
+        expect(described_class.all.count { |entity| entity.reference_entity == entity }).to eq(33)
       end
     end
   end

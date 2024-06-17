@@ -198,7 +198,7 @@ describe EAD do
 
       ead.start(['./spec/sample_EAD.json'])
 
-      expect(changes.size).to eq(89)
+      expect(changes.size).to eq(90)
       # rubocop:disable Layout/LineLength
       expect(changes).to contain_exactly(
         'command bundle exec rails generate model Director --parent=Employee run',
@@ -222,6 +222,7 @@ describe EAD do
         'command bundle exec rails generate model AccountHistory credit_rating:integer access_time:datetime run',
         'command bundle exec rails generate model Account run',
         'command bundle exec rails generate model Supplier run',
+        'command bundle exec rails generate model Accountant --parent=User run',
         'command bundle exec rails generate migration AddDrivableRefToVehicle drivable:belongs_to{polymorphic} run',
         'command bundle exec rails generate migration AddTechnicianRefToVehicle technician:belongs_to run',
         'command bundle exec rails generate migration AddSupervisorRefToUser supervisor:belongs_to{polymorphic} run',

@@ -46,24 +46,18 @@ class EAD
     parsed_nodes = parsed_file['nodes']
     parsed_edges = parsed_file['edges']
 
-    @tables = parsed_tables.map do |id, parsed_table|
-      Table.new(id, parsed_table)
-    end
+    @tables = parsed_tables.map { |id, parsed_table| Table.new(id, parsed_table) }
 
     Table.update_superclasses(parsed_tables)
 
-    @nodes = parsed_nodes.map do |node|
-      Entity.new(node)
-    end
+    @nodes = parsed_nodes.map { |node| Entity.new(node) }
 
     Entity.dismiss_similar_ones
 
-    @edges = parsed_edges.map do |edge|
-      Association.new(edge)
-    end
+    @edges = parsed_edges.map { |edge| Association.new(edge) }
 
     Association.dismiss_similar_ones
-    Association.all_references.each(&:set_middle_entity)
+    Association.set_all_middle_entities
 
     Table.all.each(&:set_polymorphic_names)
   end

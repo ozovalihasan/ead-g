@@ -1,7 +1,7 @@
 {
     "version": "0.4.7",
-    "idCounter": 67,
-    "associationType": "has_many",
+    "idCounter": 80,
+    "associationType": "through",
     "nodes": [
         {
             "id": "9",
@@ -458,6 +458,92 @@
                 "width": 144,
                 "height": 71
             }
+        },
+        {
+            "id": "68",
+            "position": {
+                "x": 2445,
+                "y": 420
+            },
+            "data": {
+                "tableId": "67",
+                "name": "entity14"
+            },
+            "selected": false,
+            "type": "entity",
+            "width": 144,
+            "height": 71,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
+        },
+        {
+            "id": "70",
+            "position": {
+                "x": 2445,
+                "y": 615
+            },
+            "data": {
+                "tableId": "69",
+                "name": "entity15"
+            },
+            "selected": false,
+            "type": "entity",
+            "width": 144,
+            "height": 71,
+            "style": {
+                "width": 144,
+                "height": 71
+            }
+        },
+        {
+            "id": "73",
+            "position": {
+                "x": 2685,
+                "y": 660
+            },
+            "data": {
+                "tableId": "71",
+                "name": "entity16"
+            },
+            "selected": false,
+            "type": "entity",
+            "width": 144,
+            "height": 71,
+            "style": {
+                "width": 144,
+                "height": 71
+            },
+            "positionAbsolute": {
+                "x": 2685,
+                "y": 660
+            },
+            "dragging": false
+        },
+        {
+            "id": "74",
+            "position": {
+                "x": 2955,
+                "y": 810
+            },
+            "data": {
+                "tableId": "72",
+                "name": "entity17"
+            },
+            "selected": true,
+            "type": "entity",
+            "width": 144,
+            "height": 71,
+            "style": {
+                "width": 144,
+                "height": 71
+            },
+            "positionAbsolute": {
+                "x": 2955,
+                "y": 810
+            },
+            "dragging": false
         }
     ],
     "edges": [
@@ -751,6 +837,54 @@
             "data": {
                 "optional": false
             }
+        },
+        {
+            "id": "75",
+            "source": "68",
+            "target": "70",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            }
+        },
+        {
+            "id": "77",
+            "source": "73",
+            "target": "74",
+            "sourceHandle": "bottom2",
+            "targetHandle": "top",
+            "type": "hasMany",
+            "label": "has many",
+            "data": {
+                "optional": false
+            }
+        },
+        {
+            "id": "78",
+            "source": "68",
+            "target": "73",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "type": "through",
+            "label": "through",
+            "data": {
+                "throughNodeId": "70"
+            }
+        },
+        {
+            "id": "79",
+            "source": "68",
+            "target": "74",
+            "sourceHandle": "bottom3",
+            "targetHandle": "top",
+            "type": "through",
+            "label": "through",
+            "data": {
+                "throughNodeId": "73"
+            }
         }
     ],
     "tables": {
@@ -818,6 +952,26 @@
             "name": "entity13",
             "attributes": {},
             "superclassId": ""
+        },
+        "67": {
+            "name": "entity14",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "69": {
+            "name": "entity15",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "71": {
+            "name": "entity16",
+            "attributes": {},
+            "superclassId": ""
+        },
+        "72": {
+            "name": "entity17",
+            "attributes": {},
+            "superclassId": ""
         }
     },
     "orderedTables": [
@@ -833,9 +987,13 @@
         "33",
         "34",
         "41",
-        "44"
+        "44",
+        "67",
+        "69",
+        "71",
+        "72"
     ],
-    "connectionStartNodeId": "35",
+    "connectionStartNodeId": "68",
     "isConnectContinue": false,
     "isMouseOnNode": false,
     "isMouseOnEdge": false,

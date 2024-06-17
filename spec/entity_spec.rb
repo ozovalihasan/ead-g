@@ -91,7 +91,7 @@ describe Entity do
       end
 
       Association.dismiss_similar_ones
-      Association.all_references.each(&:set_middle_entity)
+      Association.set_all_middle_entities
 
       Table.all.each(&:set_polymorphic_names)
     end
@@ -284,7 +284,7 @@ describe Entity do
 
     describe '#update_start_model_file' do
       it 'updates the model file of an table' do
-        Association.all_references.each(&:set_middle_entity)
+        Association.set_all_middle_entities
 
         allow(ProjectFile).to receive(:add_line) do |name, end_model, line_content|
           expect(%w[user user]).to include name

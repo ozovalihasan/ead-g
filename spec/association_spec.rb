@@ -48,8 +48,6 @@ describe Association do
         expect(association1.first_entity.class).to eq(Entity)
         expect(association1.name).to eq('has_many')
         expect(association1.reference_association == association1).to be(true)
-        expect(association1.middle_entities_has_many).to eq([])
-        expect(association1.middle_entities_has_one).to eq([])
 
         expect(entity2.associations.first).to eq(association2)
         expect(entity2.parent_associations.any?(association1)).to be(true)
@@ -93,56 +91,6 @@ describe Association do
       end
     end
 
-    describe '.check_middle_entities_include' do
-      it "sets all middle entities of any 'through' association if the through entity of the association " \
-         'is the given entity' do
-        entity3 = Entity.find_by_name('entity3')
-        entity8 = Entity.find_by_name('entity8')
-
-        described_class.check_middle_entities_include(entity4)
-        expect(entity3.children_has_one_through.map(&:id)).not_to include(entity4.id)
-        expect(entity4.parents_has_one_through.map(&:id)).not_to include(entity3.id)
-
-        described_class.check_middle_entities_include(entity2)
-        expect(entity3.children_has_one_through.map(&:id)).to include(entity4.id)
-        expect(entity4.parents_has_one_through.map(&:id)).to include(entity3.id)
-        expect(entity3.children_has_one_through).to include(entity8)
-        expect(entity8.parents_has_one_through).to include(entity3)
-      end
-    end
-
-    describe '#set_middle_entity' do
-      it "sets the middle entity of a 'through' association" do
-        described_class.all_references.each(&:set_middle_entity)
-
-        entity3 = Entity.find_by_name('entity3')
-        entity5 = Entity.find_by_name('entity5')
-        entity6 = Entity.find_by_name('entity6')
-        entity7 = Entity.find_by_name('entity7')
-        entity8 = Entity.find_by_name('entity8')
-
-        association = entity7.associations.find(&:through?)
-        expect(association.middle_entities_has_one).to include(entity5)
-        expect(entity7.children_has_one_through).to include(entity6)
-        expect(entity6.parents_has_one_through).to include(entity7)
-
-        association2 = entity2.associations.find(&:through?)
-        expect(association2.middle_entities_has_many).to include(entity7)
-
-        expect(entity3.children_has_many_through).to include(entity7)
-        expect(entity7.parents_has_many_through).to include(entity3)
-
-        expect(entity3.children_has_many_through).to include(entity5)
-        expect(entity5.parents_has_many_through).to include(entity3)
-
-        expect(entity3.children_has_one_through).to include(entity4)
-        expect(entity4.parents_has_one_through).to include(entity3)
-
-        expect(entity3.children_has_one_through).to include(entity8)
-        expect(entity8.parents_has_one_through).to include(entity3)
-      end
-    end
-
     describe '#update_model_from_entity' do
       it 'calls Entity#update_model' do
         allow_any_instance_of(Entity).to receive(:update_model) do |first_entity, second_entity, association|
@@ -180,13 +128,75 @@ describe Association do
 
     describe '.all_references' do
       it 'returns all reference associations' do
-        expect(described_class.all_references.size).to eq(19)
+        expect(described_class.all_references.size).to eq(23)
       end
     end
 
     describe '.all' do
       it 'returns all created instances' do
-        expect(described_class.all.size).to eq(23)
+        expect(described_class.all.size).to eq(27)
+      end
+    end
+
+    describe '.set_all_middle_entities' do
+      let(:shown_texts) { [] }
+
+      before do
+        allow_any_instance_of(Object).to receive(:puts) do |_, str|
+          shown_texts << str
+        end
+        described_class.set_all_middle_entities
+      end
+
+      it "sets the middle entity of a 'through' association" do
+        entity3 = Entity.find_by_name('entity3')
+        entity5 = Entity.find_by_name('entity5')
+        entity6 = Entity.find_by_name('entity6')
+        entity7 = Entity.find_by_name('entity7')
+        entity8 = Entity.find_by_name('entity8')
+
+        expect(entity7.children_has_one_through).to include(entity6)
+        expect(entity6.parents_has_one_through).to include(entity7)
+
+        expect(entity3.children_has_many_through).to include(entity7)
+        expect(entity7.parents_has_many_through).to include(entity3)
+
+        expect(entity3.children_has_many_through).to include(entity5)
+        expect(entity5.parents_has_many_through).to include(entity3)
+
+        expect(entity3.children_has_one_through).to include(entity4)
+        expect(entity4.parents_has_one_through).to include(entity3)
+
+        expect(entity3.children_has_one_through).to include(entity8)
+        expect(entity8.parents_has_one_through).to include(entity3)
+      end
+
+      it "doesn't set the middle entity of a 'through' association if there is an issue between two entities" do
+        entity14 = Entity.find_by_name('entity14')
+        entity16 = Entity.find_by_name('entity16')
+        entity17 = Entity.find_by_name('entity17')
+
+        association1 = entity14.associations.find { |association| association.second_entity == entity16 }
+        association2 = entity14.associations.find { |association| association.second_entity == entity17 }
+
+        expect(association1.have_issue).to be_truthy
+        expect(entity16.children_has_one_through).not_to include(entity14)
+        expect(entity16.children_has_many_through).not_to include(entity14)
+        expect(entity14.parents_has_one_through).not_to include(entity16)
+        expect(entity14.parents_has_many_through).not_to include(entity16)
+
+        expect(association2.have_issue).to be_truthy
+        expect(entity17.children_has_one_through).not_to include(entity14)
+        expect(entity17.children_has_many_through).not_to include(entity14)
+        expect(entity14.parents_has_one_through).not_to include(entity17)
+        expect(entity14.parents_has_many_through).not_to include(entity17)
+
+        expect(shown_texts).to eq ['----------------',
+                                   'Association between entity14 and entity16 has issue',
+                                   '----------------',
+                                   '----------------',
+                                   'Association between entity14 and entity17 has issue',
+                                   '----------------']
       end
     end
   end
@@ -198,7 +208,7 @@ describe Association do
 
     describe '.dismiss_similar_ones' do
       it 'returns all reference associations' do
-        expect(described_class.all_references.size).to eq(23)
+        expect(described_class.all_references.size).to eq(27)
 
         described_class.dismiss_similar_ones
 
@@ -250,7 +260,7 @@ describe Association do
                  association.reference_association == association
                end).to eq(2)
 
-        expect(described_class.all_references.size).to eq(19)
+        expect(described_class.all_references.size).to eq(23)
       end
     end
   end

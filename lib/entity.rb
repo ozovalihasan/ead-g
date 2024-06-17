@@ -131,6 +131,8 @@ class Entity < TableEntityBase
   end
 
   def update_start_model_file(end_entity, association)
+    return if association.have_issue?
+
     start_model = table.name
 
     end_model = end_entity.name
@@ -186,9 +188,9 @@ class Entity < TableEntityBase
     update_start_model_file(end_entity, association)
   end
 
-  private_class_method :all_references
-
   def self.all_references
     all.select { |entity| entity.reference_entity == entity }
   end
+
+  private_class_method :all_references
 end

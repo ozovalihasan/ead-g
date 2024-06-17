@@ -1,12 +1,16 @@
 require 'table'
 
 class Association
-  attr_accessor :first_entity, :second_entity, :name, :middle_entities_has_one, :middle_entities_has_many,
-                :through_entity, :optional, :reference_association
+  attr_accessor :first_entity, :second_entity, :name,
+                :through_entity, :optional, :reference_association, :middle_entity_checked, :have_issue
 
   alias optional? optional
+  alias have_issue? have_issue
 
+  @@groups_to_check_middle_entities = nil
   def initialize(edge)
+    @middle_entity_checked = false
+
     @first_entity = Entity.find(edge['source']).reference_entity
     @second_entity = Entity.find(edge['target']).reference_entity
     @through_entity = nil
@@ -38,71 +42,77 @@ class Association
     end
   end
 
-  def self.check_middle_entities_include(entity)
-    associations = Association.all.select { |association| association.through_entity == entity }
+  def self.groups_to_check_middle_entities
+    @@groups_to_check_middle_entities = {}
+    Association.all_references.each do |reference_association|
+      source = reference_association.first_entity.reference_entity
+      target = reference_association.second_entity.reference_entity
 
-    associations.each do |association|
-      unless (association.middle_entities_has_many.include? entity) || (association.middle_entities_has_one.include? entity)
-        association.set_middle_entity
+      if reference_association.name == 'has_many' || reference_association.name == 'has_one'
+        @@groups_to_check_middle_entities[[target.table, source.table, source.name]] = reference_association
       end
+      @@groups_to_check_middle_entities[[source.table, target.table, target.name]] = reference_association
     end
+
+    @@groups_to_check_middle_entities
   end
 
   def set_middle_entity
-    return unless through?
+    return true unless through?
+    return true if middle_entity_checked
 
+    self.middle_entity_checked = true
+    exist_an_issue = false
     source = first_entity
     target = second_entity
 
-    if (
-        source.parents_has_many +
-        source.parents_has_many_through +
-        source.parents_has_one +
-        source.parents_has_one_through +
-        source.children_has_many +
-        source.children_has_many_through +
-        source.children_has_one +
-        source.children_has_one_through
-      ).include?(through_entity) && (
-        (
-          target.parents_has_many +
-          target.parents_has_many_through +
-          target.parents_has_one +
-          target.parents_has_one_through +
-          target.children_has_many +
-          target.children_has_many_through +
-          target.children_has_one +
-          target.children_has_one_through
-        ).include?(through_entity) || (
-          through_entity.parents_has_many.map(&:table).include?(target.table) ||
-          through_entity.parents_has_one.map(&:table).include?(target.table)
-        )
-      )
-
-      if (
-          source.children_has_many.include?(through_entity) ||
-          source.children_has_many_through.include?(through_entity)
-        ) || (
-          target.parents_has_many.include?(through_entity) ||
-          target.parents_has_many_through.include?(through_entity)
-        )
-
-        unless middle_entities_has_many.include? through_entity
-          middle_entities_has_many << through_entity
-          source.children_has_many_through << target
-          target.parents_has_many_through << source
-          Association.check_middle_entities_include(target)
-        end
-      else
-        unless middle_entities_has_one.include? through_entity
-          middle_entities_has_one << through_entity
-          source.children_has_one_through << target
-          target.parents_has_one_through << source
-          Association.check_middle_entities_include(target)
-        end
-      end
-
+    first_part_of_association = @@groups_to_check_middle_entities[[source.table, through_entity.table,
+                                                                   through_entity.name]]
+    if first_part_of_association
+      exist_an_issue = true unless first_part_of_association.set_middle_entity
+    else
+      exist_an_issue = true
     end
+
+    last_part_of_association = @@groups_to_check_middle_entities[[through_entity.table, target.table, target.name]]
+    if last_part_of_association
+      exist_an_issue = true unless last_part_of_association.set_middle_entity
+    else
+      exist_an_issue = true
+    end
+
+    if exist_an_issue
+      self.have_issue = true
+
+      puts '----------------'
+      puts "Association between #{first_entity.name} and #{second_entity.name} has issue"
+      puts '----------------'
+
+      return false
+    end
+    if (
+        source.children_has_many.include?(through_entity) ||
+        source.children_has_many_through.include?(through_entity)
+      ) || (
+        target.parents_has_many.include?(through_entity) ||
+        target.parents_has_many_through.include?(through_entity)
+      )
+      source.children_has_many_through << target
+      target.parents_has_many_through << source
+    else
+      source.children_has_one_through << target
+      target.parents_has_one_through << source
+    end
+  end
+
+  def self.clear_groups_to_check_middle_entities
+    @@groups_to_check_middle_entities = nil
+  end
+
+  def self.set_all_middle_entities
+    Association.groups_to_check_middle_entities
+    Association.all_references.each(&:set_middle_entity)
+    Association.clear_groups_to_check_middle_entities
   end
 
   def update_model_from_entity

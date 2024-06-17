@@ -66,7 +66,8 @@ class Association
     source = first_entity
     target = second_entity
 
-    first_part_of_association = @@groups_to_check_middle_entities[[source.table, through_entity.table,
+    first_part_of_association = @@groups_to_check_middle_entities[[source.table,
+                                                                   through_entity.table,
                                                                    through_entity.name]]
     if first_part_of_association
       exist_an_issue = true unless first_part_of_association.set_middle_entity
@@ -74,7 +75,9 @@ class Association
       exist_an_issue = true
     end
 
-    last_part_of_association = @@groups_to_check_middle_entities[[through_entity.table, target.table, target.name]]
+    last_part_of_association = @@groups_to_check_middle_entities[[through_entity.table,
+                                                                  target.table,
+                                                                  target.name]]
     if last_part_of_association
       exist_an_issue = true unless last_part_of_association.set_middle_entity
     else
@@ -90,6 +93,7 @@ class Association
 
       return false
     end
+
     if (
         source.children_has_many.include?(through_entity) ||
         source.children_has_many_through.include?(through_entity)

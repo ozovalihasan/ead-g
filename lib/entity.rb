@@ -29,7 +29,7 @@ class Entity < TableEntityBase
   end
 
   def self.find_by_name(name)
-    all.select { |entity| entity.reference_entity == entity }.find { |entity| entity.name == name }
+    all_references.find { |entity| entity.name == name }
   end
 
   def self.dismiss_similar_ones
@@ -184,5 +184,11 @@ class Entity < TableEntityBase
     end_entity.update_end_model_migration_files(self, association) if association.has_any?
 
     update_start_model_file(end_entity, association)
+  end
+
+  private_class_method :all_references
+
+  def self.all_references
+    all.select { |entity| entity.reference_entity == entity }
   end
 end

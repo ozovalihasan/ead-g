@@ -1,7 +1,6 @@
 {
     "version": "0.4.7",
     "idCounter": 80,
-    "associationType": "through",
     "nodes": [
         {
             "id": "9",
@@ -23,6 +22,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -49,6 +52,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -71,6 +78,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -97,6 +108,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -119,6 +134,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -145,6 +164,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -167,6 +190,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -193,6 +220,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -215,6 +246,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -241,6 +276,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -263,6 +302,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -289,6 +332,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -311,6 +358,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -337,6 +388,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -359,6 +414,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -385,6 +444,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -407,6 +470,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -433,6 +500,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -457,6 +528,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -476,6 +551,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -493,6 +572,10 @@
             "width": 144,
             "height": 71,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -519,7 +602,11 @@
                 "x": 2685,
                 "y": 660
             },
-            "dragging": false
+            "dragging": false,
+            "measured": {
+                "width": 144,
+                "height": 71
+            }
         },
         {
             "id": "74",
@@ -543,7 +630,11 @@
                 "x": 2955,
                 "y": 810
             },
-            "dragging": false
+            "dragging": false,
+            "measured": {
+                "width": 144,
+                "height": 71
+            }
         }
     ],
     "edges": [
@@ -992,15 +1083,5 @@
         "69",
         "71",
         "72"
-    ],
-    "connectionStartNodeId": "68",
-    "isConnectContinue": false,
-    "isMouseOnNode": false,
-    "isMouseOnEdge": false,
-    "mouseOnNodeId": null,
-    "mouseOnEdgeId": null,
-    "selectedNodeIdForThrough": null,
-    "needFitView": false,
-    "connectionStartId": "11",
-    "showTextOnEdges": false
+    ]
 }

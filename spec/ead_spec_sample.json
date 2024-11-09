@@ -1,7 +1,6 @@
 {
     "version": "0.4.7",
     "idCounter": 12,
-    "associationType": "has_many",
     "nodes": [
         {
             "id": "3",
@@ -17,6 +16,10 @@
             "width": 144,
             "height": 71,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -43,6 +46,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -67,6 +74,10 @@
             "style": {
                 "width": 144,
                 "height": 71
+            },
+            "measured": {
+                "width": 144,
+                "height": 71
             }
         },
         {
@@ -89,6 +100,10 @@
             },
             "dragging": false,
             "style": {
+                "width": 144,
+                "height": 71
+            },
+            "measured": {
                 "width": 144,
                 "height": 71
             }
@@ -136,15 +151,5 @@
     "orderedTables": [
         "1",
         "2"
-    ],
-    "connectionStartNodeId": "9",
-    "isConnectContinue": false,
-    "isMouseOnNode": false,
-    "isMouseOnEdge": false,
-    "mouseOnNodeId": null,
-    "mouseOnEdgeId": null,
-    "selectedNodeIdForThrough": null,
-    "needFitView": false,
-    "connectionStartId": "3",
-    "showTextOnEdges": false
+    ]
 }
